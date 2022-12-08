@@ -71,6 +71,18 @@ public class StylesService {
                 if (styles.getIsActive() != null) {
                     existingStyles.setIsActive(styles.getIsActive());
                 }
+                if (styles.getWidth() != null) {
+                    existingStyles.setWidth(styles.getWidth());
+                }
+                if (styles.getHeight() != null) {
+                    existingStyles.setHeight(styles.getHeight());
+                }
+                if (styles.getX() != null) {
+                    existingStyles.setX(styles.getX());
+                }
+                if (styles.getY() != null) {
+                    existingStyles.setY(styles.getY());
+                }
 
                 return existingStyles;
             })
@@ -90,6 +102,15 @@ public class StylesService {
     }
 
     /**
+     * Get all the styles with eager load of many-to-many relationships.
+     *
+     * @return the list of entities.
+     */
+    public Page<Styles> findAllWithEagerRelationships(Pageable pageable) {
+        return stylesRepository.findAllWithEagerRelationships(pageable);
+    }
+
+    /**
      * Get one styles by id.
      *
      * @param id the id of the entity.
@@ -98,7 +119,7 @@ public class StylesService {
     @Transactional(readOnly = true)
     public Optional<Styles> findOne(Long id) {
         log.debug("Request to get Styles : {}", id);
-        return stylesRepository.findById(id);
+        return stylesRepository.findOneWithEagerRelationships(id);
     }
 
     /**

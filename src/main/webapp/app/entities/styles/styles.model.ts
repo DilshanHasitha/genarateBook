@@ -6,6 +6,10 @@ export interface IStyles {
   description?: string | null;
   imgURL?: string | null;
   isActive?: boolean | null;
+  width?: number | null;
+  height?: number | null;
+  x?: number | null;
+  y?: number | null;
   options?: Pick<IOptions, 'id'>[] | null;
 }
 

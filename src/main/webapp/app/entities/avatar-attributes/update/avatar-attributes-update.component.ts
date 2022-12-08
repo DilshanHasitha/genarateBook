@@ -9,8 +9,8 @@ import { IAvatarAttributes } from '../avatar-attributes.model';
 import { AvatarAttributesService } from '../service/avatar-attributes.service';
 import { IAvatarCharactor } from 'app/entities/avatar-charactor/avatar-charactor.model';
 import { AvatarCharactorService } from 'app/entities/avatar-charactor/service/avatar-charactor.service';
-import { IOptions } from 'app/entities/options/options.model';
-import { OptionsService } from 'app/entities/options/service/options.service';
+import { IStyles } from 'app/entities/styles/styles.model';
+import { StylesService } from 'app/entities/styles/service/styles.service';
 
 @Component({
   selector: 'jhi-avatar-attributes-update',
@@ -21,7 +21,7 @@ export class AvatarAttributesUpdateComponent implements OnInit {
   avatarAttributes: IAvatarAttributes | null = null;
 
   avatarCharactorsSharedCollection: IAvatarCharactor[] = [];
-  optionsSharedCollection: IOptions[] = [];
+  stylesSharedCollection: IStyles[] = [];
 
   editForm: AvatarAttributesFormGroup = this.avatarAttributesFormService.createAvatarAttributesFormGroup();
 
@@ -29,14 +29,14 @@ export class AvatarAttributesUpdateComponent implements OnInit {
     protected avatarAttributesService: AvatarAttributesService,
     protected avatarAttributesFormService: AvatarAttributesFormService,
     protected avatarCharactorService: AvatarCharactorService,
-    protected optionsService: OptionsService,
+    protected stylesService: StylesService,
     protected activatedRoute: ActivatedRoute
   ) {}
 
   compareAvatarCharactor = (o1: IAvatarCharactor | null, o2: IAvatarCharactor | null): boolean =>
     this.avatarCharactorService.compareAvatarCharactor(o1, o2);
 
-  compareOptions = (o1: IOptions | null, o2: IOptions | null): boolean => this.optionsService.compareOptions(o1, o2);
+  compareStyles = (o1: IStyles | null, o2: IStyles | null): boolean => this.stylesService.compareStyles(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ avatarAttributes }) => {
@@ -90,9 +90,9 @@ export class AvatarAttributesUpdateComponent implements OnInit {
       this.avatarCharactorsSharedCollection,
       ...(avatarAttributes.avatarCharactors ?? [])
     );
-    this.optionsSharedCollection = this.optionsService.addOptionsToCollectionIfMissing<IOptions>(
-      this.optionsSharedCollection,
-      ...(avatarAttributes.options ?? [])
+    this.stylesSharedCollection = this.stylesService.addStylesToCollectionIfMissing<IStyles>(
+      this.stylesSharedCollection,
+      ...(avatarAttributes.styles ?? [])
     );
   }
 
@@ -110,14 +110,14 @@ export class AvatarAttributesUpdateComponent implements OnInit {
       )
       .subscribe((avatarCharactors: IAvatarCharactor[]) => (this.avatarCharactorsSharedCollection = avatarCharactors));
 
-    this.optionsService
+    this.stylesService
       .query()
-      .pipe(map((res: HttpResponse<IOptions[]>) => res.body ?? []))
+      .pipe(map((res: HttpResponse<IStyles[]>) => res.body ?? []))
       .pipe(
-        map((options: IOptions[]) =>
-          this.optionsService.addOptionsToCollectionIfMissing<IOptions>(options, ...(this.avatarAttributes?.options ?? []))
+        map((styles: IStyles[]) =>
+          this.stylesService.addStylesToCollectionIfMissing<IStyles>(styles, ...(this.avatarAttributes?.styles ?? []))
         )
       )
-      .subscribe((options: IOptions[]) => (this.optionsSharedCollection = options));
+      .subscribe((styles: IStyles[]) => (this.stylesSharedCollection = styles));
   }
 }

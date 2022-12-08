@@ -6,21 +6,30 @@ export const sampleWithRequiredData: IAvatarCharactor = {
 };
 
 export const sampleWithPartialData: IAvatarCharactor = {
-  id: 77383,
-  code: 'Engineer Mountain Strategist',
-  description: 'microchip',
+  id: 46921,
+  code: 'XSS Birr',
+  description: 'mobile',
   isActive: true,
+  imgUrl: 'purple Cheese',
+  width: 73312,
+  height: 27566,
+  y: 86722,
 };
 
 export const sampleWithFullData: IAvatarCharactor = {
-  id: 21790,
-  code: 'sticky blue',
-  description: 'parse systemic',
+  id: 62723,
+  code: 'evolve array',
+  description: 'Handmade Small Israel',
   isActive: false,
+  imgUrl: 'disintermediate',
+  width: 68980,
+  height: 29154,
+  x: 46822,
+  y: 47985,
 };
 
 export const sampleWithNewData: NewAvatarCharactor = {
-  description: 'Practical user-centric',
+  description: 'white Savings',
   id: null,
 };
 

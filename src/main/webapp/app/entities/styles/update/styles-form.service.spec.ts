@@ -24,6 +24,10 @@ describe('Styles Form Service', () => {
             description: expect.any(Object),
             imgURL: expect.any(Object),
             isActive: expect.any(Object),
+            width: expect.any(Object),
+            height: expect.any(Object),
+            x: expect.any(Object),
+            y: expect.any(Object),
             options: expect.any(Object),
           })
         );
@@ -39,6 +43,10 @@ describe('Styles Form Service', () => {
             description: expect.any(Object),
             imgURL: expect.any(Object),
             isActive: expect.any(Object),
+            width: expect.any(Object),
+            height: expect.any(Object),
+            x: expect.any(Object),
+            y: expect.any(Object),
             options: expect.any(Object),
           })
         );

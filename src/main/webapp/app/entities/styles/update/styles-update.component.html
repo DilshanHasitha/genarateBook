@@ -40,6 +40,41 @@
           <label class="form-label" for="field_isActive">Is Active</label>
           <input type="checkbox" class="form-check" name="isActive" id="field_isActive" data-cy="isActive" formControlName="isActive" />
         </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_width">Width</label>
+          <input type="number" class="form-control" name="width" id="field_width" data-cy="width" formControlName="width" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_height">Height</label>
+          <input type="number" class="form-control" name="height" id="field_height" data-cy="height" formControlName="height" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_x">X</label>
+          <input type="number" class="form-control" name="x" id="field_x" data-cy="x" formControlName="x" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_y">Y</label>
+          <input type="number" class="form-control" name="y" id="field_y" data-cy="y" formControlName="y" />
+        </div>
+
+        <div class="row mb-3">
+          <label for="field_options">Options</label>
+          <select
+            class="form-control"
+            id="field_options"
+            data-cy="options"
+            multiple
+            name="options"
+            formControlName="options"
+            [compareWith]="compareOptions"
+          >
+            <option [ngValue]="optionsOption" *ngFor="let optionsOption of optionsSharedCollection">{{ optionsOption.id }}</option>
+          </select>
+        </div>
       </div>
 
       <div>

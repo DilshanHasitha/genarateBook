@@ -22,6 +22,10 @@ type StylesFormGroupContent = {
   description: FormControl<IStyles['description']>;
   imgURL: FormControl<IStyles['imgURL']>;
   isActive: FormControl<IStyles['isActive']>;
+  width: FormControl<IStyles['width']>;
+  height: FormControl<IStyles['height']>;
+  x: FormControl<IStyles['x']>;
+  y: FormControl<IStyles['y']>;
   options: FormControl<IStyles['options']>;
 };
 
@@ -48,6 +52,10 @@ export class StylesFormService {
       }),
       imgURL: new FormControl(stylesRawValue.imgURL),
       isActive: new FormControl(stylesRawValue.isActive),
+      width: new FormControl(stylesRawValue.width),
+      height: new FormControl(stylesRawValue.height),
+      x: new FormControl(stylesRawValue.x),
+      y: new FormControl(stylesRawValue.y),
       options: new FormControl(stylesRawValue.options ?? []),
     });
   }

@@ -58,6 +58,36 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
+          <th scope="col" jhiSortBy="imgUrl">
+            <div class="d-flex">
+              <span>Img Url</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="width">
+            <div class="d-flex">
+              <span>Width</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="height">
+            <div class="d-flex">
+              <span>Height</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="x">
+            <div class="d-flex">
+              <span>X</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="y">
+            <div class="d-flex">
+              <span>Y</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -69,6 +99,11 @@
           <td>{{ avatarCharactor.code }}</td>
           <td>{{ avatarCharactor.description }}</td>
           <td>{{ avatarCharactor.isActive }}</td>
+          <td>{{ avatarCharactor.imgUrl }}</td>
+          <td>{{ avatarCharactor.width }}</td>
+          <td>{{ avatarCharactor.height }}</td>
+          <td>{{ avatarCharactor.x }}</td>
+          <td>{{ avatarCharactor.y }}</td>
           <td class="text-end">
             <div class="btn-group">
               <button

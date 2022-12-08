@@ -21,15 +21,15 @@
                                  referencedTableName="avatar_charactor"/>
 
         <addForeignKeyConstraint baseColumnNames="avatar_attributes_id"
-                                 baseTableName="rel_avatar_attributes__option"
-                                 constraintName="fk_rel_avatar_attributes__option__avatar_attributes_id"
+                                 baseTableName="rel_avatar_attributes__styles"
+                                 constraintName="fk_rel_avatar_attributes__styles__avatar_attributes_id"
                                  referencedColumnNames="id"
                                  referencedTableName="avatar_attributes"/>
 
-        <addForeignKeyConstraint baseColumnNames="option_id"
-                                 baseTableName="rel_avatar_attributes__option"
-                                 constraintName="fk_rel_avatar_attributes__option__option_id"
+        <addForeignKeyConstraint baseColumnNames="styles_id"
+                                 baseTableName="rel_avatar_attributes__styles"
+                                 constraintName="fk_rel_avatar_attributes__styles__styles_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="options"/>
+                                 referencedTableName="styles"/>
     </changeSet>
 </databaseChangeLog>

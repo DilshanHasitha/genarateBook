@@ -97,21 +97,6 @@ public class OptionsQueryService extends QueryService<Options> {
             if (criteria.getIsActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getIsActive(), Options_.isActive));
             }
-            if (criteria.getStyleId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getStyleId(), root -> root.join(Options_.styles, JoinType.LEFT).get(Styles_.id))
-                    );
-            }
-            if (criteria.getAvatarAttributesId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getAvatarAttributesId(),
-                            root -> root.join(Options_.avatarAttributes, JoinType.LEFT).get(AvatarAttributes_.id)
-                        )
-                    );
-            }
         }
         return specification;
     }

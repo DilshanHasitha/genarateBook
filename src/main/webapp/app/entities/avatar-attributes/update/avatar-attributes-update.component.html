@@ -54,17 +54,17 @@
         </div>
 
         <div class="row mb-3">
-          <label for="field_options">Option</label>
+          <label for="field_styles">Styles</label>
           <select
             class="form-control"
-            id="field_options"
-            data-cy="option"
+            id="field_styles"
+            data-cy="styles"
             multiple
-            name="options"
-            formControlName="options"
-            [compareWith]="compareOptions"
+            name="styles"
+            formControlName="styles"
+            [compareWith]="compareStyles"
           >
-            <option [ngValue]="optionsOption" *ngFor="let optionsOption of optionsSharedCollection">{{ optionsOption.id }}</option>
+            <option [ngValue]="stylesOption" *ngFor="let stylesOption of stylesSharedCollection">{{ stylesOption.id }}</option>
           </select>
         </div>
       </div>

@@ -5,6 +5,11 @@ export interface IAvatarCharactor {
   code?: string | null;
   description?: string | null;
   isActive?: boolean | null;
+  imgUrl?: string | null;
+  width?: number | null;
+  height?: number | null;
+  x?: number | null;
+  y?: number | null;
   avatarAttributes?: Pick<IAvatarAttributes, 'id'>[] | null;
 }
 

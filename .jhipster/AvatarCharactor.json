@@ -17,6 +17,26 @@
     {
       "fieldName": "isActive",
       "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "imgUrl",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "width",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "height",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "x",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "y",
+      "fieldType": "Integer"
     }
   ],
   "fluentMethods": true,

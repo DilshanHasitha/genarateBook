@@ -68,6 +68,21 @@ public class AvatarCharactorService {
                 if (avatarCharactor.getIsActive() != null) {
                     existingAvatarCharactor.setIsActive(avatarCharactor.getIsActive());
                 }
+                if (avatarCharactor.getImgUrl() != null) {
+                    existingAvatarCharactor.setImgUrl(avatarCharactor.getImgUrl());
+                }
+                if (avatarCharactor.getWidth() != null) {
+                    existingAvatarCharactor.setWidth(avatarCharactor.getWidth());
+                }
+                if (avatarCharactor.getHeight() != null) {
+                    existingAvatarCharactor.setHeight(avatarCharactor.getHeight());
+                }
+                if (avatarCharactor.getX() != null) {
+                    existingAvatarCharactor.setX(avatarCharactor.getX());
+                }
+                if (avatarCharactor.getY() != null) {
+                    existingAvatarCharactor.setY(avatarCharactor.getY());
+                }
 
                 return existingAvatarCharactor;
             })

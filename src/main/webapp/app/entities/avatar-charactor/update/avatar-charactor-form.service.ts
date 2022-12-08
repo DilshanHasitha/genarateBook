@@ -21,6 +21,11 @@ type AvatarCharactorFormGroupContent = {
   code: FormControl<IAvatarCharactor['code']>;
   description: FormControl<IAvatarCharactor['description']>;
   isActive: FormControl<IAvatarCharactor['isActive']>;
+  imgUrl: FormControl<IAvatarCharactor['imgUrl']>;
+  width: FormControl<IAvatarCharactor['width']>;
+  height: FormControl<IAvatarCharactor['height']>;
+  x: FormControl<IAvatarCharactor['x']>;
+  y: FormControl<IAvatarCharactor['y']>;
   avatarAttributes: FormControl<IAvatarCharactor['avatarAttributes']>;
 };
 
@@ -46,6 +51,11 @@ export class AvatarCharactorFormService {
         validators: [Validators.required],
       }),
       isActive: new FormControl(avatarCharactorRawValue.isActive),
+      imgUrl: new FormControl(avatarCharactorRawValue.imgUrl),
+      width: new FormControl(avatarCharactorRawValue.width),
+      height: new FormControl(avatarCharactorRawValue.height),
+      x: new FormControl(avatarCharactorRawValue.x),
+      y: new FormControl(avatarCharactorRawValue.y),
       avatarAttributes: new FormControl(avatarCharactorRawValue.avatarAttributes ?? []),
     });
   }

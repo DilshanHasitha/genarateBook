@@ -9,6 +9,8 @@ import { of, Subject, from } from 'rxjs';
 import { StylesFormService } from './styles-form.service';
 import { StylesService } from '../service/styles.service';
 import { IStyles } from '../styles.model';
+import { IOptions } from 'app/entities/options/options.model';
+import { OptionsService } from 'app/entities/options/service/options.service';
 
 import { StylesUpdateComponent } from './styles-update.component';
 
@@ -18,6 +20,7 @@ describe('Styles Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let stylesFormService: StylesFormService;
   let stylesService: StylesService;
+  let optionsService: OptionsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -40,17 +43,43 @@ describe('Styles Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     stylesFormService = TestBed.inject(StylesFormService);
     stylesService = TestBed.inject(StylesService);
+    optionsService = TestBed.inject(OptionsService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('Should update editForm', () => {
+    it('Should call Options query and add missing value', () => {
       const styles: IStyles = { id: 456 };
+      const options: IOptions[] = [{ id: 59960 }];
+      styles.options = options;
+
+      const optionsCollection: IOptions[] = [{ id: 816 }];
+      jest.spyOn(optionsService, 'query').mockReturnValue(of(new HttpResponse({ body: optionsCollection })));
+      const additionalOptions = [...options];
+      const expectedCollection: IOptions[] = [...additionalOptions, ...optionsCollection];
+      jest.spyOn(optionsService, 'addOptionsToCollectionIfMissing').mockReturnValue(expectedCollection);
 
       activatedRoute.data = of({ styles });
       comp.ngOnInit();
 
+      expect(optionsService.query).toHaveBeenCalled();
+      expect(optionsService.addOptionsToCollectionIfMissing).toHaveBeenCalledWith(
+        optionsCollection,
+        ...additionalOptions.map(expect.objectContaining)
+      );
+      expect(comp.optionsSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should update editForm', () => {
+      const styles: IStyles = { id: 456 };
+      const options: IOptions = { id: 99179 };
+      styles.options = [options];
+
+      activatedRoute.data = of({ styles });
+      comp.ngOnInit();
+
+      expect(comp.optionsSharedCollection).toContain(options);
       expect(comp.styles).toEqual(styles);
     });
   });
@@ -120,6 +149,18 @@ describe('Styles Management Update Component', () => {
       expect(stylesService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Compare relationships', () => {
+    describe('compareOptions', () => {
+      it('Should forward to optionsService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(optionsService, 'compareOptions');
+        comp.compareOptions(entity, entity2);
+        expect(optionsService.compareOptions).toHaveBeenCalledWith(entity, entity2);
+      });
     });
   });
 });

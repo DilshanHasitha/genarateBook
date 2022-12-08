@@ -30,13 +30,6 @@
         <dd>
           <span>{{ options.isActive }}</span>
         </dd>
-        <dt><span>Style</span></dt>
-        <dd>
-          <span *ngFor="let style of options.styles; let last = last">
-            <a [routerLink]="['/styles', style.id, 'view']">{{ style.id }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
-        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

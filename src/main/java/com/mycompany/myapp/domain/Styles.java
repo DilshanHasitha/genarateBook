@@ -1,6 +1,5 @@
 package com.mycompany.myapp.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -38,9 +37,25 @@ public class Styles implements Serializable {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    @ManyToMany(mappedBy = "styles")
+    @Column(name = "width")
+    private Integer width;
+
+    @Column(name = "height")
+    private Integer height;
+
+    @Column(name = "x")
+    private Integer x;
+
+    @Column(name = "y")
+    private Integer y;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "rel_styles__options",
+        joinColumns = @JoinColumn(name = "styles_id"),
+        inverseJoinColumns = @JoinColumn(name = "options_id")
+    )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "styles", "avatarAttributes" }, allowSetters = true)
     private Set<Options> options = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -110,17 +125,63 @@ public class Styles implements Serializable {
         this.isActive = isActive;
     }
 
+    public Integer getWidth() {
+        return this.width;
+    }
+
+    public Styles width(Integer width) {
+        this.setWidth(width);
+        return this;
+    }
+
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
+
+    public Integer getHeight() {
+        return this.height;
+    }
+
+    public Styles height(Integer height) {
+        this.setHeight(height);
+        return this;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
+
+    public Integer getX() {
+        return this.x;
+    }
+
+    public Styles x(Integer x) {
+        this.setX(x);
+        return this;
+    }
+
+    public void setX(Integer x) {
+        this.x = x;
+    }
+
+    public Integer getY() {
+        return this.y;
+    }
+
+    public Styles y(Integer y) {
+        this.setY(y);
+        return this;
+    }
+
+    public void setY(Integer y) {
+        this.y = y;
+    }
+
     public Set<Options> getOptions() {
         return this.options;
     }
 
     public void setOptions(Set<Options> options) {
-        if (this.options != null) {
-            this.options.forEach(i -> i.removeStyle(this));
-        }
-        if (options != null) {
-            options.forEach(i -> i.addStyle(this));
-        }
         this.options = options;
     }
 
@@ -129,15 +190,13 @@ public class Styles implements Serializable {
         return this;
     }
 
-    public Styles addOption(Options options) {
+    public Styles addOptions(Options options) {
         this.options.add(options);
-        options.getStyles().add(this);
         return this;
     }
 
-    public Styles removeOption(Options options) {
+    public Styles removeOptions(Options options) {
         this.options.remove(options);
-        options.getStyles().remove(this);
         return this;
     }
 
@@ -169,6 +228,10 @@ public class Styles implements Serializable {
             ", description='" + getDescription() + "'" +
             ", imgURL='" + getImgURL() + "'" +
             ", isActive='" + getIsActive() + "'" +
+            ", width=" + getWidth() +
+            ", height=" + getHeight() +
+            ", x=" + getX() +
+            ", y=" + getY() +
             "}";
     }
 }

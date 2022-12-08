@@ -80,16 +80,6 @@
             <div class="btn-group">
               <button
                 type="submit"
-                [routerLink]="['/avatar-attributes']"
-                [queryParams]="{ 'filter[optionId.in]': options.id }"
-                class="btn btn-info btn-sm"
-                data-cy="filterOtherEntityButton"
-              >
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline">Show Avatar Attributes</span>
-              </button>
-              <button
-                type="submit"
                 [routerLink]="['/options', options.id, 'view']"
                 class="btn btn-info btn-sm"
                 data-cy="entityDetailsButton"

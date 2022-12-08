@@ -29,6 +29,16 @@ public class AvatarCharactorCriteria implements Serializable, Criteria {
 
     private BooleanFilter isActive;
 
+    private StringFilter imgUrl;
+
+    private IntegerFilter width;
+
+    private IntegerFilter height;
+
+    private IntegerFilter x;
+
+    private IntegerFilter y;
+
     private LongFilter avatarAttributesId;
 
     private Boolean distinct;
@@ -40,6 +50,11 @@ public class AvatarCharactorCriteria implements Serializable, Criteria {
         this.code = other.code == null ? null : other.code.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.isActive = other.isActive == null ? null : other.isActive.copy();
+        this.imgUrl = other.imgUrl == null ? null : other.imgUrl.copy();
+        this.width = other.width == null ? null : other.width.copy();
+        this.height = other.height == null ? null : other.height.copy();
+        this.x = other.x == null ? null : other.x.copy();
+        this.y = other.y == null ? null : other.y.copy();
         this.avatarAttributesId = other.avatarAttributesId == null ? null : other.avatarAttributesId.copy();
         this.distinct = other.distinct;
     }
@@ -109,6 +124,81 @@ public class AvatarCharactorCriteria implements Serializable, Criteria {
         this.isActive = isActive;
     }
 
+    public StringFilter getImgUrl() {
+        return imgUrl;
+    }
+
+    public StringFilter imgUrl() {
+        if (imgUrl == null) {
+            imgUrl = new StringFilter();
+        }
+        return imgUrl;
+    }
+
+    public void setImgUrl(StringFilter imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public IntegerFilter getWidth() {
+        return width;
+    }
+
+    public IntegerFilter width() {
+        if (width == null) {
+            width = new IntegerFilter();
+        }
+        return width;
+    }
+
+    public void setWidth(IntegerFilter width) {
+        this.width = width;
+    }
+
+    public IntegerFilter getHeight() {
+        return height;
+    }
+
+    public IntegerFilter height() {
+        if (height == null) {
+            height = new IntegerFilter();
+        }
+        return height;
+    }
+
+    public void setHeight(IntegerFilter height) {
+        this.height = height;
+    }
+
+    public IntegerFilter getX() {
+        return x;
+    }
+
+    public IntegerFilter x() {
+        if (x == null) {
+            x = new IntegerFilter();
+        }
+        return x;
+    }
+
+    public void setX(IntegerFilter x) {
+        this.x = x;
+    }
+
+    public IntegerFilter getY() {
+        return y;
+    }
+
+    public IntegerFilter y() {
+        if (y == null) {
+            y = new IntegerFilter();
+        }
+        return y;
+    }
+
+    public void setY(IntegerFilter y) {
+        this.y = y;
+    }
+
     public LongFilter getAvatarAttributesId() {
         return avatarAttributesId;
     }
@@ -146,6 +236,11 @@ public class AvatarCharactorCriteria implements Serializable, Criteria {
             Objects.equals(code, that.code) &&
             Objects.equals(description, that.description) &&
             Objects.equals(isActive, that.isActive) &&
+            Objects.equals(imgUrl, that.imgUrl) &&
+            Objects.equals(width, that.width) &&
+            Objects.equals(height, that.height) &&
+            Objects.equals(x, that.x) &&
+            Objects.equals(y, that.y) &&
             Objects.equals(avatarAttributesId, that.avatarAttributesId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -153,7 +248,7 @@ public class AvatarCharactorCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, code, description, isActive, avatarAttributesId, distinct);
+        return Objects.hash(id, code, description, isActive, imgUrl, width, height, x, y, avatarAttributesId, distinct);
     }
 
     // prettier-ignore
@@ -164,6 +259,11 @@ public class AvatarCharactorCriteria implements Serializable, Criteria {
             (code != null ? "code=" + code + ", " : "") +
             (description != null ? "description=" + description + ", " : "") +
             (isActive != null ? "isActive=" + isActive + ", " : "") +
+            (imgUrl != null ? "imgUrl=" + imgUrl + ", " : "") +
+            (width != null ? "width=" + width + ", " : "") +
+            (height != null ? "height=" + height + ", " : "") +
+            (x != null ? "x=" + x + ", " : "") +
+            (y != null ? "y=" + y + ", " : "") +
             (avatarAttributesId != null ? "avatarAttributesId=" + avatarAttributesId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

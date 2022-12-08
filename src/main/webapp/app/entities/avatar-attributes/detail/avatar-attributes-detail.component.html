@@ -33,10 +33,10 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
-        <dt><span>Option</span></dt>
+        <dt><span>Styles</span></dt>
         <dd>
-          <span *ngFor="let option of avatarAttributes.options; let last = last">
-            <a [routerLink]="['/options', option.id, 'view']">{{ option.id }}</a
+          <span *ngFor="let styles of avatarAttributes.styles; let last = last">
+            <a [routerLink]="['/styles', styles.id, 'view']">{{ styles.id }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

@@ -14,7 +14,7 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type AvatarAttributesFormGroupInput = IAvatarAttributes | PartialWithRequiredKeyOf<NewAvatarAttributes>;
 
-type AvatarAttributesFormDefaults = Pick<NewAvatarAttributes, 'id' | 'isActive' | 'avatarCharactors' | 'options' | 'books'>;
+type AvatarAttributesFormDefaults = Pick<NewAvatarAttributes, 'id' | 'isActive' | 'avatarCharactors' | 'books' | 'styles'>;
 
 type AvatarAttributesFormGroupContent = {
   id: FormControl<IAvatarAttributes['id'] | NewAvatarAttributes['id']>;
@@ -22,8 +22,8 @@ type AvatarAttributesFormGroupContent = {
   description: FormControl<IAvatarAttributes['description']>;
   isActive: FormControl<IAvatarAttributes['isActive']>;
   avatarCharactors: FormControl<IAvatarAttributes['avatarCharactors']>;
-  options: FormControl<IAvatarAttributes['options']>;
   books: FormControl<IAvatarAttributes['books']>;
+  styles: FormControl<IAvatarAttributes['styles']>;
 };
 
 export type AvatarAttributesFormGroup = FormGroup<AvatarAttributesFormGroupContent>;
@@ -49,8 +49,8 @@ export class AvatarAttributesFormService {
       }),
       isActive: new FormControl(avatarAttributesRawValue.isActive),
       avatarCharactors: new FormControl(avatarAttributesRawValue.avatarCharactors ?? []),
-      options: new FormControl(avatarAttributesRawValue.options ?? []),
       books: new FormControl(avatarAttributesRawValue.books ?? []),
+      styles: new FormControl(avatarAttributesRawValue.styles ?? []),
     });
   }
 
@@ -73,8 +73,8 @@ export class AvatarAttributesFormService {
       id: null,
       isActive: false,
       avatarCharactors: [],
-      options: [],
       books: [],
+      styles: [],
     };
   }
 }

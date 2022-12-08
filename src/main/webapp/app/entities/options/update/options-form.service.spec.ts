@@ -24,8 +24,6 @@ describe('Options Form Service', () => {
             description: expect.any(Object),
             imgURL: expect.any(Object),
             isActive: expect.any(Object),
-            styles: expect.any(Object),
-            avatarAttributes: expect.any(Object),
           })
         );
       });
@@ -40,8 +38,6 @@ describe('Options Form Service', () => {
             description: expect.any(Object),
             imgURL: expect.any(Object),
             isActive: expect.any(Object),
-            styles: expect.any(Object),
-            avatarAttributes: expect.any(Object),
           })
         );
       });

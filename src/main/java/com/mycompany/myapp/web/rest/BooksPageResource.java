@@ -1,22 +1,18 @@
 package com.mycompany.myapp.web.rest;
 
-import com.mycompany.myapp.domain.Books;
 import com.mycompany.myapp.domain.BooksPage;
-import com.mycompany.myapp.domain.PageLayers;
 import com.mycompany.myapp.repository.BooksPageRepository;
-import com.mycompany.myapp.repository.BooksRepository;
 import com.mycompany.myapp.service.BooksPageQueryService;
 import com.mycompany.myapp.service.BooksPageService;
-import com.mycompany.myapp.service.PDFGenarator;
 import com.mycompany.myapp.service.criteria.BooksPageCriteria;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import net.sf.jasperreports.engine.JRException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,21 +45,15 @@ public class BooksPageResource {
     private final BooksPageRepository booksPageRepository;
 
     private final BooksPageQueryService booksPageQueryService;
-    private final BooksRepository booksRepository;
-    private final PDFGenarator pdfGenarator;
 
     public BooksPageResource(
         BooksPageService booksPageService,
         BooksPageRepository booksPageRepository,
-        BooksPageQueryService booksPageQueryService,
-        BooksRepository booksRepository,
-        PDFGenarator pdfGenarator
+        BooksPageQueryService booksPageQueryService
     ) {
         this.booksPageService = booksPageService;
         this.booksPageRepository = booksPageRepository;
         this.booksPageQueryService = booksPageQueryService;
-        this.booksRepository = booksRepository;
-        this.pdfGenarator = pdfGenarator;
     }
 
     /**
@@ -213,27 +203,5 @@ public class BooksPageResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
-    }
-
-    @GetMapping("/printReceipt")
-    public byte[] receipt(String orderId, String storeCode) throws IOException, JRException {
-        //        BooksPage booksPage = booksPageRepository.findOneByNum(1);
-        Books books = booksRepository.findOneByCode("demo");
-
-        List<BooksPage> booksPages = new ArrayList<>(books.getBooksPages());
-        //Sort the books page in ascending order
-        Collections.sort(
-            booksPages,
-            new Comparator<BooksPage>() {
-                public int compare(BooksPage o1, BooksPage o2) {
-                    return o1.getNum().compareTo(o2.getNum());
-                }
-            }
-        );
-        Set<BooksPage> booksPageList = new HashSet<>(booksPages);
-        books.setBooksPages(booksPageList);
-
-        byte[] receipt = pdfGenarator.pdfCreator(books);
-        return receipt;
     }
 }

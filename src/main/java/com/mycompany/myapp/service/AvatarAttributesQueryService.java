@@ -103,19 +103,19 @@ public class AvatarAttributesQueryService extends QueryService<AvatarAttributes>
                         )
                     );
             }
-            if (criteria.getOptionId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getOptionId(),
-                            root -> root.join(AvatarAttributes_.options, JoinType.LEFT).get(Options_.id)
-                        )
-                    );
-            }
             if (criteria.getBooksId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(criteria.getBooksId(), root -> root.join(AvatarAttributes_.books, JoinType.LEFT).get(Books_.id))
+                    );
+            }
+            if (criteria.getStylesId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getStylesId(),
+                            root -> root.join(AvatarAttributes_.styles, JoinType.LEFT).get(Styles_.id)
+                        )
                     );
             }
         }

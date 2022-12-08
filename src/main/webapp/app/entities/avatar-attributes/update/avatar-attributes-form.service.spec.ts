@@ -24,8 +24,8 @@ describe('AvatarAttributes Form Service', () => {
             description: expect.any(Object),
             isActive: expect.any(Object),
             avatarCharactors: expect.any(Object),
-            options: expect.any(Object),
             books: expect.any(Object),
+            styles: expect.any(Object),
           })
         );
       });
@@ -40,8 +40,8 @@ describe('AvatarAttributes Form Service', () => {
             description: expect.any(Object),
             isActive: expect.any(Object),
             avatarCharactors: expect.any(Object),
-            options: expect.any(Object),
             books: expect.any(Object),
+            styles: expect.any(Object),
           })
         );
       });

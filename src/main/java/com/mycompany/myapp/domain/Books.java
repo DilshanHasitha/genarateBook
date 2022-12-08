@@ -115,7 +115,7 @@ public class Books implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "avatar_attributes_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "avatarCharactors", "options", "books" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "avatarCharactors", "books", "styles" }, allowSetters = true)
     private Set<AvatarAttributes> avatarAttributes = new HashSet<>();
 
     @ManyToMany

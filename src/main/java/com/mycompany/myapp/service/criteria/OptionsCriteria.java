@@ -31,10 +31,6 @@ public class OptionsCriteria implements Serializable, Criteria {
 
     private BooleanFilter isActive;
 
-    private LongFilter styleId;
-
-    private LongFilter avatarAttributesId;
-
     private Boolean distinct;
 
     public OptionsCriteria() {}
@@ -45,8 +41,6 @@ public class OptionsCriteria implements Serializable, Criteria {
         this.description = other.description == null ? null : other.description.copy();
         this.imgURL = other.imgURL == null ? null : other.imgURL.copy();
         this.isActive = other.isActive == null ? null : other.isActive.copy();
-        this.styleId = other.styleId == null ? null : other.styleId.copy();
-        this.avatarAttributesId = other.avatarAttributesId == null ? null : other.avatarAttributesId.copy();
         this.distinct = other.distinct;
     }
 
@@ -130,36 +124,6 @@ public class OptionsCriteria implements Serializable, Criteria {
         this.isActive = isActive;
     }
 
-    public LongFilter getStyleId() {
-        return styleId;
-    }
-
-    public LongFilter styleId() {
-        if (styleId == null) {
-            styleId = new LongFilter();
-        }
-        return styleId;
-    }
-
-    public void setStyleId(LongFilter styleId) {
-        this.styleId = styleId;
-    }
-
-    public LongFilter getAvatarAttributesId() {
-        return avatarAttributesId;
-    }
-
-    public LongFilter avatarAttributesId() {
-        if (avatarAttributesId == null) {
-            avatarAttributesId = new LongFilter();
-        }
-        return avatarAttributesId;
-    }
-
-    public void setAvatarAttributesId(LongFilter avatarAttributesId) {
-        this.avatarAttributesId = avatarAttributesId;
-    }
-
     public Boolean getDistinct() {
         return distinct;
     }
@@ -183,15 +147,13 @@ public class OptionsCriteria implements Serializable, Criteria {
             Objects.equals(description, that.description) &&
             Objects.equals(imgURL, that.imgURL) &&
             Objects.equals(isActive, that.isActive) &&
-            Objects.equals(styleId, that.styleId) &&
-            Objects.equals(avatarAttributesId, that.avatarAttributesId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, code, description, imgURL, isActive, styleId, avatarAttributesId, distinct);
+        return Objects.hash(id, code, description, imgURL, isActive, distinct);
     }
 
     // prettier-ignore
@@ -203,8 +165,6 @@ public class OptionsCriteria implements Serializable, Criteria {
             (description != null ? "description=" + description + ", " : "") +
             (imgURL != null ? "imgURL=" + imgURL + ", " : "") +
             (isActive != null ? "isActive=" + isActive + ", " : "") +
-            (styleId != null ? "styleId=" + styleId + ", " : "") +
-            (avatarAttributesId != null ? "avatarAttributesId=" + avatarAttributesId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

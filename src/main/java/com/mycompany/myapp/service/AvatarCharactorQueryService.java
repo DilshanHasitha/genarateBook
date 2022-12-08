@@ -94,6 +94,21 @@ public class AvatarCharactorQueryService extends QueryService<AvatarCharactor> {
             if (criteria.getIsActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getIsActive(), AvatarCharactor_.isActive));
             }
+            if (criteria.getImgUrl() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getImgUrl(), AvatarCharactor_.imgUrl));
+            }
+            if (criteria.getWidth() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getWidth(), AvatarCharactor_.width));
+            }
+            if (criteria.getHeight() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getHeight(), AvatarCharactor_.height));
+            }
+            if (criteria.getX() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getX(), AvatarCharactor_.x));
+            }
+            if (criteria.getY() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getY(), AvatarCharactor_.y));
+            }
             if (criteria.getAvatarAttributesId() != null) {
                 specification =
                     specification.and(

@@ -40,6 +40,25 @@ class AvatarCharactorResourceIT {
     private static final Boolean DEFAULT_IS_ACTIVE = false;
     private static final Boolean UPDATED_IS_ACTIVE = true;
 
+    private static final String DEFAULT_IMG_URL = "AAAAAAAAAA";
+    private static final String UPDATED_IMG_URL = "BBBBBBBBBB";
+
+    private static final Integer DEFAULT_WIDTH = 1;
+    private static final Integer UPDATED_WIDTH = 2;
+    private static final Integer SMALLER_WIDTH = 1 - 1;
+
+    private static final Integer DEFAULT_HEIGHT = 1;
+    private static final Integer UPDATED_HEIGHT = 2;
+    private static final Integer SMALLER_HEIGHT = 1 - 1;
+
+    private static final Integer DEFAULT_X = 1;
+    private static final Integer UPDATED_X = 2;
+    private static final Integer SMALLER_X = 1 - 1;
+
+    private static final Integer DEFAULT_Y = 1;
+    private static final Integer UPDATED_Y = 2;
+    private static final Integer SMALLER_Y = 1 - 1;
+
     private static final String ENTITY_API_URL = "/api/avatar-charactors";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -67,7 +86,12 @@ class AvatarCharactorResourceIT {
         AvatarCharactor avatarCharactor = new AvatarCharactor()
             .code(DEFAULT_CODE)
             .description(DEFAULT_DESCRIPTION)
-            .isActive(DEFAULT_IS_ACTIVE);
+            .isActive(DEFAULT_IS_ACTIVE)
+            .imgUrl(DEFAULT_IMG_URL)
+            .width(DEFAULT_WIDTH)
+            .height(DEFAULT_HEIGHT)
+            .x(DEFAULT_X)
+            .y(DEFAULT_Y);
         return avatarCharactor;
     }
 
@@ -81,7 +105,12 @@ class AvatarCharactorResourceIT {
         AvatarCharactor avatarCharactor = new AvatarCharactor()
             .code(UPDATED_CODE)
             .description(UPDATED_DESCRIPTION)
-            .isActive(UPDATED_IS_ACTIVE);
+            .isActive(UPDATED_IS_ACTIVE)
+            .imgUrl(UPDATED_IMG_URL)
+            .width(UPDATED_WIDTH)
+            .height(UPDATED_HEIGHT)
+            .x(UPDATED_X)
+            .y(UPDATED_Y);
         return avatarCharactor;
     }
 
@@ -108,6 +137,11 @@ class AvatarCharactorResourceIT {
         assertThat(testAvatarCharactor.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testAvatarCharactor.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testAvatarCharactor.getIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
+        assertThat(testAvatarCharactor.getImgUrl()).isEqualTo(DEFAULT_IMG_URL);
+        assertThat(testAvatarCharactor.getWidth()).isEqualTo(DEFAULT_WIDTH);
+        assertThat(testAvatarCharactor.getHeight()).isEqualTo(DEFAULT_HEIGHT);
+        assertThat(testAvatarCharactor.getX()).isEqualTo(DEFAULT_X);
+        assertThat(testAvatarCharactor.getY()).isEqualTo(DEFAULT_Y);
     }
 
     @Test
@@ -163,7 +197,12 @@ class AvatarCharactorResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(avatarCharactor.getId().intValue())))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())));
+            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].imgUrl").value(hasItem(DEFAULT_IMG_URL)))
+            .andExpect(jsonPath("$.[*].width").value(hasItem(DEFAULT_WIDTH)))
+            .andExpect(jsonPath("$.[*].height").value(hasItem(DEFAULT_HEIGHT)))
+            .andExpect(jsonPath("$.[*].x").value(hasItem(DEFAULT_X)))
+            .andExpect(jsonPath("$.[*].y").value(hasItem(DEFAULT_Y)));
     }
 
     @Test
@@ -180,7 +219,12 @@ class AvatarCharactorResourceIT {
             .andExpect(jsonPath("$.id").value(avatarCharactor.getId().intValue()))
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()));
+            .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()))
+            .andExpect(jsonPath("$.imgUrl").value(DEFAULT_IMG_URL))
+            .andExpect(jsonPath("$.width").value(DEFAULT_WIDTH))
+            .andExpect(jsonPath("$.height").value(DEFAULT_HEIGHT))
+            .andExpect(jsonPath("$.x").value(DEFAULT_X))
+            .andExpect(jsonPath("$.y").value(DEFAULT_Y));
     }
 
     @Test
@@ -372,6 +416,435 @@ class AvatarCharactorResourceIT {
 
     @Test
     @Transactional
+    void getAllAvatarCharactorsByImgUrlIsEqualToSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where imgUrl equals to DEFAULT_IMG_URL
+        defaultAvatarCharactorShouldBeFound("imgUrl.equals=" + DEFAULT_IMG_URL);
+
+        // Get all the avatarCharactorList where imgUrl equals to UPDATED_IMG_URL
+        defaultAvatarCharactorShouldNotBeFound("imgUrl.equals=" + UPDATED_IMG_URL);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByImgUrlIsInShouldWork() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where imgUrl in DEFAULT_IMG_URL or UPDATED_IMG_URL
+        defaultAvatarCharactorShouldBeFound("imgUrl.in=" + DEFAULT_IMG_URL + "," + UPDATED_IMG_URL);
+
+        // Get all the avatarCharactorList where imgUrl equals to UPDATED_IMG_URL
+        defaultAvatarCharactorShouldNotBeFound("imgUrl.in=" + UPDATED_IMG_URL);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByImgUrlIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where imgUrl is not null
+        defaultAvatarCharactorShouldBeFound("imgUrl.specified=true");
+
+        // Get all the avatarCharactorList where imgUrl is null
+        defaultAvatarCharactorShouldNotBeFound("imgUrl.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByImgUrlContainsSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where imgUrl contains DEFAULT_IMG_URL
+        defaultAvatarCharactorShouldBeFound("imgUrl.contains=" + DEFAULT_IMG_URL);
+
+        // Get all the avatarCharactorList where imgUrl contains UPDATED_IMG_URL
+        defaultAvatarCharactorShouldNotBeFound("imgUrl.contains=" + UPDATED_IMG_URL);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByImgUrlNotContainsSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where imgUrl does not contain DEFAULT_IMG_URL
+        defaultAvatarCharactorShouldNotBeFound("imgUrl.doesNotContain=" + DEFAULT_IMG_URL);
+
+        // Get all the avatarCharactorList where imgUrl does not contain UPDATED_IMG_URL
+        defaultAvatarCharactorShouldBeFound("imgUrl.doesNotContain=" + UPDATED_IMG_URL);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByWidthIsEqualToSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where width equals to DEFAULT_WIDTH
+        defaultAvatarCharactorShouldBeFound("width.equals=" + DEFAULT_WIDTH);
+
+        // Get all the avatarCharactorList where width equals to UPDATED_WIDTH
+        defaultAvatarCharactorShouldNotBeFound("width.equals=" + UPDATED_WIDTH);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByWidthIsInShouldWork() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where width in DEFAULT_WIDTH or UPDATED_WIDTH
+        defaultAvatarCharactorShouldBeFound("width.in=" + DEFAULT_WIDTH + "," + UPDATED_WIDTH);
+
+        // Get all the avatarCharactorList where width equals to UPDATED_WIDTH
+        defaultAvatarCharactorShouldNotBeFound("width.in=" + UPDATED_WIDTH);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByWidthIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where width is not null
+        defaultAvatarCharactorShouldBeFound("width.specified=true");
+
+        // Get all the avatarCharactorList where width is null
+        defaultAvatarCharactorShouldNotBeFound("width.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByWidthIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where width is greater than or equal to DEFAULT_WIDTH
+        defaultAvatarCharactorShouldBeFound("width.greaterThanOrEqual=" + DEFAULT_WIDTH);
+
+        // Get all the avatarCharactorList where width is greater than or equal to UPDATED_WIDTH
+        defaultAvatarCharactorShouldNotBeFound("width.greaterThanOrEqual=" + UPDATED_WIDTH);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByWidthIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where width is less than or equal to DEFAULT_WIDTH
+        defaultAvatarCharactorShouldBeFound("width.lessThanOrEqual=" + DEFAULT_WIDTH);
+
+        // Get all the avatarCharactorList where width is less than or equal to SMALLER_WIDTH
+        defaultAvatarCharactorShouldNotBeFound("width.lessThanOrEqual=" + SMALLER_WIDTH);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByWidthIsLessThanSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where width is less than DEFAULT_WIDTH
+        defaultAvatarCharactorShouldNotBeFound("width.lessThan=" + DEFAULT_WIDTH);
+
+        // Get all the avatarCharactorList where width is less than UPDATED_WIDTH
+        defaultAvatarCharactorShouldBeFound("width.lessThan=" + UPDATED_WIDTH);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByWidthIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where width is greater than DEFAULT_WIDTH
+        defaultAvatarCharactorShouldNotBeFound("width.greaterThan=" + DEFAULT_WIDTH);
+
+        // Get all the avatarCharactorList where width is greater than SMALLER_WIDTH
+        defaultAvatarCharactorShouldBeFound("width.greaterThan=" + SMALLER_WIDTH);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByHeightIsEqualToSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where height equals to DEFAULT_HEIGHT
+        defaultAvatarCharactorShouldBeFound("height.equals=" + DEFAULT_HEIGHT);
+
+        // Get all the avatarCharactorList where height equals to UPDATED_HEIGHT
+        defaultAvatarCharactorShouldNotBeFound("height.equals=" + UPDATED_HEIGHT);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByHeightIsInShouldWork() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where height in DEFAULT_HEIGHT or UPDATED_HEIGHT
+        defaultAvatarCharactorShouldBeFound("height.in=" + DEFAULT_HEIGHT + "," + UPDATED_HEIGHT);
+
+        // Get all the avatarCharactorList where height equals to UPDATED_HEIGHT
+        defaultAvatarCharactorShouldNotBeFound("height.in=" + UPDATED_HEIGHT);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByHeightIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where height is not null
+        defaultAvatarCharactorShouldBeFound("height.specified=true");
+
+        // Get all the avatarCharactorList where height is null
+        defaultAvatarCharactorShouldNotBeFound("height.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByHeightIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where height is greater than or equal to DEFAULT_HEIGHT
+        defaultAvatarCharactorShouldBeFound("height.greaterThanOrEqual=" + DEFAULT_HEIGHT);
+
+        // Get all the avatarCharactorList where height is greater than or equal to UPDATED_HEIGHT
+        defaultAvatarCharactorShouldNotBeFound("height.greaterThanOrEqual=" + UPDATED_HEIGHT);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByHeightIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where height is less than or equal to DEFAULT_HEIGHT
+        defaultAvatarCharactorShouldBeFound("height.lessThanOrEqual=" + DEFAULT_HEIGHT);
+
+        // Get all the avatarCharactorList where height is less than or equal to SMALLER_HEIGHT
+        defaultAvatarCharactorShouldNotBeFound("height.lessThanOrEqual=" + SMALLER_HEIGHT);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByHeightIsLessThanSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where height is less than DEFAULT_HEIGHT
+        defaultAvatarCharactorShouldNotBeFound("height.lessThan=" + DEFAULT_HEIGHT);
+
+        // Get all the avatarCharactorList where height is less than UPDATED_HEIGHT
+        defaultAvatarCharactorShouldBeFound("height.lessThan=" + UPDATED_HEIGHT);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByHeightIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where height is greater than DEFAULT_HEIGHT
+        defaultAvatarCharactorShouldNotBeFound("height.greaterThan=" + DEFAULT_HEIGHT);
+
+        // Get all the avatarCharactorList where height is greater than SMALLER_HEIGHT
+        defaultAvatarCharactorShouldBeFound("height.greaterThan=" + SMALLER_HEIGHT);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByXIsEqualToSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where x equals to DEFAULT_X
+        defaultAvatarCharactorShouldBeFound("x.equals=" + DEFAULT_X);
+
+        // Get all the avatarCharactorList where x equals to UPDATED_X
+        defaultAvatarCharactorShouldNotBeFound("x.equals=" + UPDATED_X);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByXIsInShouldWork() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where x in DEFAULT_X or UPDATED_X
+        defaultAvatarCharactorShouldBeFound("x.in=" + DEFAULT_X + "," + UPDATED_X);
+
+        // Get all the avatarCharactorList where x equals to UPDATED_X
+        defaultAvatarCharactorShouldNotBeFound("x.in=" + UPDATED_X);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByXIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where x is not null
+        defaultAvatarCharactorShouldBeFound("x.specified=true");
+
+        // Get all the avatarCharactorList where x is null
+        defaultAvatarCharactorShouldNotBeFound("x.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByXIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where x is greater than or equal to DEFAULT_X
+        defaultAvatarCharactorShouldBeFound("x.greaterThanOrEqual=" + DEFAULT_X);
+
+        // Get all the avatarCharactorList where x is greater than or equal to UPDATED_X
+        defaultAvatarCharactorShouldNotBeFound("x.greaterThanOrEqual=" + UPDATED_X);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByXIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where x is less than or equal to DEFAULT_X
+        defaultAvatarCharactorShouldBeFound("x.lessThanOrEqual=" + DEFAULT_X);
+
+        // Get all the avatarCharactorList where x is less than or equal to SMALLER_X
+        defaultAvatarCharactorShouldNotBeFound("x.lessThanOrEqual=" + SMALLER_X);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByXIsLessThanSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where x is less than DEFAULT_X
+        defaultAvatarCharactorShouldNotBeFound("x.lessThan=" + DEFAULT_X);
+
+        // Get all the avatarCharactorList where x is less than UPDATED_X
+        defaultAvatarCharactorShouldBeFound("x.lessThan=" + UPDATED_X);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByXIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where x is greater than DEFAULT_X
+        defaultAvatarCharactorShouldNotBeFound("x.greaterThan=" + DEFAULT_X);
+
+        // Get all the avatarCharactorList where x is greater than SMALLER_X
+        defaultAvatarCharactorShouldBeFound("x.greaterThan=" + SMALLER_X);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByYIsEqualToSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where y equals to DEFAULT_Y
+        defaultAvatarCharactorShouldBeFound("y.equals=" + DEFAULT_Y);
+
+        // Get all the avatarCharactorList where y equals to UPDATED_Y
+        defaultAvatarCharactorShouldNotBeFound("y.equals=" + UPDATED_Y);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByYIsInShouldWork() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where y in DEFAULT_Y or UPDATED_Y
+        defaultAvatarCharactorShouldBeFound("y.in=" + DEFAULT_Y + "," + UPDATED_Y);
+
+        // Get all the avatarCharactorList where y equals to UPDATED_Y
+        defaultAvatarCharactorShouldNotBeFound("y.in=" + UPDATED_Y);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByYIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where y is not null
+        defaultAvatarCharactorShouldBeFound("y.specified=true");
+
+        // Get all the avatarCharactorList where y is null
+        defaultAvatarCharactorShouldNotBeFound("y.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByYIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where y is greater than or equal to DEFAULT_Y
+        defaultAvatarCharactorShouldBeFound("y.greaterThanOrEqual=" + DEFAULT_Y);
+
+        // Get all the avatarCharactorList where y is greater than or equal to UPDATED_Y
+        defaultAvatarCharactorShouldNotBeFound("y.greaterThanOrEqual=" + UPDATED_Y);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByYIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where y is less than or equal to DEFAULT_Y
+        defaultAvatarCharactorShouldBeFound("y.lessThanOrEqual=" + DEFAULT_Y);
+
+        // Get all the avatarCharactorList where y is less than or equal to SMALLER_Y
+        defaultAvatarCharactorShouldNotBeFound("y.lessThanOrEqual=" + SMALLER_Y);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByYIsLessThanSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where y is less than DEFAULT_Y
+        defaultAvatarCharactorShouldNotBeFound("y.lessThan=" + DEFAULT_Y);
+
+        // Get all the avatarCharactorList where y is less than UPDATED_Y
+        defaultAvatarCharactorShouldBeFound("y.lessThan=" + UPDATED_Y);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByYIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+
+        // Get all the avatarCharactorList where y is greater than DEFAULT_Y
+        defaultAvatarCharactorShouldNotBeFound("y.greaterThan=" + DEFAULT_Y);
+
+        // Get all the avatarCharactorList where y is greater than SMALLER_Y
+        defaultAvatarCharactorShouldBeFound("y.greaterThan=" + SMALLER_Y);
+    }
+
+    @Test
+    @Transactional
     void getAllAvatarCharactorsByAvatarAttributesIsEqualToSomething() throws Exception {
         AvatarAttributes avatarAttributes;
         if (TestUtil.findAll(em, AvatarAttributes.class).isEmpty()) {
@@ -404,7 +877,12 @@ class AvatarCharactorResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(avatarCharactor.getId().intValue())))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())));
+            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].imgUrl").value(hasItem(DEFAULT_IMG_URL)))
+            .andExpect(jsonPath("$.[*].width").value(hasItem(DEFAULT_WIDTH)))
+            .andExpect(jsonPath("$.[*].height").value(hasItem(DEFAULT_HEIGHT)))
+            .andExpect(jsonPath("$.[*].x").value(hasItem(DEFAULT_X)))
+            .andExpect(jsonPath("$.[*].y").value(hasItem(DEFAULT_Y)));
 
         // Check, that the count call also returns 1
         restAvatarCharactorMockMvc
@@ -452,7 +930,15 @@ class AvatarCharactorResourceIT {
         AvatarCharactor updatedAvatarCharactor = avatarCharactorRepository.findById(avatarCharactor.getId()).get();
         // Disconnect from session so that the updates on updatedAvatarCharactor are not directly saved in db
         em.detach(updatedAvatarCharactor);
-        updatedAvatarCharactor.code(UPDATED_CODE).description(UPDATED_DESCRIPTION).isActive(UPDATED_IS_ACTIVE);
+        updatedAvatarCharactor
+            .code(UPDATED_CODE)
+            .description(UPDATED_DESCRIPTION)
+            .isActive(UPDATED_IS_ACTIVE)
+            .imgUrl(UPDATED_IMG_URL)
+            .width(UPDATED_WIDTH)
+            .height(UPDATED_HEIGHT)
+            .x(UPDATED_X)
+            .y(UPDATED_Y);
 
         restAvatarCharactorMockMvc
             .perform(
@@ -469,6 +955,11 @@ class AvatarCharactorResourceIT {
         assertThat(testAvatarCharactor.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testAvatarCharactor.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testAvatarCharactor.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+        assertThat(testAvatarCharactor.getImgUrl()).isEqualTo(UPDATED_IMG_URL);
+        assertThat(testAvatarCharactor.getWidth()).isEqualTo(UPDATED_WIDTH);
+        assertThat(testAvatarCharactor.getHeight()).isEqualTo(UPDATED_HEIGHT);
+        assertThat(testAvatarCharactor.getX()).isEqualTo(UPDATED_X);
+        assertThat(testAvatarCharactor.getY()).isEqualTo(UPDATED_Y);
     }
 
     @Test
@@ -541,7 +1032,7 @@ class AvatarCharactorResourceIT {
         AvatarCharactor partialUpdatedAvatarCharactor = new AvatarCharactor();
         partialUpdatedAvatarCharactor.setId(avatarCharactor.getId());
 
-        partialUpdatedAvatarCharactor.code(UPDATED_CODE);
+        partialUpdatedAvatarCharactor.code(UPDATED_CODE).imgUrl(UPDATED_IMG_URL);
 
         restAvatarCharactorMockMvc
             .perform(
@@ -558,6 +1049,11 @@ class AvatarCharactorResourceIT {
         assertThat(testAvatarCharactor.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testAvatarCharactor.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testAvatarCharactor.getIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
+        assertThat(testAvatarCharactor.getImgUrl()).isEqualTo(UPDATED_IMG_URL);
+        assertThat(testAvatarCharactor.getWidth()).isEqualTo(DEFAULT_WIDTH);
+        assertThat(testAvatarCharactor.getHeight()).isEqualTo(DEFAULT_HEIGHT);
+        assertThat(testAvatarCharactor.getX()).isEqualTo(DEFAULT_X);
+        assertThat(testAvatarCharactor.getY()).isEqualTo(DEFAULT_Y);
     }
 
     @Test
@@ -572,7 +1068,15 @@ class AvatarCharactorResourceIT {
         AvatarCharactor partialUpdatedAvatarCharactor = new AvatarCharactor();
         partialUpdatedAvatarCharactor.setId(avatarCharactor.getId());
 
-        partialUpdatedAvatarCharactor.code(UPDATED_CODE).description(UPDATED_DESCRIPTION).isActive(UPDATED_IS_ACTIVE);
+        partialUpdatedAvatarCharactor
+            .code(UPDATED_CODE)
+            .description(UPDATED_DESCRIPTION)
+            .isActive(UPDATED_IS_ACTIVE)
+            .imgUrl(UPDATED_IMG_URL)
+            .width(UPDATED_WIDTH)
+            .height(UPDATED_HEIGHT)
+            .x(UPDATED_X)
+            .y(UPDATED_Y);
 
         restAvatarCharactorMockMvc
             .perform(
@@ -589,6 +1093,11 @@ class AvatarCharactorResourceIT {
         assertThat(testAvatarCharactor.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testAvatarCharactor.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testAvatarCharactor.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+        assertThat(testAvatarCharactor.getImgUrl()).isEqualTo(UPDATED_IMG_URL);
+        assertThat(testAvatarCharactor.getWidth()).isEqualTo(UPDATED_WIDTH);
+        assertThat(testAvatarCharactor.getHeight()).isEqualTo(UPDATED_HEIGHT);
+        assertThat(testAvatarCharactor.getX()).isEqualTo(UPDATED_X);
+        assertThat(testAvatarCharactor.getY()).isEqualTo(UPDATED_Y);
     }
 
     @Test

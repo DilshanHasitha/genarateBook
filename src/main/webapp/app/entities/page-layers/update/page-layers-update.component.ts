@@ -88,9 +88,7 @@ export class PageLayersUpdateComponent implements OnInit {
 
   protected loadRelationshipsOptions(): void {
     this.pageLayersDetailsService
-      .query({
-        size: 100,
-      })
+      .query()
       .pipe(map((res: HttpResponse<IPageLayersDetails[]>) => res.body ?? []))
       .pipe(
         map((pageLayersDetails: IPageLayersDetails[]) =>

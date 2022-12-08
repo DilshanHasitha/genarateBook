@@ -22,7 +22,7 @@ public class AvatarAttributesRepositoryWithBagRelationshipsImpl implements Avata
 
     @Override
     public Optional<AvatarAttributes> fetchBagRelationships(Optional<AvatarAttributes> avatarAttributes) {
-        return avatarAttributes.map(this::fetchAvatarCharactors).map(this::fetchOptions);
+        return avatarAttributes.map(this::fetchAvatarCharactors).map(this::fetchStyles);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class AvatarAttributesRepositoryWithBagRelationshipsImpl implements Avata
 
     @Override
     public List<AvatarAttributes> fetchBagRelationships(List<AvatarAttributes> avatarAttributes) {
-        return Optional.of(avatarAttributes).map(this::fetchAvatarCharactors).map(this::fetchOptions).orElse(Collections.emptyList());
+        return Optional.of(avatarAttributes).map(this::fetchAvatarCharactors).map(this::fetchStyles).orElse(Collections.emptyList());
     }
 
     AvatarAttributes fetchAvatarCharactors(AvatarAttributes result) {
@@ -65,10 +65,10 @@ public class AvatarAttributesRepositoryWithBagRelationshipsImpl implements Avata
         return result;
     }
 
-    AvatarAttributes fetchOptions(AvatarAttributes result) {
+    AvatarAttributes fetchStyles(AvatarAttributes result) {
         return entityManager
             .createQuery(
-                "select avatarAttributes from AvatarAttributes avatarAttributes left join fetch avatarAttributes.options where avatarAttributes is :avatarAttributes",
+                "select avatarAttributes from AvatarAttributes avatarAttributes left join fetch avatarAttributes.styles where avatarAttributes is :avatarAttributes",
                 AvatarAttributes.class
             )
             .setParameter("avatarAttributes", result)
@@ -76,12 +76,12 @@ public class AvatarAttributesRepositoryWithBagRelationshipsImpl implements Avata
             .getSingleResult();
     }
 
-    List<AvatarAttributes> fetchOptions(List<AvatarAttributes> avatarAttributes) {
+    List<AvatarAttributes> fetchStyles(List<AvatarAttributes> avatarAttributes) {
         HashMap<Object, Integer> order = new HashMap<>();
         IntStream.range(0, avatarAttributes.size()).forEach(index -> order.put(avatarAttributes.get(index).getId(), index));
         List<AvatarAttributes> result = entityManager
             .createQuery(
-                "select distinct avatarAttributes from AvatarAttributes avatarAttributes left join fetch avatarAttributes.options where avatarAttributes in :avatarAttributes",
+                "select distinct avatarAttributes from AvatarAttributes avatarAttributes left join fetch avatarAttributes.styles where avatarAttributes in :avatarAttributes",
                 AvatarAttributes.class
             )
             .setParameter("avatarAttributes", avatarAttributes)

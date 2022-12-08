@@ -45,16 +45,6 @@ public class AvatarAttributes implements Serializable {
     @JsonIgnoreProperties(value = { "avatarAttributes" }, allowSetters = true)
     private Set<AvatarCharactor> avatarCharactors = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-        name = "rel_avatar_attributes__option",
-        joinColumns = @JoinColumn(name = "avatar_attributes_id"),
-        inverseJoinColumns = @JoinColumn(name = "option_id")
-    )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "styles", "avatarAttributes" }, allowSetters = true)
-    private Set<Options> options = new HashSet<>();
-
     @ManyToMany(mappedBy = "avatarAttributes")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
@@ -72,6 +62,16 @@ public class AvatarAttributes implements Serializable {
         allowSetters = true
     )
     private Set<Books> books = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_avatar_attributes__styles",
+        joinColumns = @JoinColumn(name = "avatar_attributes_id"),
+        inverseJoinColumns = @JoinColumn(name = "styles_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "options" }, allowSetters = true)
+    private Set<Styles> styles = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -152,31 +152,6 @@ public class AvatarAttributes implements Serializable {
         return this;
     }
 
-    public Set<Options> getOptions() {
-        return this.options;
-    }
-
-    public void setOptions(Set<Options> options) {
-        this.options = options;
-    }
-
-    public AvatarAttributes options(Set<Options> options) {
-        this.setOptions(options);
-        return this;
-    }
-
-    public AvatarAttributes addOption(Options options) {
-        this.options.add(options);
-        options.getAvatarAttributes().add(this);
-        return this;
-    }
-
-    public AvatarAttributes removeOption(Options options) {
-        this.options.remove(options);
-        options.getAvatarAttributes().remove(this);
-        return this;
-    }
-
     public Set<Books> getBooks() {
         return this.books;
     }
@@ -205,6 +180,29 @@ public class AvatarAttributes implements Serializable {
     public AvatarAttributes removeBooks(Books books) {
         this.books.remove(books);
         books.getAvatarAttributes().remove(this);
+        return this;
+    }
+
+    public Set<Styles> getStyles() {
+        return this.styles;
+    }
+
+    public void setStyles(Set<Styles> styles) {
+        this.styles = styles;
+    }
+
+    public AvatarAttributes styles(Set<Styles> styles) {
+        this.setStyles(styles);
+        return this;
+    }
+
+    public AvatarAttributes addStyles(Styles styles) {
+        this.styles.add(styles);
+        return this;
+    }
+
+    public AvatarAttributes removeStyles(Styles styles) {
+        this.styles.remove(styles);
         return this;
     }
 

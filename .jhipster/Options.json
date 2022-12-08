@@ -28,21 +28,6 @@
   "name": "Options",
   "pagination": "pagination",
   "readOnly": false,
-  "relationships": [
-    {
-      "otherEntityName": "styles",
-      "otherEntityRelationshipName": "option",
-      "ownerSide": true,
-      "relationshipName": "style",
-      "relationshipType": "many-to-many"
-    },
-    {
-      "otherEntityName": "avatarAttributes",
-      "otherEntityRelationshipName": "option",
-      "ownerSide": false,
-      "relationshipName": "avatarAttributes",
-      "relationshipType": "many-to-many"
-    }
-  ],
+  "relationships": [],
   "service": "serviceClass"
 }

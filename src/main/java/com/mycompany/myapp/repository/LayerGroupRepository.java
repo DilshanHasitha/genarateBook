@@ -1,6 +1,5 @@
 package com.mycompany.myapp.repository;
 
-import com.mycompany.myapp.domain.LayerDetails;
 import com.mycompany.myapp.domain.LayerGroup;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +29,4 @@ public interface LayerGroupRepository
     default Page<LayerGroup> findAllWithEagerRelationships(Pageable pageable) {
         return this.fetchBagRelationships(this.findAll(pageable));
     }
-
-    LayerGroup findOneByCode(String code);
 }

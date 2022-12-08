@@ -14,7 +14,7 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type OptionsFormGroupInput = IOptions | PartialWithRequiredKeyOf<NewOptions>;
 
-type OptionsFormDefaults = Pick<NewOptions, 'id' | 'isActive' | 'styles' | 'avatarAttributes'>;
+type OptionsFormDefaults = Pick<NewOptions, 'id' | 'isActive'>;
 
 type OptionsFormGroupContent = {
   id: FormControl<IOptions['id'] | NewOptions['id']>;
@@ -22,8 +22,6 @@ type OptionsFormGroupContent = {
   description: FormControl<IOptions['description']>;
   imgURL: FormControl<IOptions['imgURL']>;
   isActive: FormControl<IOptions['isActive']>;
-  styles: FormControl<IOptions['styles']>;
-  avatarAttributes: FormControl<IOptions['avatarAttributes']>;
 };
 
 export type OptionsFormGroup = FormGroup<OptionsFormGroupContent>;
@@ -49,8 +47,6 @@ export class OptionsFormService {
       }),
       imgURL: new FormControl(optionsRawValue.imgURL),
       isActive: new FormControl(optionsRawValue.isActive),
-      styles: new FormControl(optionsRawValue.styles ?? []),
-      avatarAttributes: new FormControl(optionsRawValue.avatarAttributes ?? []),
     });
   }
 
@@ -72,8 +68,6 @@ export class OptionsFormService {
     return {
       id: null,
       isActive: false,
-      styles: [],
-      avatarAttributes: [],
     };
   }
 }

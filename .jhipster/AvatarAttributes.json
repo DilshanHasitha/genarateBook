@@ -33,17 +33,18 @@
       "relationshipType": "many-to-many"
     },
     {
-      "otherEntityName": "options",
-      "otherEntityRelationshipName": "avatarAttributes",
-      "ownerSide": true,
-      "relationshipName": "option",
-      "relationshipType": "many-to-many"
-    },
-    {
       "otherEntityName": "books",
       "otherEntityRelationshipName": "avatarAttributes",
       "ownerSide": false,
       "relationshipName": "books",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "styles",
+      "otherEntityRelationshipName": "avatarAttributes",
+      "ownerSide": true,
+      "relationshipName": "styles",
       "relationshipType": "many-to-many"
     }
   ],

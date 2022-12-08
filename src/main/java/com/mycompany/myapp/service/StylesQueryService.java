@@ -97,10 +97,22 @@ public class StylesQueryService extends QueryService<Styles> {
             if (criteria.getIsActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getIsActive(), Styles_.isActive));
             }
-            if (criteria.getOptionId() != null) {
+            if (criteria.getWidth() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getWidth(), Styles_.width));
+            }
+            if (criteria.getHeight() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getHeight(), Styles_.height));
+            }
+            if (criteria.getX() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getX(), Styles_.x));
+            }
+            if (criteria.getY() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getY(), Styles_.y));
+            }
+            if (criteria.getOptionsId() != null) {
                 specification =
                     specification.and(
-                        buildSpecification(criteria.getOptionId(), root -> root.join(Styles_.options, JoinType.LEFT).get(Options_.id))
+                        buildSpecification(criteria.getOptionsId(), root -> root.join(Styles_.options, JoinType.LEFT).get(Options_.id))
                     );
             }
         }

@@ -23,6 +23,11 @@ describe('AvatarCharactor Form Service', () => {
             code: expect.any(Object),
             description: expect.any(Object),
             isActive: expect.any(Object),
+            imgUrl: expect.any(Object),
+            width: expect.any(Object),
+            height: expect.any(Object),
+            x: expect.any(Object),
+            y: expect.any(Object),
             avatarAttributes: expect.any(Object),
           })
         );
@@ -37,6 +42,11 @@ describe('AvatarCharactor Form Service', () => {
             code: expect.any(Object),
             description: expect.any(Object),
             isActive: expect.any(Object),
+            imgUrl: expect.any(Object),
+            width: expect.any(Object),
+            height: expect.any(Object),
+            x: expect.any(Object),
+            y: expect.any(Object),
             avatarAttributes: expect.any(Object),
           })
         );

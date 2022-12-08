@@ -31,9 +31,9 @@ public class AvatarAttributesCriteria implements Serializable, Criteria {
 
     private LongFilter avatarCharactorId;
 
-    private LongFilter optionId;
-
     private LongFilter booksId;
+
+    private LongFilter stylesId;
 
     private Boolean distinct;
 
@@ -45,8 +45,8 @@ public class AvatarAttributesCriteria implements Serializable, Criteria {
         this.description = other.description == null ? null : other.description.copy();
         this.isActive = other.isActive == null ? null : other.isActive.copy();
         this.avatarCharactorId = other.avatarCharactorId == null ? null : other.avatarCharactorId.copy();
-        this.optionId = other.optionId == null ? null : other.optionId.copy();
         this.booksId = other.booksId == null ? null : other.booksId.copy();
+        this.stylesId = other.stylesId == null ? null : other.stylesId.copy();
         this.distinct = other.distinct;
     }
 
@@ -130,21 +130,6 @@ public class AvatarAttributesCriteria implements Serializable, Criteria {
         this.avatarCharactorId = avatarCharactorId;
     }
 
-    public LongFilter getOptionId() {
-        return optionId;
-    }
-
-    public LongFilter optionId() {
-        if (optionId == null) {
-            optionId = new LongFilter();
-        }
-        return optionId;
-    }
-
-    public void setOptionId(LongFilter optionId) {
-        this.optionId = optionId;
-    }
-
     public LongFilter getBooksId() {
         return booksId;
     }
@@ -158,6 +143,21 @@ public class AvatarAttributesCriteria implements Serializable, Criteria {
 
     public void setBooksId(LongFilter booksId) {
         this.booksId = booksId;
+    }
+
+    public LongFilter getStylesId() {
+        return stylesId;
+    }
+
+    public LongFilter stylesId() {
+        if (stylesId == null) {
+            stylesId = new LongFilter();
+        }
+        return stylesId;
+    }
+
+    public void setStylesId(LongFilter stylesId) {
+        this.stylesId = stylesId;
     }
 
     public Boolean getDistinct() {
@@ -183,15 +183,15 @@ public class AvatarAttributesCriteria implements Serializable, Criteria {
             Objects.equals(description, that.description) &&
             Objects.equals(isActive, that.isActive) &&
             Objects.equals(avatarCharactorId, that.avatarCharactorId) &&
-            Objects.equals(optionId, that.optionId) &&
             Objects.equals(booksId, that.booksId) &&
+            Objects.equals(stylesId, that.stylesId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, code, description, isActive, avatarCharactorId, optionId, booksId, distinct);
+        return Objects.hash(id, code, description, isActive, avatarCharactorId, booksId, stylesId, distinct);
     }
 
     // prettier-ignore
@@ -203,8 +203,8 @@ public class AvatarAttributesCriteria implements Serializable, Criteria {
             (description != null ? "description=" + description + ", " : "") +
             (isActive != null ? "isActive=" + isActive + ", " : "") +
             (avatarCharactorId != null ? "avatarCharactorId=" + avatarCharactorId + ", " : "") +
-            (optionId != null ? "optionId=" + optionId + ", " : "") +
             (booksId != null ? "booksId=" + booksId + ", " : "") +
+            (stylesId != null ? "stylesId=" + stylesId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

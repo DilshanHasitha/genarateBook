@@ -31,7 +31,15 @@ public class StylesCriteria implements Serializable, Criteria {
 
     private BooleanFilter isActive;
 
-    private LongFilter optionId;
+    private IntegerFilter width;
+
+    private IntegerFilter height;
+
+    private IntegerFilter x;
+
+    private IntegerFilter y;
+
+    private LongFilter optionsId;
 
     private Boolean distinct;
 
@@ -43,7 +51,11 @@ public class StylesCriteria implements Serializable, Criteria {
         this.description = other.description == null ? null : other.description.copy();
         this.imgURL = other.imgURL == null ? null : other.imgURL.copy();
         this.isActive = other.isActive == null ? null : other.isActive.copy();
-        this.optionId = other.optionId == null ? null : other.optionId.copy();
+        this.width = other.width == null ? null : other.width.copy();
+        this.height = other.height == null ? null : other.height.copy();
+        this.x = other.x == null ? null : other.x.copy();
+        this.y = other.y == null ? null : other.y.copy();
+        this.optionsId = other.optionsId == null ? null : other.optionsId.copy();
         this.distinct = other.distinct;
     }
 
@@ -127,19 +139,79 @@ public class StylesCriteria implements Serializable, Criteria {
         this.isActive = isActive;
     }
 
-    public LongFilter getOptionId() {
-        return optionId;
+    public IntegerFilter getWidth() {
+        return width;
     }
 
-    public LongFilter optionId() {
-        if (optionId == null) {
-            optionId = new LongFilter();
+    public IntegerFilter width() {
+        if (width == null) {
+            width = new IntegerFilter();
         }
-        return optionId;
+        return width;
     }
 
-    public void setOptionId(LongFilter optionId) {
-        this.optionId = optionId;
+    public void setWidth(IntegerFilter width) {
+        this.width = width;
+    }
+
+    public IntegerFilter getHeight() {
+        return height;
+    }
+
+    public IntegerFilter height() {
+        if (height == null) {
+            height = new IntegerFilter();
+        }
+        return height;
+    }
+
+    public void setHeight(IntegerFilter height) {
+        this.height = height;
+    }
+
+    public IntegerFilter getX() {
+        return x;
+    }
+
+    public IntegerFilter x() {
+        if (x == null) {
+            x = new IntegerFilter();
+        }
+        return x;
+    }
+
+    public void setX(IntegerFilter x) {
+        this.x = x;
+    }
+
+    public IntegerFilter getY() {
+        return y;
+    }
+
+    public IntegerFilter y() {
+        if (y == null) {
+            y = new IntegerFilter();
+        }
+        return y;
+    }
+
+    public void setY(IntegerFilter y) {
+        this.y = y;
+    }
+
+    public LongFilter getOptionsId() {
+        return optionsId;
+    }
+
+    public LongFilter optionsId() {
+        if (optionsId == null) {
+            optionsId = new LongFilter();
+        }
+        return optionsId;
+    }
+
+    public void setOptionsId(LongFilter optionsId) {
+        this.optionsId = optionsId;
     }
 
     public Boolean getDistinct() {
@@ -165,14 +237,18 @@ public class StylesCriteria implements Serializable, Criteria {
             Objects.equals(description, that.description) &&
             Objects.equals(imgURL, that.imgURL) &&
             Objects.equals(isActive, that.isActive) &&
-            Objects.equals(optionId, that.optionId) &&
+            Objects.equals(width, that.width) &&
+            Objects.equals(height, that.height) &&
+            Objects.equals(x, that.x) &&
+            Objects.equals(y, that.y) &&
+            Objects.equals(optionsId, that.optionsId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, code, description, imgURL, isActive, optionId, distinct);
+        return Objects.hash(id, code, description, imgURL, isActive, width, height, x, y, optionsId, distinct);
     }
 
     // prettier-ignore
@@ -184,7 +260,11 @@ public class StylesCriteria implements Serializable, Criteria {
             (description != null ? "description=" + description + ", " : "") +
             (imgURL != null ? "imgURL=" + imgURL + ", " : "") +
             (isActive != null ? "isActive=" + isActive + ", " : "") +
-            (optionId != null ? "optionId=" + optionId + ", " : "") +
+            (width != null ? "width=" + width + ", " : "") +
+            (height != null ? "height=" + height + ", " : "") +
+            (x != null ? "x=" + x + ", " : "") +
+            (y != null ? "y=" + y + ", " : "") +
+            (optionsId != null ? "optionsId=" + optionsId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

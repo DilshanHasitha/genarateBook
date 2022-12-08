@@ -10,7 +10,7 @@ import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.AvatarAttributes;
 import com.mycompany.myapp.domain.AvatarCharactor;
 import com.mycompany.myapp.domain.Books;
-import com.mycompany.myapp.domain.Options;
+import com.mycompany.myapp.domain.Styles;
 import com.mycompany.myapp.repository.AvatarAttributesRepository;
 import com.mycompany.myapp.service.AvatarAttributesService;
 import com.mycompany.myapp.service.criteria.AvatarAttributesCriteria;
@@ -430,29 +430,6 @@ class AvatarAttributesResourceIT {
 
     @Test
     @Transactional
-    void getAllAvatarAttributesByOptionIsEqualToSomething() throws Exception {
-        Options option;
-        if (TestUtil.findAll(em, Options.class).isEmpty()) {
-            avatarAttributesRepository.saveAndFlush(avatarAttributes);
-            option = OptionsResourceIT.createEntity(em);
-        } else {
-            option = TestUtil.findAll(em, Options.class).get(0);
-        }
-        em.persist(option);
-        em.flush();
-        avatarAttributes.addOption(option);
-        avatarAttributesRepository.saveAndFlush(avatarAttributes);
-        Long optionId = option.getId();
-
-        // Get all the avatarAttributesList where option equals to optionId
-        defaultAvatarAttributesShouldBeFound("optionId.equals=" + optionId);
-
-        // Get all the avatarAttributesList where option equals to (optionId + 1)
-        defaultAvatarAttributesShouldNotBeFound("optionId.equals=" + (optionId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllAvatarAttributesByBooksIsEqualToSomething() throws Exception {
         Books books;
         if (TestUtil.findAll(em, Books.class).isEmpty()) {
@@ -472,6 +449,29 @@ class AvatarAttributesResourceIT {
 
         // Get all the avatarAttributesList where books equals to (booksId + 1)
         defaultAvatarAttributesShouldNotBeFound("booksId.equals=" + (booksId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarAttributesByStylesIsEqualToSomething() throws Exception {
+        Styles styles;
+        if (TestUtil.findAll(em, Styles.class).isEmpty()) {
+            avatarAttributesRepository.saveAndFlush(avatarAttributes);
+            styles = StylesResourceIT.createEntity(em);
+        } else {
+            styles = TestUtil.findAll(em, Styles.class).get(0);
+        }
+        em.persist(styles);
+        em.flush();
+        avatarAttributes.addStyles(styles);
+        avatarAttributesRepository.saveAndFlush(avatarAttributes);
+        Long stylesId = styles.getId();
+
+        // Get all the avatarAttributesList where styles equals to stylesId
+        defaultAvatarAttributesShouldBeFound("stylesId.equals=" + stylesId);
+
+        // Get all the avatarAttributesList where styles equals to (stylesId + 1)
+        defaultAvatarAttributesShouldNotBeFound("stylesId.equals=" + (stylesId + 1));
     }
 
     /**

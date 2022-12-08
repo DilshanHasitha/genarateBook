@@ -64,6 +64,30 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
+          <th scope="col" jhiSortBy="width">
+            <div class="d-flex">
+              <span>Width</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="height">
+            <div class="d-flex">
+              <span>Height</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="x">
+            <div class="d-flex">
+              <span>X</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="y">
+            <div class="d-flex">
+              <span>Y</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -76,18 +100,12 @@
           <td>{{ styles.description }}</td>
           <td>{{ styles.imgURL }}</td>
           <td>{{ styles.isActive }}</td>
+          <td>{{ styles.width }}</td>
+          <td>{{ styles.height }}</td>
+          <td>{{ styles.x }}</td>
+          <td>{{ styles.y }}</td>
           <td class="text-end">
             <div class="btn-group">
-              <button
-                type="submit"
-                [routerLink]="['/options']"
-                [queryParams]="{ 'filter[styleId.in]': styles.id }"
-                class="btn btn-info btn-sm"
-                data-cy="filterOtherEntityButton"
-              >
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline">Show Options</span>
-              </button>
               <button type="submit" [routerLink]="['/styles', styles.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                 <fa-icon icon="eye"></fa-icon>
                 <span class="d-none d-md-inline">View</span>

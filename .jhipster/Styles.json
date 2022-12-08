@@ -21,6 +21,22 @@
     {
       "fieldName": "isActive",
       "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "width",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "height",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "x",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "y",
+      "fieldType": "Integer"
     }
   ],
   "fluentMethods": true,
@@ -30,10 +46,11 @@
   "readOnly": false,
   "relationships": [
     {
+      "otherEntityField": "id",
       "otherEntityName": "options",
-      "otherEntityRelationshipName": "style",
-      "ownerSide": false,
-      "relationshipName": "option",
+      "otherEntityRelationshipName": "styles",
+      "ownerSide": true,
+      "relationshipName": "options",
       "relationshipType": "many-to-many"
     }
   ],

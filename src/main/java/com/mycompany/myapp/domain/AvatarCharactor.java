@@ -35,9 +35,24 @@ public class AvatarCharactor implements Serializable {
     @Column(name = "is_active")
     private Boolean isActive;
 
+    @Column(name = "img_url")
+    private String imgUrl;
+
+    @Column(name = "width")
+    private Integer width;
+
+    @Column(name = "height")
+    private Integer height;
+
+    @Column(name = "x")
+    private Integer x;
+
+    @Column(name = "y")
+    private Integer y;
+
     @ManyToMany(mappedBy = "avatarCharactors")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "avatarCharactors", "options", "books" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "avatarCharactors", "books", "styles" }, allowSetters = true)
     private Set<AvatarAttributes> avatarAttributes = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -92,6 +107,71 @@ public class AvatarCharactor implements Serializable {
 
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public String getImgUrl() {
+        return this.imgUrl;
+    }
+
+    public AvatarCharactor imgUrl(String imgUrl) {
+        this.setImgUrl(imgUrl);
+        return this;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public Integer getWidth() {
+        return this.width;
+    }
+
+    public AvatarCharactor width(Integer width) {
+        this.setWidth(width);
+        return this;
+    }
+
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
+
+    public Integer getHeight() {
+        return this.height;
+    }
+
+    public AvatarCharactor height(Integer height) {
+        this.setHeight(height);
+        return this;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
+
+    public Integer getX() {
+        return this.x;
+    }
+
+    public AvatarCharactor x(Integer x) {
+        this.setX(x);
+        return this;
+    }
+
+    public void setX(Integer x) {
+        this.x = x;
+    }
+
+    public Integer getY() {
+        return this.y;
+    }
+
+    public AvatarCharactor y(Integer y) {
+        this.setY(y);
+        return this;
+    }
+
+    public void setY(Integer y) {
+        this.y = y;
     }
 
     public Set<AvatarAttributes> getAvatarAttributes() {
@@ -152,6 +232,11 @@ public class AvatarCharactor implements Serializable {
             ", code='" + getCode() + "'" +
             ", description='" + getDescription() + "'" +
             ", isActive='" + getIsActive() + "'" +
+            ", imgUrl='" + getImgUrl() + "'" +
+            ", width=" + getWidth() +
+            ", height=" + getHeight() +
+            ", x=" + getX() +
+            ", y=" + getY() +
             "}";
     }
 }

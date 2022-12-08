@@ -6,21 +6,27 @@ export const sampleWithRequiredData: IStyles = {
 };
 
 export const sampleWithPartialData: IStyles = {
-  id: 23521,
-  description: 'Usability',
-  isActive: true,
+  id: 15592,
+  description: 'redundant Soft',
+  isActive: false,
+  x: 90912,
+  y: 4128,
 };
 
 export const sampleWithFullData: IStyles = {
-  id: 81174,
-  code: 'platforms Florida',
-  description: 'Soft',
-  imgURL: 'overriding transmitting',
-  isActive: false,
+  id: 13944,
+  code: 'strategize blue generating',
+  description: 'parsing Account Small',
+  imgURL: 'Programmable capacitor Borders',
+  isActive: true,
+  width: 57712,
+  height: 63328,
+  x: 32141,
+  y: 40827,
 };
 
 export const sampleWithNewData: NewStyles = {
-  description: 'parsing Account Small',
+  description: 'Pass Business-focused District',
   id: null,
 };
 

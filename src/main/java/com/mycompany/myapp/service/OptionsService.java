@@ -90,15 +90,6 @@ public class OptionsService {
     }
 
     /**
-     * Get all the options with eager load of many-to-many relationships.
-     *
-     * @return the list of entities.
-     */
-    public Page<Options> findAllWithEagerRelationships(Pageable pageable) {
-        return optionsRepository.findAllWithEagerRelationships(pageable);
-    }
-
-    /**
      * Get one options by id.
      *
      * @param id the id of the entity.
@@ -107,7 +98,7 @@ public class OptionsService {
     @Transactional(readOnly = true)
     public Optional<Options> findOne(Long id) {
         log.debug("Request to get Options : {}", id);
-        return optionsRepository.findOneWithEagerRelationships(id);
+        return optionsRepository.findById(id);
     }
 
     /**

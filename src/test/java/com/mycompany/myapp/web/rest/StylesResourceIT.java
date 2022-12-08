@@ -2,6 +2,7 @@ package com.mycompany.myapp.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -9,15 +10,23 @@ import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.Options;
 import com.mycompany.myapp.domain.Styles;
 import com.mycompany.myapp.repository.StylesRepository;
+import com.mycompany.myapp.service.StylesService;
 import com.mycompany.myapp.service.criteria.StylesCriteria;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link StylesResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class StylesResourceIT {
@@ -43,6 +53,22 @@ class StylesResourceIT {
     private static final Boolean DEFAULT_IS_ACTIVE = false;
     private static final Boolean UPDATED_IS_ACTIVE = true;
 
+    private static final Integer DEFAULT_WIDTH = 1;
+    private static final Integer UPDATED_WIDTH = 2;
+    private static final Integer SMALLER_WIDTH = 1 - 1;
+
+    private static final Integer DEFAULT_HEIGHT = 1;
+    private static final Integer UPDATED_HEIGHT = 2;
+    private static final Integer SMALLER_HEIGHT = 1 - 1;
+
+    private static final Integer DEFAULT_X = 1;
+    private static final Integer UPDATED_X = 2;
+    private static final Integer SMALLER_X = 1 - 1;
+
+    private static final Integer DEFAULT_Y = 1;
+    private static final Integer UPDATED_Y = 2;
+    private static final Integer SMALLER_Y = 1 - 1;
+
     private static final String ENTITY_API_URL = "/api/styles";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -51,6 +77,12 @@ class StylesResourceIT {
 
     @Autowired
     private StylesRepository stylesRepository;
+
+    @Mock
+    private StylesRepository stylesRepositoryMock;
+
+    @Mock
+    private StylesService stylesServiceMock;
 
     @Autowired
     private EntityManager em;
@@ -71,7 +103,11 @@ class StylesResourceIT {
             .code(DEFAULT_CODE)
             .description(DEFAULT_DESCRIPTION)
             .imgURL(DEFAULT_IMG_URL)
-            .isActive(DEFAULT_IS_ACTIVE);
+            .isActive(DEFAULT_IS_ACTIVE)
+            .width(DEFAULT_WIDTH)
+            .height(DEFAULT_HEIGHT)
+            .x(DEFAULT_X)
+            .y(DEFAULT_Y);
         return styles;
     }
 
@@ -86,7 +122,11 @@ class StylesResourceIT {
             .code(UPDATED_CODE)
             .description(UPDATED_DESCRIPTION)
             .imgURL(UPDATED_IMG_URL)
-            .isActive(UPDATED_IS_ACTIVE);
+            .isActive(UPDATED_IS_ACTIVE)
+            .width(UPDATED_WIDTH)
+            .height(UPDATED_HEIGHT)
+            .x(UPDATED_X)
+            .y(UPDATED_Y);
         return styles;
     }
 
@@ -112,6 +152,10 @@ class StylesResourceIT {
         assertThat(testStyles.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testStyles.getImgURL()).isEqualTo(DEFAULT_IMG_URL);
         assertThat(testStyles.getIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
+        assertThat(testStyles.getWidth()).isEqualTo(DEFAULT_WIDTH);
+        assertThat(testStyles.getHeight()).isEqualTo(DEFAULT_HEIGHT);
+        assertThat(testStyles.getX()).isEqualTo(DEFAULT_X);
+        assertThat(testStyles.getY()).isEqualTo(DEFAULT_Y);
     }
 
     @Test
@@ -164,7 +208,28 @@ class StylesResourceIT {
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].imgURL").value(hasItem(DEFAULT_IMG_URL)))
-            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())));
+            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].width").value(hasItem(DEFAULT_WIDTH)))
+            .andExpect(jsonPath("$.[*].height").value(hasItem(DEFAULT_HEIGHT)))
+            .andExpect(jsonPath("$.[*].x").value(hasItem(DEFAULT_X)))
+            .andExpect(jsonPath("$.[*].y").value(hasItem(DEFAULT_Y)));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllStylesWithEagerRelationshipsIsEnabled() throws Exception {
+        when(stylesServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restStylesMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(stylesServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllStylesWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(stylesServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restStylesMockMvc.perform(get(ENTITY_API_URL + "?eagerload=false")).andExpect(status().isOk());
+        verify(stylesRepositoryMock, times(1)).findAll(any(Pageable.class));
     }
 
     @Test
@@ -182,7 +247,11 @@ class StylesResourceIT {
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.imgURL").value(DEFAULT_IMG_URL))
-            .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()));
+            .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()))
+            .andExpect(jsonPath("$.width").value(DEFAULT_WIDTH))
+            .andExpect(jsonPath("$.height").value(DEFAULT_HEIGHT))
+            .andExpect(jsonPath("$.x").value(DEFAULT_X))
+            .andExpect(jsonPath("$.y").value(DEFAULT_Y));
     }
 
     @Test
@@ -439,25 +508,389 @@ class StylesResourceIT {
 
     @Test
     @Transactional
-    void getAllStylesByOptionIsEqualToSomething() throws Exception {
-        Options option;
+    void getAllStylesByWidthIsEqualToSomething() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where width equals to DEFAULT_WIDTH
+        defaultStylesShouldBeFound("width.equals=" + DEFAULT_WIDTH);
+
+        // Get all the stylesList where width equals to UPDATED_WIDTH
+        defaultStylesShouldNotBeFound("width.equals=" + UPDATED_WIDTH);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByWidthIsInShouldWork() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where width in DEFAULT_WIDTH or UPDATED_WIDTH
+        defaultStylesShouldBeFound("width.in=" + DEFAULT_WIDTH + "," + UPDATED_WIDTH);
+
+        // Get all the stylesList where width equals to UPDATED_WIDTH
+        defaultStylesShouldNotBeFound("width.in=" + UPDATED_WIDTH);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByWidthIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where width is not null
+        defaultStylesShouldBeFound("width.specified=true");
+
+        // Get all the stylesList where width is null
+        defaultStylesShouldNotBeFound("width.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByWidthIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where width is greater than or equal to DEFAULT_WIDTH
+        defaultStylesShouldBeFound("width.greaterThanOrEqual=" + DEFAULT_WIDTH);
+
+        // Get all the stylesList where width is greater than or equal to UPDATED_WIDTH
+        defaultStylesShouldNotBeFound("width.greaterThanOrEqual=" + UPDATED_WIDTH);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByWidthIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where width is less than or equal to DEFAULT_WIDTH
+        defaultStylesShouldBeFound("width.lessThanOrEqual=" + DEFAULT_WIDTH);
+
+        // Get all the stylesList where width is less than or equal to SMALLER_WIDTH
+        defaultStylesShouldNotBeFound("width.lessThanOrEqual=" + SMALLER_WIDTH);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByWidthIsLessThanSomething() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where width is less than DEFAULT_WIDTH
+        defaultStylesShouldNotBeFound("width.lessThan=" + DEFAULT_WIDTH);
+
+        // Get all the stylesList where width is less than UPDATED_WIDTH
+        defaultStylesShouldBeFound("width.lessThan=" + UPDATED_WIDTH);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByWidthIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where width is greater than DEFAULT_WIDTH
+        defaultStylesShouldNotBeFound("width.greaterThan=" + DEFAULT_WIDTH);
+
+        // Get all the stylesList where width is greater than SMALLER_WIDTH
+        defaultStylesShouldBeFound("width.greaterThan=" + SMALLER_WIDTH);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByHeightIsEqualToSomething() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where height equals to DEFAULT_HEIGHT
+        defaultStylesShouldBeFound("height.equals=" + DEFAULT_HEIGHT);
+
+        // Get all the stylesList where height equals to UPDATED_HEIGHT
+        defaultStylesShouldNotBeFound("height.equals=" + UPDATED_HEIGHT);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByHeightIsInShouldWork() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where height in DEFAULT_HEIGHT or UPDATED_HEIGHT
+        defaultStylesShouldBeFound("height.in=" + DEFAULT_HEIGHT + "," + UPDATED_HEIGHT);
+
+        // Get all the stylesList where height equals to UPDATED_HEIGHT
+        defaultStylesShouldNotBeFound("height.in=" + UPDATED_HEIGHT);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByHeightIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where height is not null
+        defaultStylesShouldBeFound("height.specified=true");
+
+        // Get all the stylesList where height is null
+        defaultStylesShouldNotBeFound("height.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByHeightIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where height is greater than or equal to DEFAULT_HEIGHT
+        defaultStylesShouldBeFound("height.greaterThanOrEqual=" + DEFAULT_HEIGHT);
+
+        // Get all the stylesList where height is greater than or equal to UPDATED_HEIGHT
+        defaultStylesShouldNotBeFound("height.greaterThanOrEqual=" + UPDATED_HEIGHT);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByHeightIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where height is less than or equal to DEFAULT_HEIGHT
+        defaultStylesShouldBeFound("height.lessThanOrEqual=" + DEFAULT_HEIGHT);
+
+        // Get all the stylesList where height is less than or equal to SMALLER_HEIGHT
+        defaultStylesShouldNotBeFound("height.lessThanOrEqual=" + SMALLER_HEIGHT);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByHeightIsLessThanSomething() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where height is less than DEFAULT_HEIGHT
+        defaultStylesShouldNotBeFound("height.lessThan=" + DEFAULT_HEIGHT);
+
+        // Get all the stylesList where height is less than UPDATED_HEIGHT
+        defaultStylesShouldBeFound("height.lessThan=" + UPDATED_HEIGHT);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByHeightIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where height is greater than DEFAULT_HEIGHT
+        defaultStylesShouldNotBeFound("height.greaterThan=" + DEFAULT_HEIGHT);
+
+        // Get all the stylesList where height is greater than SMALLER_HEIGHT
+        defaultStylesShouldBeFound("height.greaterThan=" + SMALLER_HEIGHT);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByXIsEqualToSomething() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where x equals to DEFAULT_X
+        defaultStylesShouldBeFound("x.equals=" + DEFAULT_X);
+
+        // Get all the stylesList where x equals to UPDATED_X
+        defaultStylesShouldNotBeFound("x.equals=" + UPDATED_X);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByXIsInShouldWork() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where x in DEFAULT_X or UPDATED_X
+        defaultStylesShouldBeFound("x.in=" + DEFAULT_X + "," + UPDATED_X);
+
+        // Get all the stylesList where x equals to UPDATED_X
+        defaultStylesShouldNotBeFound("x.in=" + UPDATED_X);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByXIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where x is not null
+        defaultStylesShouldBeFound("x.specified=true");
+
+        // Get all the stylesList where x is null
+        defaultStylesShouldNotBeFound("x.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByXIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where x is greater than or equal to DEFAULT_X
+        defaultStylesShouldBeFound("x.greaterThanOrEqual=" + DEFAULT_X);
+
+        // Get all the stylesList where x is greater than or equal to UPDATED_X
+        defaultStylesShouldNotBeFound("x.greaterThanOrEqual=" + UPDATED_X);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByXIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where x is less than or equal to DEFAULT_X
+        defaultStylesShouldBeFound("x.lessThanOrEqual=" + DEFAULT_X);
+
+        // Get all the stylesList where x is less than or equal to SMALLER_X
+        defaultStylesShouldNotBeFound("x.lessThanOrEqual=" + SMALLER_X);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByXIsLessThanSomething() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where x is less than DEFAULT_X
+        defaultStylesShouldNotBeFound("x.lessThan=" + DEFAULT_X);
+
+        // Get all the stylesList where x is less than UPDATED_X
+        defaultStylesShouldBeFound("x.lessThan=" + UPDATED_X);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByXIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where x is greater than DEFAULT_X
+        defaultStylesShouldNotBeFound("x.greaterThan=" + DEFAULT_X);
+
+        // Get all the stylesList where x is greater than SMALLER_X
+        defaultStylesShouldBeFound("x.greaterThan=" + SMALLER_X);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByYIsEqualToSomething() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where y equals to DEFAULT_Y
+        defaultStylesShouldBeFound("y.equals=" + DEFAULT_Y);
+
+        // Get all the stylesList where y equals to UPDATED_Y
+        defaultStylesShouldNotBeFound("y.equals=" + UPDATED_Y);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByYIsInShouldWork() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where y in DEFAULT_Y or UPDATED_Y
+        defaultStylesShouldBeFound("y.in=" + DEFAULT_Y + "," + UPDATED_Y);
+
+        // Get all the stylesList where y equals to UPDATED_Y
+        defaultStylesShouldNotBeFound("y.in=" + UPDATED_Y);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByYIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where y is not null
+        defaultStylesShouldBeFound("y.specified=true");
+
+        // Get all the stylesList where y is null
+        defaultStylesShouldNotBeFound("y.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByYIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where y is greater than or equal to DEFAULT_Y
+        defaultStylesShouldBeFound("y.greaterThanOrEqual=" + DEFAULT_Y);
+
+        // Get all the stylesList where y is greater than or equal to UPDATED_Y
+        defaultStylesShouldNotBeFound("y.greaterThanOrEqual=" + UPDATED_Y);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByYIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where y is less than or equal to DEFAULT_Y
+        defaultStylesShouldBeFound("y.lessThanOrEqual=" + DEFAULT_Y);
+
+        // Get all the stylesList where y is less than or equal to SMALLER_Y
+        defaultStylesShouldNotBeFound("y.lessThanOrEqual=" + SMALLER_Y);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByYIsLessThanSomething() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where y is less than DEFAULT_Y
+        defaultStylesShouldNotBeFound("y.lessThan=" + DEFAULT_Y);
+
+        // Get all the stylesList where y is less than UPDATED_Y
+        defaultStylesShouldBeFound("y.lessThan=" + UPDATED_Y);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByYIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where y is greater than DEFAULT_Y
+        defaultStylesShouldNotBeFound("y.greaterThan=" + DEFAULT_Y);
+
+        // Get all the stylesList where y is greater than SMALLER_Y
+        defaultStylesShouldBeFound("y.greaterThan=" + SMALLER_Y);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByOptionsIsEqualToSomething() throws Exception {
+        Options options;
         if (TestUtil.findAll(em, Options.class).isEmpty()) {
             stylesRepository.saveAndFlush(styles);
-            option = OptionsResourceIT.createEntity(em);
+            options = OptionsResourceIT.createEntity(em);
         } else {
-            option = TestUtil.findAll(em, Options.class).get(0);
+            options = TestUtil.findAll(em, Options.class).get(0);
         }
-        em.persist(option);
+        em.persist(options);
         em.flush();
-        styles.addOption(option);
+        styles.addOptions(options);
         stylesRepository.saveAndFlush(styles);
-        Long optionId = option.getId();
+        Long optionsId = options.getId();
 
-        // Get all the stylesList where option equals to optionId
-        defaultStylesShouldBeFound("optionId.equals=" + optionId);
+        // Get all the stylesList where options equals to optionsId
+        defaultStylesShouldBeFound("optionsId.equals=" + optionsId);
 
-        // Get all the stylesList where option equals to (optionId + 1)
-        defaultStylesShouldNotBeFound("optionId.equals=" + (optionId + 1));
+        // Get all the stylesList where options equals to (optionsId + 1)
+        defaultStylesShouldNotBeFound("optionsId.equals=" + (optionsId + 1));
     }
 
     /**
@@ -472,7 +905,11 @@ class StylesResourceIT {
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].imgURL").value(hasItem(DEFAULT_IMG_URL)))
-            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())));
+            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].width").value(hasItem(DEFAULT_WIDTH)))
+            .andExpect(jsonPath("$.[*].height").value(hasItem(DEFAULT_HEIGHT)))
+            .andExpect(jsonPath("$.[*].x").value(hasItem(DEFAULT_X)))
+            .andExpect(jsonPath("$.[*].y").value(hasItem(DEFAULT_Y)));
 
         // Check, that the count call also returns 1
         restStylesMockMvc
@@ -520,7 +957,15 @@ class StylesResourceIT {
         Styles updatedStyles = stylesRepository.findById(styles.getId()).get();
         // Disconnect from session so that the updates on updatedStyles are not directly saved in db
         em.detach(updatedStyles);
-        updatedStyles.code(UPDATED_CODE).description(UPDATED_DESCRIPTION).imgURL(UPDATED_IMG_URL).isActive(UPDATED_IS_ACTIVE);
+        updatedStyles
+            .code(UPDATED_CODE)
+            .description(UPDATED_DESCRIPTION)
+            .imgURL(UPDATED_IMG_URL)
+            .isActive(UPDATED_IS_ACTIVE)
+            .width(UPDATED_WIDTH)
+            .height(UPDATED_HEIGHT)
+            .x(UPDATED_X)
+            .y(UPDATED_Y);
 
         restStylesMockMvc
             .perform(
@@ -538,6 +983,10 @@ class StylesResourceIT {
         assertThat(testStyles.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testStyles.getImgURL()).isEqualTo(UPDATED_IMG_URL);
         assertThat(testStyles.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+        assertThat(testStyles.getWidth()).isEqualTo(UPDATED_WIDTH);
+        assertThat(testStyles.getHeight()).isEqualTo(UPDATED_HEIGHT);
+        assertThat(testStyles.getX()).isEqualTo(UPDATED_X);
+        assertThat(testStyles.getY()).isEqualTo(UPDATED_Y);
     }
 
     @Test
@@ -608,7 +1057,12 @@ class StylesResourceIT {
         Styles partialUpdatedStyles = new Styles();
         partialUpdatedStyles.setId(styles.getId());
 
-        partialUpdatedStyles.code(UPDATED_CODE).description(UPDATED_DESCRIPTION).imgURL(UPDATED_IMG_URL).isActive(UPDATED_IS_ACTIVE);
+        partialUpdatedStyles
+            .code(UPDATED_CODE)
+            .description(UPDATED_DESCRIPTION)
+            .imgURL(UPDATED_IMG_URL)
+            .isActive(UPDATED_IS_ACTIVE)
+            .x(UPDATED_X);
 
         restStylesMockMvc
             .perform(
@@ -626,6 +1080,10 @@ class StylesResourceIT {
         assertThat(testStyles.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testStyles.getImgURL()).isEqualTo(UPDATED_IMG_URL);
         assertThat(testStyles.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+        assertThat(testStyles.getWidth()).isEqualTo(DEFAULT_WIDTH);
+        assertThat(testStyles.getHeight()).isEqualTo(DEFAULT_HEIGHT);
+        assertThat(testStyles.getX()).isEqualTo(UPDATED_X);
+        assertThat(testStyles.getY()).isEqualTo(DEFAULT_Y);
     }
 
     @Test
@@ -640,7 +1098,15 @@ class StylesResourceIT {
         Styles partialUpdatedStyles = new Styles();
         partialUpdatedStyles.setId(styles.getId());
 
-        partialUpdatedStyles.code(UPDATED_CODE).description(UPDATED_DESCRIPTION).imgURL(UPDATED_IMG_URL).isActive(UPDATED_IS_ACTIVE);
+        partialUpdatedStyles
+            .code(UPDATED_CODE)
+            .description(UPDATED_DESCRIPTION)
+            .imgURL(UPDATED_IMG_URL)
+            .isActive(UPDATED_IS_ACTIVE)
+            .width(UPDATED_WIDTH)
+            .height(UPDATED_HEIGHT)
+            .x(UPDATED_X)
+            .y(UPDATED_Y);
 
         restStylesMockMvc
             .perform(
@@ -658,6 +1124,10 @@ class StylesResourceIT {
         assertThat(testStyles.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testStyles.getImgURL()).isEqualTo(UPDATED_IMG_URL);
         assertThat(testStyles.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+        assertThat(testStyles.getWidth()).isEqualTo(UPDATED_WIDTH);
+        assertThat(testStyles.getHeight()).isEqualTo(UPDATED_HEIGHT);
+        assertThat(testStyles.getX()).isEqualTo(UPDATED_X);
+        assertThat(testStyles.getY()).isEqualTo(UPDATED_Y);
     }
 
     @Test
