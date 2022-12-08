@@ -1,0 +1,43 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="booksPage">
+      <h2 data-cy="booksPageDetailsHeading"><span>Books Page</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ booksPage.id }}</span>
+        </dd>
+        <dt><span>Num</span></dt>
+        <dd>
+          <span>{{ booksPage.num }}</span>
+        </dd>
+        <dt><span>Is Active</span></dt>
+        <dd>
+          <span>{{ booksPage.isActive }}</span>
+        </dd>
+        <dt><span>Page Details</span></dt>
+        <dd>
+          <span *ngFor="let pageDetails of booksPage.pageDetails; let last = last">
+            <a [routerLink]="['/page-layers', pageDetails.id, 'view']">{{ pageDetails.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/books-page', booksPage.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

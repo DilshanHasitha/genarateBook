@@ -1,0 +1,201 @@
+
+entity Customer {
+	code String,
+    name String required,
+    creditLimit BigDecimal,
+    rating Double,
+    isActive Boolean,    
+    phone String required,
+    addressLine1 String,
+    addressLine2 String,
+    city String required,
+    country String,
+    email String,
+}
+
+entity Books {
+	code String,
+    name String required,
+    title String required,
+    subTitle String,
+    author String,
+    isActive Boolean required,
+    noOfPages Integer,
+    storeImg String,
+}
+
+entity SelectedOption{
+    code String,
+    date LocalDate,
+}
+entity SelectedOptionDetails{
+    code String,
+    name String,
+    selectedValue String,
+    isActive Boolean,
+}
+
+entity BooksPage {
+	num Integer required,
+    isActive Boolean
+}
+
+entity PageLayers {
+	layerNo Integer required, 
+    isActive Boolean
+}
+
+entity PageLayersDetails {
+	name String required,
+    description String,
+    isActive Boolean
+}
+
+entity PageSize{
+    code String,
+    description String,
+    isActive Boolean,
+    width Integer,
+    height Integer,
+}
+
+entity BooksOptionDetails{
+    avatarAttributes String,
+    avatarCharactor String,
+    style String,
+    option String,   
+    isActive Boolean,
+}
+
+entity BooksAttributes{
+    code String,
+    description String,
+    isActive Boolean,
+}
+
+entity BooksVariables{
+    code String,
+    description String,
+    isActive Boolean,
+}
+
+entity PriceRelatedOption{
+    code String,
+    name String required,
+    isActive Boolean
+}
+entity PriceRelatedOptionDetails{
+	description String required,
+    price BigDecimal required,
+}
+
+entity BooksRelatedOption{
+    code String,
+    name String required,
+    isActive Boolean
+}
+
+entity BooksRelatedOptionDetails{
+	code String,
+    description String required,
+    isActive Boolean
+}
+
+entity OptionType{
+    code String,
+    description String required,
+    isActive Boolean
+}
+
+entity LayerGroup{
+    code String,
+    description String required,
+    isActive Boolean
+}
+
+entity AvatarCharactor{
+    code String,
+    description String required,
+    isActive Boolean
+}
+
+entity Options{
+    code String,
+    description String required,
+    imgURL String,
+    isActive Boolean
+}
+
+entity Styles{
+    code String,
+    description String required,
+    imgURL String,
+    isActive Boolean
+}
+entity AvatarAttributes{
+    code String,
+    description String required,
+    isActive Boolean
+}
+
+entity Layers{
+    layerNo Integer required,
+    isActive Boolean
+}
+
+
+entity LayerDetails{
+    name String required,
+    description String,
+}
+
+
+relationship ManyToOne{
+    Books{pageSize} to PageSize
+    Books{user} to User
+    PriceRelatedOption{optionType} to OptionType
+    BooksOptionDetails{books} to Books
+    SelectedOption{books} to Books
+    SelectedOption{customer} to Customer
+       
+}
+
+relationship ManyToMany{
+    Books{booksPage} to BooksPage{books}
+    Books{priceRelatedOption} to PriceRelatedOption{books}
+    Books{booksRelatedOption} to BooksRelatedOption{books}
+    Books{booksAttributes} to BooksAttributes{books}
+    Books{booksVariables} to BooksVariables{books}
+    Books{avatarAttributes} to AvatarAttributes{books}
+    Books{layerGroup} to LayerGroup{books}
+    
+    BooksPage{pageDetails} to PageLayers{booksPage}
+    PageLayers{pageElementDetails} to PageLayersDetails{pageElement}
+    
+    BooksRelatedOption{booksRelatedOptionDetails} to BooksRelatedOptionDetails{booksRelatedOption}  
+    PriceRelatedOption{priceRelatedOptionDetails} to PriceRelatedOptionDetails{priceRelatedOption}
+    
+    Layers{layerdetails} to LayerDetails{layers}
+    LayerGroup{layers} to Layers{layerGroup}
+    
+    AvatarAttributes{avatarCharactor} to AvatarCharactor{avatarAttributes}
+    AvatarAttributes{option} to Options{avatarAttributes}
+    Options{style} to Styles{option}
+    
+    SelectedOption{selectedOptionDetails} to SelectedOptionDetails{selectedOption}
+    
+}
+
+// Set pagination options
+//paginate * with infinite-scroll
+paginate * with pagination
+
+// Use Data Transfert Objects (DTO)
+// dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceClass
+
+filter * 
+// Set an angular suffix
+// angularSuffix * with mySuffix

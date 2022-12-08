@@ -1,0 +1,54 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="booksOptionDetails">
+      <h2 data-cy="booksOptionDetailsDetailsHeading"><span>Books Option Details</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ booksOptionDetails.id }}</span>
+        </dd>
+        <dt><span>Avatar Attributes</span></dt>
+        <dd>
+          <span>{{ booksOptionDetails.avatarAttributes }}</span>
+        </dd>
+        <dt><span>Avatar Charactor</span></dt>
+        <dd>
+          <span>{{ booksOptionDetails.avatarCharactor }}</span>
+        </dd>
+        <dt><span>Style</span></dt>
+        <dd>
+          <span>{{ booksOptionDetails.style }}</span>
+        </dd>
+        <dt><span>Option</span></dt>
+        <dd>
+          <span>{{ booksOptionDetails.option }}</span>
+        </dd>
+        <dt><span>Is Active</span></dt>
+        <dd>
+          <span>{{ booksOptionDetails.isActive }}</span>
+        </dd>
+        <dt><span>Books</span></dt>
+        <dd>
+          <div *ngIf="booksOptionDetails.books">
+            <a [routerLink]="['/books', booksOptionDetails.books.id, 'view']">{{ booksOptionDetails.books.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/books-option-details', booksOptionDetails.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

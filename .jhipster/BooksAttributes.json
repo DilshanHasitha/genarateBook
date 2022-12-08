@@ -1,0 +1,36 @@
+{
+  "applications": "*",
+  "changelogDate": "20221205035313",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "books_attributes",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": true,
+  "name": "BooksAttributes",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "books",
+      "otherEntityRelationshipName": "booksAttributes",
+      "ownerSide": false,
+      "relationshipName": "books",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

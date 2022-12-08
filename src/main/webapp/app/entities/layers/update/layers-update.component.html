@@ -1,0 +1,65 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-layers-heading" data-cy="LayersCreateUpdateHeading">Create or edit a Layers</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_layerNo">Layer No</label>
+          <input type="number" class="form-control" name="layerNo" id="field_layerNo" data-cy="layerNo" formControlName="layerNo" />
+          <div *ngIf="editForm.get('layerNo')!.invalid && (editForm.get('layerNo')!.dirty || editForm.get('layerNo')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('layerNo')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('layerNo')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_isActive">Is Active</label>
+          <input type="checkbox" class="form-check" name="isActive" id="field_isActive" data-cy="isActive" formControlName="isActive" />
+        </div>
+
+        <div class="row mb-3">
+          <label for="field_layerdetails">Layerdetails</label>
+          <select
+            class="form-control"
+            id="field_layerdetails"
+            data-cy="layerdetails"
+            multiple
+            name="layerdetails"
+            formControlName="layerdetails"
+            [compareWith]="compareLayerDetails"
+          >
+            <option [ngValue]="layerDetailsOption" *ngFor="let layerDetailsOption of layerDetailsSharedCollection">
+              {{ layerDetailsOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

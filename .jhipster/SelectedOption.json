@@ -1,0 +1,42 @@
+{
+  "applications": "*",
+  "changelogDate": "20221205035306",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "selected_option",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "date",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": true,
+  "name": "SelectedOption",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "books",
+      "relationshipName": "books",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "customer",
+      "relationshipName": "customer",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "selectedOptionDetails",
+      "otherEntityRelationshipName": "selectedOption",
+      "ownerSide": true,
+      "relationshipName": "selectedOptionDetails",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

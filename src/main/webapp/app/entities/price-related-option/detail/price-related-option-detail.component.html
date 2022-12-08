@@ -1,0 +1,53 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="priceRelatedOption">
+      <h2 data-cy="priceRelatedOptionDetailsHeading"><span>Price Related Option</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ priceRelatedOption.id }}</span>
+        </dd>
+        <dt><span>Code</span></dt>
+        <dd>
+          <span>{{ priceRelatedOption.code }}</span>
+        </dd>
+        <dt><span>Name</span></dt>
+        <dd>
+          <span>{{ priceRelatedOption.name }}</span>
+        </dd>
+        <dt><span>Is Active</span></dt>
+        <dd>
+          <span>{{ priceRelatedOption.isActive }}</span>
+        </dd>
+        <dt><span>Option Type</span></dt>
+        <dd>
+          <div *ngIf="priceRelatedOption.optionType">
+            <a [routerLink]="['/option-type', priceRelatedOption.optionType.id, 'view']">{{ priceRelatedOption.optionType.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Price Related Option Details</span></dt>
+        <dd>
+          <span *ngFor="let priceRelatedOptionDetails of priceRelatedOption.priceRelatedOptionDetails; let last = last">
+            <a [routerLink]="['/price-related-option-details', priceRelatedOptionDetails.id, 'view']">{{ priceRelatedOptionDetails.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/price-related-option', priceRelatedOption.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

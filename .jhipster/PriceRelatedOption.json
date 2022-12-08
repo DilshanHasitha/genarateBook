@@ -1,0 +1,49 @@
+{
+  "applications": "*",
+  "changelogDate": "20221205035315",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "price_related_option",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": true,
+  "name": "PriceRelatedOption",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "optionType",
+      "relationshipName": "optionType",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "priceRelatedOptionDetails",
+      "otherEntityRelationshipName": "priceRelatedOption",
+      "ownerSide": true,
+      "relationshipName": "priceRelatedOptionDetails",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "books",
+      "otherEntityRelationshipName": "priceRelatedOption",
+      "ownerSide": false,
+      "relationshipName": "books",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

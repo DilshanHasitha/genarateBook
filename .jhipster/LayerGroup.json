@@ -1,0 +1,44 @@
+{
+  "applications": "*",
+  "changelogDate": "20221205035320",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "layer_group",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": true,
+  "name": "LayerGroup",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "layers",
+      "otherEntityRelationshipName": "layerGroup",
+      "ownerSide": true,
+      "relationshipName": "layers",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "books",
+      "otherEntityRelationshipName": "layerGroup",
+      "ownerSide": false,
+      "relationshipName": "books",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

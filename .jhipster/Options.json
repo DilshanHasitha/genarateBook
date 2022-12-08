@@ -1,0 +1,48 @@
+{
+  "applications": "*",
+  "changelogDate": "20221205035322",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "options",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "imgURL",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": true,
+  "name": "Options",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "styles",
+      "otherEntityRelationshipName": "option",
+      "ownerSide": true,
+      "relationshipName": "style",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "avatarAttributes",
+      "otherEntityRelationshipName": "option",
+      "ownerSide": false,
+      "relationshipName": "avatarAttributes",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

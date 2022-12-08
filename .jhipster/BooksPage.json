@@ -1,0 +1,40 @@
+{
+  "applications": "*",
+  "changelogDate": "20221205035308",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "books_page",
+  "fields": [
+    {
+      "fieldName": "num",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": true,
+  "name": "BooksPage",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "pageLayers",
+      "otherEntityRelationshipName": "booksPage",
+      "ownerSide": true,
+      "relationshipName": "pageDetails",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "books",
+      "otherEntityRelationshipName": "booksPage",
+      "ownerSide": false,
+      "relationshipName": "books",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

@@ -1,0 +1,40 @@
+{
+  "applications": "*",
+  "changelogDate": "20221205035309",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "page_layers",
+  "fields": [
+    {
+      "fieldName": "layerNo",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": true,
+  "name": "PageLayers",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "pageLayersDetails",
+      "otherEntityRelationshipName": "pageElement",
+      "ownerSide": true,
+      "relationshipName": "pageElementDetails",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "booksPage",
+      "otherEntityRelationshipName": "pageDetails",
+      "ownerSide": false,
+      "relationshipName": "booksPage",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

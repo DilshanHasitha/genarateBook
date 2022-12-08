@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <!--
+        Added the constraints for entity AvatarAttributes.
+    -->
+    <changeSet id="20221205035324-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="avatar_attributes_id"
+                                 baseTableName="rel_avatar_attributes__avatar_charactor"
+                                 constraintName="fk_rel_avatar_attributes__avata__avatar_attributes_69_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="avatar_attributes"/>
+
+        <addForeignKeyConstraint baseColumnNames="avatar_charactor_id"
+                                 baseTableName="rel_avatar_attributes__avatar_charactor"
+                                 constraintName="fk_rel_avatar_attributes__avatar_charactor__avatar_charactor_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="avatar_charactor"/>
+
+        <addForeignKeyConstraint baseColumnNames="avatar_attributes_id"
+                                 baseTableName="rel_avatar_attributes__option"
+                                 constraintName="fk_rel_avatar_attributes__option__avatar_attributes_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="avatar_attributes"/>
+
+        <addForeignKeyConstraint baseColumnNames="option_id"
+                                 baseTableName="rel_avatar_attributes__option"
+                                 constraintName="fk_rel_avatar_attributes__option__option_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="options"/>
+    </changeSet>
+</databaseChangeLog>

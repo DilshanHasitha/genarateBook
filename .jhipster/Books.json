@@ -1,0 +1,111 @@
+{
+  "applications": "*",
+  "changelogDate": "20221205035305",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "books",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "subTitle",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "author",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "noOfPages",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "storeImg",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": true,
+  "name": "Books",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "pageSize",
+      "relationshipName": "pageSize",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "user",
+      "relationshipName": "user",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "booksPage",
+      "otherEntityRelationshipName": "books",
+      "ownerSide": true,
+      "relationshipName": "booksPage",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "priceRelatedOption",
+      "otherEntityRelationshipName": "books",
+      "ownerSide": true,
+      "relationshipName": "priceRelatedOption",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "booksRelatedOption",
+      "otherEntityRelationshipName": "books",
+      "ownerSide": true,
+      "relationshipName": "booksRelatedOption",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "booksAttributes",
+      "otherEntityRelationshipName": "books",
+      "ownerSide": true,
+      "relationshipName": "booksAttributes",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "booksVariables",
+      "otherEntityRelationshipName": "books",
+      "ownerSide": true,
+      "relationshipName": "booksVariables",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "avatarAttributes",
+      "otherEntityRelationshipName": "books",
+      "ownerSide": true,
+      "relationshipName": "avatarAttributes",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "layerGroup",
+      "otherEntityRelationshipName": "books",
+      "ownerSide": true,
+      "relationshipName": "layerGroup",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <!--
+        Added the constraints for entity Books.
+    -->
+    <changeSet id="20221205035305-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="page_size_id"
+                                 baseTableName="books"
+                                 constraintName="fk_books__page_size_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="page_size"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="books"
+                                 constraintName="fk_books__user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="books_id"
+                                 baseTableName="rel_books__books_page"
+                                 constraintName="fk_rel_books__books_page__books_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="books"/>
+
+        <addForeignKeyConstraint baseColumnNames="books_page_id"
+                                 baseTableName="rel_books__books_page"
+                                 constraintName="fk_rel_books__books_page__books_page_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="books_page"/>
+
+        <addForeignKeyConstraint baseColumnNames="books_id"
+                                 baseTableName="rel_books__price_related_option"
+                                 constraintName="fk_rel_books__price_related_option__books_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="books"/>
+
+        <addForeignKeyConstraint baseColumnNames="price_related_option_id"
+                                 baseTableName="rel_books__price_related_option"
+                                 constraintName="fk_rel_books__price_related_option__price_related_option_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="price_related_option"/>
+
+        <addForeignKeyConstraint baseColumnNames="books_id"
+                                 baseTableName="rel_books__books_related_option"
+                                 constraintName="fk_rel_books__books_related_option__books_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="books"/>
+
+        <addForeignKeyConstraint baseColumnNames="books_related_option_id"
+                                 baseTableName="rel_books__books_related_option"
+                                 constraintName="fk_rel_books__books_related_option__books_related_option_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="books_related_option"/>
+
+        <addForeignKeyConstraint baseColumnNames="books_id"
+                                 baseTableName="rel_books__books_attributes"
+                                 constraintName="fk_rel_books__books_attributes__books_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="books"/>
+
+        <addForeignKeyConstraint baseColumnNames="books_attributes_id"
+                                 baseTableName="rel_books__books_attributes"
+                                 constraintName="fk_rel_books__books_attributes__books_attributes_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="books_attributes"/>
+
+        <addForeignKeyConstraint baseColumnNames="books_id"
+                                 baseTableName="rel_books__books_variables"
+                                 constraintName="fk_rel_books__books_variables__books_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="books"/>
+
+        <addForeignKeyConstraint baseColumnNames="books_variables_id"
+                                 baseTableName="rel_books__books_variables"
+                                 constraintName="fk_rel_books__books_variables__books_variables_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="books_variables"/>
+
+        <addForeignKeyConstraint baseColumnNames="books_id"
+                                 baseTableName="rel_books__avatar_attributes"
+                                 constraintName="fk_rel_books__avatar_attributes__books_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="books"/>
+
+        <addForeignKeyConstraint baseColumnNames="avatar_attributes_id"
+                                 baseTableName="rel_books__avatar_attributes"
+                                 constraintName="fk_rel_books__avatar_attributes__avatar_attributes_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="avatar_attributes"/>
+
+        <addForeignKeyConstraint baseColumnNames="books_id"
+                                 baseTableName="rel_books__layer_group"
+                                 constraintName="fk_rel_books__layer_group__books_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="books"/>
+
+        <addForeignKeyConstraint baseColumnNames="layer_group_id"
+                                 baseTableName="rel_books__layer_group"
+                                 constraintName="fk_rel_books__layer_group__layer_group_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="layer_group"/>
+    </changeSet>
+</databaseChangeLog>

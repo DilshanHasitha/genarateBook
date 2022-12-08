@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <!--
+        Added the constraints for entity BooksRelatedOption.
+    -->
+    <changeSet id="20221205035317-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="books_related_option_id"
+                                 baseTableName="rel_books_related_option__books_related_option_details"
+                                 constraintName="fk_rel_books_related_option__bo__books_related_option_56_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="books_related_option"/>
+
+        <addForeignKeyConstraint baseColumnNames="books_related_option_details_id"
+                                 baseTableName="rel_books_related_option__books_related_option_details"
+                                 constraintName="fk_rel_books_related_option__bo__books_related_option_deta_21_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="books_related_option_details"/>
+    </changeSet>
+</databaseChangeLog>

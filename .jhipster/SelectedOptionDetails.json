@@ -1,0 +1,40 @@
+{
+  "applications": "*",
+  "changelogDate": "20221205035307",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "selected_option_details",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "selectedValue",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": true,
+  "name": "SelectedOptionDetails",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "selectedOption",
+      "otherEntityRelationshipName": "selectedOptionDetails",
+      "ownerSide": false,
+      "relationshipName": "selectedOption",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

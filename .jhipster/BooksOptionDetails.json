@@ -1,0 +1,42 @@
+{
+  "applications": "*",
+  "changelogDate": "20221205035312",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "books_option_details",
+  "fields": [
+    {
+      "fieldName": "avatarAttributes",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "avatarCharactor",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "style",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "option",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": true,
+  "name": "BooksOptionDetails",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "books",
+      "relationshipName": "books",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}

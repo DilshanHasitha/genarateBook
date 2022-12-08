@@ -1,0 +1,34 @@
+{
+  "applications": "*",
+  "changelogDate": "20221205035316",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "price_related_option_details",
+  "fields": [
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "price",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": true,
+  "name": "PriceRelatedOptionDetails",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "priceRelatedOption",
+      "otherEntityRelationshipName": "priceRelatedOptionDetails",
+      "ownerSide": false,
+      "relationshipName": "priceRelatedOption",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

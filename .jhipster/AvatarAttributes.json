@@ -1,0 +1,51 @@
+{
+  "applications": "*",
+  "changelogDate": "20221205035324",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "avatar_attributes",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": true,
+  "name": "AvatarAttributes",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "avatarCharactor",
+      "otherEntityRelationshipName": "avatarAttributes",
+      "ownerSide": true,
+      "relationshipName": "avatarCharactor",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "options",
+      "otherEntityRelationshipName": "avatarAttributes",
+      "ownerSide": true,
+      "relationshipName": "option",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "books",
+      "otherEntityRelationshipName": "avatarAttributes",
+      "ownerSide": false,
+      "relationshipName": "books",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

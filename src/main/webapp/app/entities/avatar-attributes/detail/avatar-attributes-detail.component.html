@@ -1,0 +1,54 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="avatarAttributes">
+      <h2 data-cy="avatarAttributesDetailsHeading"><span>Avatar Attributes</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ avatarAttributes.id }}</span>
+        </dd>
+        <dt><span>Code</span></dt>
+        <dd>
+          <span>{{ avatarAttributes.code }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ avatarAttributes.description }}</span>
+        </dd>
+        <dt><span>Is Active</span></dt>
+        <dd>
+          <span>{{ avatarAttributes.isActive }}</span>
+        </dd>
+        <dt><span>Avatar Charactor</span></dt>
+        <dd>
+          <span *ngFor="let avatarCharactor of avatarAttributes.avatarCharactors; let last = last">
+            <a [routerLink]="['/avatar-charactor', avatarCharactor.id, 'view']">{{ avatarCharactor.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Option</span></dt>
+        <dd>
+          <span *ngFor="let option of avatarAttributes.options; let last = last">
+            <a [routerLink]="['/options', option.id, 'view']">{{ option.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/avatar-attributes', avatarAttributes.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

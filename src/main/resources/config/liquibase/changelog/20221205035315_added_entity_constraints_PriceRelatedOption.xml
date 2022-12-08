@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <!--
+        Added the constraints for entity PriceRelatedOption.
+    -->
+    <changeSet id="20221205035315-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="option_type_id"
+                                 baseTableName="price_related_option"
+                                 constraintName="fk_price_related_option__option_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="option_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="price_related_option_id"
+                                 baseTableName="rel_price_related_option__price_related_option_details"
+                                 constraintName="fk_rel_price_related_option__pr__price_related_option_16_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="price_related_option"/>
+
+        <addForeignKeyConstraint baseColumnNames="price_related_option_details_id"
+                                 baseTableName="rel_price_related_option__price_related_option_details"
+                                 constraintName="fk_rel_price_related_option__pr__price_related_option_deta_a1_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="price_related_option_details"/>
+    </changeSet>
+</databaseChangeLog>

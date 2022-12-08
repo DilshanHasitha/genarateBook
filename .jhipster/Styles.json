@@ -1,0 +1,41 @@
+{
+  "applications": "*",
+  "changelogDate": "20221205035323",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "styles",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "imgURL",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": true,
+  "name": "Styles",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "options",
+      "otherEntityRelationshipName": "style",
+      "ownerSide": false,
+      "relationshipName": "option",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

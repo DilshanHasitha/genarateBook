@@ -17,7 +17,41 @@
     <property name="datetimeType" value="datetime(6)" dbms="mysql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035304_added_entity_Customer.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035305_added_entity_Books.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035306_added_entity_SelectedOption.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035307_added_entity_SelectedOptionDetails.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035308_added_entity_BooksPage.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035309_added_entity_PageLayers.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035310_added_entity_PageLayersDetails.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035311_added_entity_PageSize.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035312_added_entity_BooksOptionDetails.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035313_added_entity_BooksAttributes.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035314_added_entity_BooksVariables.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035315_added_entity_PriceRelatedOption.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035316_added_entity_PriceRelatedOptionDetails.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035317_added_entity_BooksRelatedOption.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035318_added_entity_BooksRelatedOptionDetails.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035319_added_entity_OptionType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035320_added_entity_LayerGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035321_added_entity_AvatarCharactor.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035322_added_entity_Options.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035323_added_entity_Styles.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035324_added_entity_AvatarAttributes.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035325_added_entity_Layers.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035326_added_entity_LayerDetails.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20221205035305_added_entity_constraints_Books.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035306_added_entity_constraints_SelectedOption.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035308_added_entity_constraints_BooksPage.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035309_added_entity_constraints_PageLayers.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035312_added_entity_constraints_BooksOptionDetails.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035315_added_entity_constraints_PriceRelatedOption.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035317_added_entity_constraints_BooksRelatedOption.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035320_added_entity_constraints_LayerGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035322_added_entity_constraints_Options.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035324_added_entity_constraints_AvatarAttributes.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221205035325_added_entity_constraints_Layers.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

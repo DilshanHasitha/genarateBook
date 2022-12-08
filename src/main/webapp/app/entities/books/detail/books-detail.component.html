@@ -1,0 +1,119 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="books">
+      <h2 data-cy="booksDetailsHeading"><span>Books</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ books.id }}</span>
+        </dd>
+        <dt><span>Code</span></dt>
+        <dd>
+          <span>{{ books.code }}</span>
+        </dd>
+        <dt><span>Name</span></dt>
+        <dd>
+          <span>{{ books.name }}</span>
+        </dd>
+        <dt><span>Title</span></dt>
+        <dd>
+          <span>{{ books.title }}</span>
+        </dd>
+        <dt><span>Sub Title</span></dt>
+        <dd>
+          <span>{{ books.subTitle }}</span>
+        </dd>
+        <dt><span>Author</span></dt>
+        <dd>
+          <span>{{ books.author }}</span>
+        </dd>
+        <dt><span>Is Active</span></dt>
+        <dd>
+          <span>{{ books.isActive }}</span>
+        </dd>
+        <dt><span>No Of Pages</span></dt>
+        <dd>
+          <span>{{ books.noOfPages }}</span>
+        </dd>
+        <dt><span>Store Img</span></dt>
+        <dd>
+          <span>{{ books.storeImg }}</span>
+        </dd>
+        <dt><span>Page Size</span></dt>
+        <dd>
+          <div *ngIf="books.pageSize">
+            <a [routerLink]="['/page-size', books.pageSize.id, 'view']">{{ books.pageSize.id }}</a>
+          </div>
+        </dd>
+        <dt><span>User</span></dt>
+        <dd>
+          <span>{{ books.user?.id }}</span>
+        </dd>
+        <dt><span>Books Page</span></dt>
+        <dd>
+          <span *ngFor="let booksPage of books.booksPages; let last = last">
+            <a [routerLink]="['/books-page', booksPage.id, 'view']">{{ booksPage.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Price Related Option</span></dt>
+        <dd>
+          <span *ngFor="let priceRelatedOption of books.priceRelatedOptions; let last = last">
+            <a [routerLink]="['/price-related-option', priceRelatedOption.id, 'view']">{{ priceRelatedOption.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Books Related Option</span></dt>
+        <dd>
+          <span *ngFor="let booksRelatedOption of books.booksRelatedOptions; let last = last">
+            <a [routerLink]="['/books-related-option', booksRelatedOption.id, 'view']">{{ booksRelatedOption.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Books Attributes</span></dt>
+        <dd>
+          <span *ngFor="let booksAttributes of books.booksAttributes; let last = last">
+            <a [routerLink]="['/books-attributes', booksAttributes.id, 'view']">{{ booksAttributes.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Books Variables</span></dt>
+        <dd>
+          <span *ngFor="let booksVariables of books.booksVariables; let last = last">
+            <a [routerLink]="['/books-variables', booksVariables.id, 'view']">{{ booksVariables.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Avatar Attributes</span></dt>
+        <dd>
+          <span *ngFor="let avatarAttributes of books.avatarAttributes; let last = last">
+            <a [routerLink]="['/avatar-attributes', avatarAttributes.id, 'view']">{{ avatarAttributes.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Layer Group</span></dt>
+        <dd>
+          <span *ngFor="let layerGroup of books.layerGroups; let last = last">
+            <a [routerLink]="['/layer-group', layerGroup.id, 'view']">{{ layerGroup.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/books', books.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

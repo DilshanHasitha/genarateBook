@@ -1,0 +1,221 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-books-heading" data-cy="BooksCreateUpdateHeading">Create or edit a Books</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_code">Code</label>
+          <input type="text" class="form-control" name="code" id="field_code" data-cy="code" formControlName="code" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_name">Name</label>
+          <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
+          <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_title">Title</label>
+          <input type="text" class="form-control" name="title" id="field_title" data-cy="title" formControlName="title" />
+          <div *ngIf="editForm.get('title')!.invalid && (editForm.get('title')!.dirty || editForm.get('title')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('title')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_subTitle">Sub Title</label>
+          <input type="text" class="form-control" name="subTitle" id="field_subTitle" data-cy="subTitle" formControlName="subTitle" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_author">Author</label>
+          <input type="text" class="form-control" name="author" id="field_author" data-cy="author" formControlName="author" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_isActive">Is Active</label>
+          <input type="checkbox" class="form-check" name="isActive" id="field_isActive" data-cy="isActive" formControlName="isActive" />
+          <div *ngIf="editForm.get('isActive')!.invalid && (editForm.get('isActive')!.dirty || editForm.get('isActive')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('isActive')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_noOfPages">No Of Pages</label>
+          <input type="number" class="form-control" name="noOfPages" id="field_noOfPages" data-cy="noOfPages" formControlName="noOfPages" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_storeImg">Store Img</label>
+          <input type="text" class="form-control" name="storeImg" id="field_storeImg" data-cy="storeImg" formControlName="storeImg" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_pageSize">Page Size</label>
+          <select
+            class="form-control"
+            id="field_pageSize"
+            data-cy="pageSize"
+            name="pageSize"
+            formControlName="pageSize"
+            [compareWith]="comparePageSize"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="pageSizeOption" *ngFor="let pageSizeOption of pageSizesSharedCollection">{{ pageSizeOption.id }}</option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_user">User</label>
+          <select class="form-control" id="field_user" data-cy="user" name="user" formControlName="user" [compareWith]="compareUser">
+            <option [ngValue]="null"></option>
+            <option [ngValue]="userOption" *ngFor="let userOption of usersSharedCollection">{{ userOption.id }}</option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label for="field_booksPages">Books Page</label>
+          <select
+            class="form-control"
+            id="field_booksPages"
+            data-cy="booksPage"
+            multiple
+            name="booksPages"
+            formControlName="booksPages"
+            [compareWith]="compareBooksPage"
+          >
+            <option [ngValue]="booksPageOption" *ngFor="let booksPageOption of booksPagesSharedCollection">{{ booksPageOption.id }}</option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label for="field_priceRelatedOptions">Price Related Option</label>
+          <select
+            class="form-control"
+            id="field_priceRelatedOptions"
+            data-cy="priceRelatedOption"
+            multiple
+            name="priceRelatedOptions"
+            formControlName="priceRelatedOptions"
+            [compareWith]="comparePriceRelatedOption"
+          >
+            <option [ngValue]="priceRelatedOptionOption" *ngFor="let priceRelatedOptionOption of priceRelatedOptionsSharedCollection">
+              {{ priceRelatedOptionOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label for="field_booksRelatedOptions">Books Related Option</label>
+          <select
+            class="form-control"
+            id="field_booksRelatedOptions"
+            data-cy="booksRelatedOption"
+            multiple
+            name="booksRelatedOptions"
+            formControlName="booksRelatedOptions"
+            [compareWith]="compareBooksRelatedOption"
+          >
+            <option [ngValue]="booksRelatedOptionOption" *ngFor="let booksRelatedOptionOption of booksRelatedOptionsSharedCollection">
+              {{ booksRelatedOptionOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label for="field_booksAttributes">Books Attributes</label>
+          <select
+            class="form-control"
+            id="field_booksAttributes"
+            data-cy="booksAttributes"
+            multiple
+            name="booksAttributes"
+            formControlName="booksAttributes"
+            [compareWith]="compareBooksAttributes"
+          >
+            <option [ngValue]="booksAttributesOption" *ngFor="let booksAttributesOption of booksAttributesSharedCollection">
+              {{ booksAttributesOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label for="field_booksVariables">Books Variables</label>
+          <select
+            class="form-control"
+            id="field_booksVariables"
+            data-cy="booksVariables"
+            multiple
+            name="booksVariables"
+            formControlName="booksVariables"
+            [compareWith]="compareBooksVariables"
+          >
+            <option [ngValue]="booksVariablesOption" *ngFor="let booksVariablesOption of booksVariablesSharedCollection">
+              {{ booksVariablesOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label for="field_avatarAttributes">Avatar Attributes</label>
+          <select
+            class="form-control"
+            id="field_avatarAttributes"
+            data-cy="avatarAttributes"
+            multiple
+            name="avatarAttributes"
+            formControlName="avatarAttributes"
+            [compareWith]="compareAvatarAttributes"
+          >
+            <option [ngValue]="avatarAttributesOption" *ngFor="let avatarAttributesOption of avatarAttributesSharedCollection">
+              {{ avatarAttributesOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label for="field_layerGroups">Layer Group</label>
+          <select
+            class="form-control"
+            id="field_layerGroups"
+            data-cy="layerGroup"
+            multiple
+            name="layerGroups"
+            formControlName="layerGroups"
+            [compareWith]="compareLayerGroup"
+          >
+            <option [ngValue]="layerGroupOption" *ngFor="let layerGroupOption of layerGroupsSharedCollection">
+              {{ layerGroupOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

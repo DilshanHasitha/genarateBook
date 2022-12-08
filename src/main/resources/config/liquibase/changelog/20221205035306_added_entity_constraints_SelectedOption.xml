@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <!--
+        Added the constraints for entity SelectedOption.
+    -->
+    <changeSet id="20221205035306-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="books_id"
+                                 baseTableName="selected_option"
+                                 constraintName="fk_selected_option__books_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="books"/>
+
+        <addForeignKeyConstraint baseColumnNames="customer_id"
+                                 baseTableName="selected_option"
+                                 constraintName="fk_selected_option__customer_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="customer"/>
+
+        <addForeignKeyConstraint baseColumnNames="selected_option_id"
+                                 baseTableName="rel_selected_option__selected_option_details"
+                                 constraintName="fk_rel_selected_option__selecte__selected_option_ec_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="selected_option"/>
+
+        <addForeignKeyConstraint baseColumnNames="selected_option_details_id"
+                                 baseTableName="rel_selected_option__selected_option_details"
+                                 constraintName="fk_rel_selected_option__selecte__selected_option_details_b7_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="selected_option_details"/>
+    </changeSet>
+</databaseChangeLog>

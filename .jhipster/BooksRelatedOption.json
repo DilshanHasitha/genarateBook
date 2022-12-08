@@ -1,0 +1,44 @@
+{
+  "applications": "*",
+  "changelogDate": "20221205035317",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "books_related_option",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": true,
+  "name": "BooksRelatedOption",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "booksRelatedOptionDetails",
+      "otherEntityRelationshipName": "booksRelatedOption",
+      "ownerSide": true,
+      "relationshipName": "booksRelatedOptionDetails",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "books",
+      "otherEntityRelationshipName": "booksRelatedOption",
+      "ownerSide": false,
+      "relationshipName": "books",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

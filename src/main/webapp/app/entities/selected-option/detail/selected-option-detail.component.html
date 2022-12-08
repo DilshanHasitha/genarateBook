@@ -1,0 +1,55 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="selectedOption">
+      <h2 data-cy="selectedOptionDetailsHeading"><span>Selected Option</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ selectedOption.id }}</span>
+        </dd>
+        <dt><span>Code</span></dt>
+        <dd>
+          <span>{{ selectedOption.code }}</span>
+        </dd>
+        <dt><span>Date</span></dt>
+        <dd>
+          <span>{{ selectedOption.date | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Books</span></dt>
+        <dd>
+          <div *ngIf="selectedOption.books">
+            <a [routerLink]="['/books', selectedOption.books.id, 'view']">{{ selectedOption.books.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Customer</span></dt>
+        <dd>
+          <div *ngIf="selectedOption.customer">
+            <a [routerLink]="['/customer', selectedOption.customer.id, 'view']">{{ selectedOption.customer.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Selected Option Details</span></dt>
+        <dd>
+          <span *ngFor="let selectedOptionDetails of selectedOption.selectedOptionDetails; let last = last">
+            <a [routerLink]="['/selected-option-details', selectedOptionDetails.id, 'view']">{{ selectedOptionDetails.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/selected-option', selectedOption.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

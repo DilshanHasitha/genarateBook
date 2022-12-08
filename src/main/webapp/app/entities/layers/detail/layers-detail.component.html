@@ -1,0 +1,43 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="layers">
+      <h2 data-cy="layersDetailsHeading"><span>Layers</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ layers.id }}</span>
+        </dd>
+        <dt><span>Layer No</span></dt>
+        <dd>
+          <span>{{ layers.layerNo }}</span>
+        </dd>
+        <dt><span>Is Active</span></dt>
+        <dd>
+          <span>{{ layers.isActive }}</span>
+        </dd>
+        <dt><span>Layerdetails</span></dt>
+        <dd>
+          <span *ngFor="let layerdetails of layers.layerdetails; let last = last">
+            <a [routerLink]="['/layer-details', layerdetails.id, 'view']">{{ layerdetails.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/layers', layers.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

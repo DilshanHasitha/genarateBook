@@ -1,0 +1,40 @@
+{
+  "applications": "*",
+  "changelogDate": "20221205035325",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "layers",
+  "fields": [
+    {
+      "fieldName": "layerNo",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": true,
+  "name": "Layers",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "layerDetails",
+      "otherEntityRelationshipName": "layers",
+      "ownerSide": true,
+      "relationshipName": "layerdetails",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "layerGroup",
+      "otherEntityRelationshipName": "layers",
+      "ownerSide": false,
+      "relationshipName": "layerGroup",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}
