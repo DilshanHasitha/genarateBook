@@ -46,6 +46,7 @@ public class BooksVariables implements Serializable {
             "booksVariables",
             "avatarAttributes",
             "layerGroups",
+            "selections",
         },
         allowSetters = true
     )

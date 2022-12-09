@@ -14,7 +14,7 @@ export type EntityArrayResponseType = HttpResponse<ILayerGroup[]>;
 
 @Injectable({ providedIn: 'root' })
 export class LayerGroupService {
-  public exportOrderUrl = SERVER_API_URL + 'api/printReceipt';
+  public exportOrderUrl = SERVER_API_URL + 'api/printReceipts';
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/layer-groups');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}

@@ -51,6 +51,15 @@
       "ownerSide": false,
       "relationshipName": "avatarAttributes",
       "relationshipType": "many-to-many"
+    },
+    {
+      "id": false,
+      "otherEntityField": "id",
+      "otherEntityName": "layerGroup",
+      "otherEntityRelationshipName": "avatarCharactor",
+      "ownerSide": true,
+      "relationshipName": "layerGroup",
+      "relationshipType": "one-to-one"
     }
   ],
   "service": "serviceClass"

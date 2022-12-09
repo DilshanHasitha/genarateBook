@@ -1,0 +1,52 @@
+{
+  "changelogDate": "20221209040503",
+  "dto": "no",
+  "fields": [
+    {
+      "fieldName": "avatarCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "styleCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "optionCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "image",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "height",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "x",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "y",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "width",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "avatarAttributesCode",
+      "fieldType": "String"
+    }
+  ],
+  "jpaMetamodelFiltering": false,
+  "name": "Selections",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceClass"
+}

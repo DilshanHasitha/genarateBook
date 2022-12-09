@@ -103,5 +103,17 @@
                                  constraintName="fk_rel_books__layer_group__layer_group_id"
                                  referencedColumnNames="id"
                                  referencedTableName="layer_group"/>
+
+        <addForeignKeyConstraint baseColumnNames="books_id"
+                                 baseTableName="rel_books__selections"
+                                 constraintName="fk_rel_books__selections__books_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="books"/>
+
+        <addForeignKeyConstraint baseColumnNames="selections_id"
+                                 baseTableName="rel_books__selections"
+                                 constraintName="fk_rel_books__selections__selections_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="selections"/>
     </changeSet>
 </databaseChangeLog>

@@ -115,7 +115,7 @@ public class Books implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "avatar_attributes_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "avatarCharactors", "books", "styles" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "avatarCharactors", "books", "styles", "options" }, allowSetters = true)
     private Set<AvatarAttributes> avatarAttributes = new HashSet<>();
 
     @ManyToMany
@@ -127,6 +127,15 @@ public class Books implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "layers", "books" }, allowSetters = true)
     private Set<LayerGroup> layerGroups = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_books__selections",
+        joinColumns = @JoinColumn(name = "books_id"),
+        inverseJoinColumns = @JoinColumn(name = "selections_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<Selections> selections = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -445,6 +454,29 @@ public class Books implements Serializable {
     public Books removeLayerGroup(LayerGroup layerGroup) {
         this.layerGroups.remove(layerGroup);
         layerGroup.getBooks().remove(this);
+        return this;
+    }
+
+    public Set<Selections> getSelections() {
+        return this.selections;
+    }
+
+    public void setSelections(Set<Selections> selections) {
+        this.selections = selections;
+    }
+
+    public Books selections(Set<Selections> selections) {
+        this.setSelections(selections);
+        return this;
+    }
+
+    public Books addSelections(Selections selections) {
+        this.selections.add(selections);
+        return this;
+    }
+
+    public Books removeSelections(Selections selections) {
+        this.selections.remove(selections);
         return this;
     }
 

@@ -65,6 +65,12 @@ public class PageLayersService {
                 if (pageLayers.getIsActive() != null) {
                     existingPageLayers.setIsActive(pageLayers.getIsActive());
                 }
+                if (pageLayers.getIsEditable() != null) {
+                    existingPageLayers.setIsEditable(pageLayers.getIsEditable());
+                }
+                if (pageLayers.getIsText() != null) {
+                    existingPageLayers.setIsText(pageLayers.getIsText());
+                }
 
                 return existingPageLayers;
             })

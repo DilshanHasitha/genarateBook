@@ -121,6 +121,11 @@ import { RouterModule } from '@angular/router';
         data: { pageTitle: 'LayerDetails' },
         loadChildren: () => import('./layer-details/layer-details.module').then(m => m.LayerDetailsModule),
       },
+      {
+        path: 'selections',
+        data: { pageTitle: 'Selections' },
+        loadChildren: () => import('./selections/selections.module').then(m => m.SelectionsModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

@@ -16,6 +16,7 @@ import com.mycompany.myapp.domain.BooksVariables;
 import com.mycompany.myapp.domain.LayerGroup;
 import com.mycompany.myapp.domain.PageSize;
 import com.mycompany.myapp.domain.PriceRelatedOption;
+import com.mycompany.myapp.domain.Selections;
 import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.BooksRepository;
 import com.mycompany.myapp.service.BooksService;
@@ -1036,6 +1037,29 @@ class BooksResourceIT {
 
         // Get all the booksList where layerGroup equals to (layerGroupId + 1)
         defaultBooksShouldNotBeFound("layerGroupId.equals=" + (layerGroupId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllBooksBySelectionsIsEqualToSomething() throws Exception {
+        Selections selections;
+        if (TestUtil.findAll(em, Selections.class).isEmpty()) {
+            booksRepository.saveAndFlush(books);
+            selections = SelectionsResourceIT.createEntity(em);
+        } else {
+            selections = TestUtil.findAll(em, Selections.class).get(0);
+        }
+        em.persist(selections);
+        em.flush();
+        books.addSelections(selections);
+        booksRepository.saveAndFlush(books);
+        Long selectionsId = selections.getId();
+
+        // Get all the booksList where selections equals to selectionsId
+        defaultBooksShouldBeFound("selectionsId.equals=" + selectionsId);
+
+        // Get all the booksList where selections equals to (selectionsId + 1)
+        defaultBooksShouldNotBeFound("selectionsId.equals=" + (selectionsId + 1));
     }
 
     /**

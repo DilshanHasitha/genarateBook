@@ -2,31 +2,21 @@ package com.mycompany.myapp.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.mycompany.myapp.IntegrationTest;
-import com.mycompany.myapp.domain.Options;
 import com.mycompany.myapp.domain.Styles;
 import com.mycompany.myapp.repository.StylesRepository;
-import com.mycompany.myapp.service.StylesService;
 import com.mycompany.myapp.service.criteria.StylesCriteria;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -36,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link StylesResource} REST controller.
  */
 @IntegrationTest
-@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class StylesResourceIT {
@@ -77,12 +66,6 @@ class StylesResourceIT {
 
     @Autowired
     private StylesRepository stylesRepository;
-
-    @Mock
-    private StylesRepository stylesRepositoryMock;
-
-    @Mock
-    private StylesService stylesServiceMock;
 
     @Autowired
     private EntityManager em;
@@ -213,23 +196,6 @@ class StylesResourceIT {
             .andExpect(jsonPath("$.[*].height").value(hasItem(DEFAULT_HEIGHT)))
             .andExpect(jsonPath("$.[*].x").value(hasItem(DEFAULT_X)))
             .andExpect(jsonPath("$.[*].y").value(hasItem(DEFAULT_Y)));
-    }
-
-    @SuppressWarnings({ "unchecked" })
-    void getAllStylesWithEagerRelationshipsIsEnabled() throws Exception {
-        when(stylesServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-
-        restStylesMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
-
-        verify(stylesServiceMock, times(1)).findAllWithEagerRelationships(any());
-    }
-
-    @SuppressWarnings({ "unchecked" })
-    void getAllStylesWithEagerRelationshipsIsNotEnabled() throws Exception {
-        when(stylesServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-
-        restStylesMockMvc.perform(get(ENTITY_API_URL + "?eagerload=false")).andExpect(status().isOk());
-        verify(stylesRepositoryMock, times(1)).findAll(any(Pageable.class));
     }
 
     @Test
@@ -868,29 +834,6 @@ class StylesResourceIT {
 
         // Get all the stylesList where y is greater than SMALLER_Y
         defaultStylesShouldBeFound("y.greaterThan=" + SMALLER_Y);
-    }
-
-    @Test
-    @Transactional
-    void getAllStylesByOptionsIsEqualToSomething() throws Exception {
-        Options options;
-        if (TestUtil.findAll(em, Options.class).isEmpty()) {
-            stylesRepository.saveAndFlush(styles);
-            options = OptionsResourceIT.createEntity(em);
-        } else {
-            options = TestUtil.findAll(em, Options.class).get(0);
-        }
-        em.persist(options);
-        em.flush();
-        styles.addOptions(options);
-        stylesRepository.saveAndFlush(styles);
-        Long optionsId = options.getId();
-
-        // Get all the stylesList where options equals to optionsId
-        defaultStylesShouldBeFound("optionsId.equals=" + optionsId);
-
-        // Get all the stylesList where options equals to (optionsId + 1)
-        defaultStylesShouldNotBeFound("optionsId.equals=" + (optionsId + 1));
     }
 
     /**

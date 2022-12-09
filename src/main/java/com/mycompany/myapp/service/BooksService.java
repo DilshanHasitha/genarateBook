@@ -131,4 +131,10 @@ public class BooksService {
         log.debug("Request to delete Books : {}", id);
         booksRepository.deleteById(id);
     }
+
+    @Transactional(readOnly = true)
+    public Optional<Books> findOneByCode(String code) {
+        log.debug("Request to get Books : {}", code);
+        return booksRepository.findOneByCode(code);
+    }
 }

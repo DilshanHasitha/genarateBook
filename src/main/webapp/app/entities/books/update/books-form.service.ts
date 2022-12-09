@@ -25,6 +25,7 @@ type BooksFormDefaults = Pick<
   | 'booksVariables'
   | 'avatarAttributes'
   | 'layerGroups'
+  | 'selections'
 >;
 
 type BooksFormGroupContent = {
@@ -46,6 +47,7 @@ type BooksFormGroupContent = {
   booksVariables: FormControl<IBooks['booksVariables']>;
   avatarAttributes: FormControl<IBooks['avatarAttributes']>;
   layerGroups: FormControl<IBooks['layerGroups']>;
+  selections: FormControl<IBooks['selections']>;
 };
 
 export type BooksFormGroup = FormGroup<BooksFormGroupContent>;
@@ -88,6 +90,7 @@ export class BooksFormService {
       booksVariables: new FormControl(booksRawValue.booksVariables ?? []),
       avatarAttributes: new FormControl(booksRawValue.avatarAttributes ?? []),
       layerGroups: new FormControl(booksRawValue.layerGroups ?? []),
+      selections: new FormControl(booksRawValue.selections ?? []),
     });
   }
 
@@ -116,6 +119,7 @@ export class BooksFormService {
       booksVariables: [],
       avatarAttributes: [],
       layerGroups: [],
+      selections: [],
     };
   }
 }

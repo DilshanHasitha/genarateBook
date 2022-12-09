@@ -58,6 +58,7 @@ public class BooksRelatedOption implements Serializable {
             "booksVariables",
             "avatarAttributes",
             "layerGroups",
+            "selections",
         },
         allowSetters = true
     )

@@ -26,6 +26,10 @@
         <dd>
           <span>{{ avatarAttributes.isActive }}</span>
         </dd>
+        <dt><span>Avatar Attributes Code</span></dt>
+        <dd>
+          <span>{{ avatarAttributes.avatarAttributesCode }}</span>
+        </dd>
         <dt><span>Avatar Charactor</span></dt>
         <dd>
           <span *ngFor="let avatarCharactor of avatarAttributes.avatarCharactors; let last = last">
@@ -37,6 +41,13 @@
         <dd>
           <span *ngFor="let styles of avatarAttributes.styles; let last = last">
             <a [routerLink]="['/styles', styles.id, 'view']">{{ styles.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Options</span></dt>
+        <dd>
+          <span *ngFor="let options of avatarAttributes.options; let last = last">
+            <a [routerLink]="['/options', options.id, 'view']">{{ options.id }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

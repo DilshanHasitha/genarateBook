@@ -1,8 +1,6 @@
 package com.mycompany.myapp.domain;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -48,15 +46,6 @@ public class Styles implements Serializable {
 
     @Column(name = "y")
     private Integer y;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "rel_styles__options",
-        joinColumns = @JoinColumn(name = "styles_id"),
-        inverseJoinColumns = @JoinColumn(name = "options_id")
-    )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<Options> options = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -175,29 +164,6 @@ public class Styles implements Serializable {
 
     public void setY(Integer y) {
         this.y = y;
-    }
-
-    public Set<Options> getOptions() {
-        return this.options;
-    }
-
-    public void setOptions(Set<Options> options) {
-        this.options = options;
-    }
-
-    public Styles options(Set<Options> options) {
-        this.setOptions(options);
-        return this;
-    }
-
-    public Styles addOptions(Options options) {
-        this.options.add(options);
-        return this;
-    }
-
-    public Styles removeOptions(Options options) {
-        this.options.remove(options);
-        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

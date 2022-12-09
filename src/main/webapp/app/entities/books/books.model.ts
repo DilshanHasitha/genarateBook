@@ -7,6 +7,7 @@ import { IBooksAttributes } from 'app/entities/books-attributes/books-attributes
 import { IBooksVariables } from 'app/entities/books-variables/books-variables.model';
 import { IAvatarAttributes } from 'app/entities/avatar-attributes/avatar-attributes.model';
 import { ILayerGroup } from 'app/entities/layer-group/layer-group.model';
+import { ISelections } from 'app/entities/selections/selections.model';
 
 export interface IBooks {
   id: number;
@@ -27,6 +28,7 @@ export interface IBooks {
   booksVariables?: Pick<IBooksVariables, 'id'>[] | null;
   avatarAttributes?: Pick<IAvatarAttributes, 'id'>[] | null;
   layerGroups?: Pick<ILayerGroup, 'id'>[] | null;
+  selections?: Pick<ISelections, 'id'>[] | null;
 }
 
 export type NewBooks = Omit<IBooks, 'id'> & { id: null };

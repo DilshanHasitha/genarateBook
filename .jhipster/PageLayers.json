@@ -13,6 +13,14 @@
     {
       "fieldName": "isActive",
       "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "isEditable",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "isText",
+      "fieldType": "Boolean"
     }
   ],
   "fluentMethods": true,

@@ -49,6 +49,7 @@ public class BooksOptionDetails implements Serializable {
             "booksVariables",
             "avatarAttributes",
             "layerGroups",
+            "selections",
         },
         allowSetters = true
     )

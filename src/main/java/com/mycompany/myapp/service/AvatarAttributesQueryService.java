@@ -94,6 +94,10 @@ public class AvatarAttributesQueryService extends QueryService<AvatarAttributes>
             if (criteria.getIsActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getIsActive(), AvatarAttributes_.isActive));
             }
+            if (criteria.getAvatarAttributesCode() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getAvatarAttributesCode(), AvatarAttributes_.avatarAttributesCode));
+            }
             if (criteria.getAvatarCharactorId() != null) {
                 specification =
                     specification.and(
@@ -115,6 +119,15 @@ public class AvatarAttributesQueryService extends QueryService<AvatarAttributes>
                         buildSpecification(
                             criteria.getStylesId(),
                             root -> root.join(AvatarAttributes_.styles, JoinType.LEFT).get(Styles_.id)
+                        )
+                    );
+            }
+            if (criteria.getOptionsId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getOptionsId(),
+                            root -> root.join(AvatarAttributes_.options, JoinType.LEFT).get(Options_.id)
                         )
                     );
             }

@@ -30,20 +30,6 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="20221205035322-1-relations" author="jhipster">
-
-        <createTable tableName="rel_options__style">
-            <column name="style_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="options_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-        <addPrimaryKey columnNames="options_id, style_id" tableName="rel_options__style"/>
-    </changeSet>
-
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 
     <!--

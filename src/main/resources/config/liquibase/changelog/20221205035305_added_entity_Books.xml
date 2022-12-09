@@ -126,6 +126,17 @@
         </createTable>
 
         <addPrimaryKey columnNames="books_id, layer_group_id" tableName="rel_books__layer_group"/>
+
+        <createTable tableName="rel_books__selections">
+            <column name="selections_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="books_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="books_id, selections_id" tableName="rel_books__selections"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->

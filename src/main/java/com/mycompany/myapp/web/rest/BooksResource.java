@@ -1,18 +1,23 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.domain.Books;
+import com.mycompany.myapp.domain.BooksPage;
 import com.mycompany.myapp.repository.BooksRepository;
 import com.mycompany.myapp.service.BooksQueryService;
 import com.mycompany.myapp.service.BooksService;
+import com.mycompany.myapp.service.PDFGenarator;
 import com.mycompany.myapp.service.criteria.BooksCriteria;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import net.sf.jasperreports.engine.JRException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,10 +51,18 @@ public class BooksResource {
 
     private final BooksQueryService booksQueryService;
 
-    public BooksResource(BooksService booksService, BooksRepository booksRepository, BooksQueryService booksQueryService) {
+    private final PDFGenarator pdfGenarator;
+
+    public BooksResource(
+        BooksService booksService,
+        BooksRepository booksRepository,
+        BooksQueryService booksQueryService,
+        PDFGenarator pdfGenarator
+    ) {
         this.booksService = booksService;
         this.booksRepository = booksRepository;
         this.booksQueryService = booksQueryService;
+        this.pdfGenarator = pdfGenarator;
     }
 
     /**
@@ -197,5 +210,17 @@ public class BooksResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @GetMapping("/printReceipts")
+    public byte[] receipt(String booksCode, String storeCode) throws IOException, JRException {
+        Optional<Books> book = booksService.findOneByCode("DEMO");
+        if (!book.isPresent()) {
+            throw new BadRequestAlertException("A new books cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        Books books = book.get();
+
+        byte[] receipt = pdfGenarator.pdfCreator(books);
+        return receipt;
     }
 }

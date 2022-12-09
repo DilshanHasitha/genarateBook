@@ -1,7 +1,6 @@
 package com.mycompany.myapp.repository;
 
 import com.mycompany.myapp.domain.BooksPage;
-import com.mycompany.myapp.domain.LayerGroup;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -30,6 +29,4 @@ public interface BooksPageRepository
     default Page<BooksPage> findAllWithEagerRelationships(Pageable pageable) {
         return this.fetchBagRelationships(this.findAll(pageable));
     }
-
-    BooksPage findOneByNum(Integer num);
 }

@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.AvatarAttributes;
 import com.mycompany.myapp.domain.AvatarCharactor;
+import com.mycompany.myapp.domain.LayerGroup;
 import com.mycompany.myapp.repository.AvatarCharactorRepository;
 import com.mycompany.myapp.service.criteria.AvatarCharactorCriteria;
 import java.util.List;
@@ -864,6 +865,29 @@ class AvatarCharactorResourceIT {
 
         // Get all the avatarCharactorList where avatarAttributes equals to (avatarAttributesId + 1)
         defaultAvatarCharactorShouldNotBeFound("avatarAttributesId.equals=" + (avatarAttributesId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarCharactorsByLayerGroupIsEqualToSomething() throws Exception {
+        LayerGroup layerGroup;
+        if (TestUtil.findAll(em, LayerGroup.class).isEmpty()) {
+            avatarCharactorRepository.saveAndFlush(avatarCharactor);
+            layerGroup = LayerGroupResourceIT.createEntity(em);
+        } else {
+            layerGroup = TestUtil.findAll(em, LayerGroup.class).get(0);
+        }
+        em.persist(layerGroup);
+        em.flush();
+        avatarCharactor.setLayerGroup(layerGroup);
+        avatarCharactorRepository.saveAndFlush(avatarCharactor);
+        Long layerGroupId = layerGroup.getId();
+
+        // Get all the avatarCharactorList where layerGroup equals to layerGroupId
+        defaultAvatarCharactorShouldBeFound("layerGroupId.equals=" + layerGroupId);
+
+        // Get all the avatarCharactorList where layerGroup equals to (layerGroupId + 1)
+        defaultAvatarCharactorShouldNotBeFound("layerGroupId.equals=" + (layerGroupId + 1));
     }
 
     /**

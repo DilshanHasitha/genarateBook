@@ -9,6 +9,8 @@ import { of, Subject, from } from 'rxjs';
 import { AvatarCharactorFormService } from './avatar-charactor-form.service';
 import { AvatarCharactorService } from '../service/avatar-charactor.service';
 import { IAvatarCharactor } from '../avatar-charactor.model';
+import { ILayerGroup } from 'app/entities/layer-group/layer-group.model';
+import { LayerGroupService } from 'app/entities/layer-group/service/layer-group.service';
 
 import { AvatarCharactorUpdateComponent } from './avatar-charactor-update.component';
 
@@ -18,6 +20,7 @@ describe('AvatarCharactor Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let avatarCharactorFormService: AvatarCharactorFormService;
   let avatarCharactorService: AvatarCharactorService;
+  let layerGroupService: LayerGroupService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -40,17 +43,43 @@ describe('AvatarCharactor Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     avatarCharactorFormService = TestBed.inject(AvatarCharactorFormService);
     avatarCharactorService = TestBed.inject(AvatarCharactorService);
+    layerGroupService = TestBed.inject(LayerGroupService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('Should update editForm', () => {
+    it('Should call LayerGroup query and add missing value', () => {
       const avatarCharactor: IAvatarCharactor = { id: 456 };
+      const layerGroup: ILayerGroup = { id: 78146 };
+      avatarCharactor.layerGroup = layerGroup;
+
+      const layerGroupCollection: ILayerGroup[] = [{ id: 71222 }];
+      jest.spyOn(layerGroupService, 'query').mockReturnValue(of(new HttpResponse({ body: layerGroupCollection })));
+      const additionalLayerGroups = [layerGroup];
+      const expectedCollection: ILayerGroup[] = [...additionalLayerGroups, ...layerGroupCollection];
+      jest.spyOn(layerGroupService, 'addLayerGroupToCollectionIfMissing').mockReturnValue(expectedCollection);
 
       activatedRoute.data = of({ avatarCharactor });
       comp.ngOnInit();
 
+      expect(layerGroupService.query).toHaveBeenCalled();
+      expect(layerGroupService.addLayerGroupToCollectionIfMissing).toHaveBeenCalledWith(
+        layerGroupCollection,
+        ...additionalLayerGroups.map(expect.objectContaining)
+      );
+      expect(comp.layerGroupsSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should update editForm', () => {
+      const avatarCharactor: IAvatarCharactor = { id: 456 };
+      const layerGroup: ILayerGroup = { id: 94968 };
+      avatarCharactor.layerGroup = layerGroup;
+
+      activatedRoute.data = of({ avatarCharactor });
+      comp.ngOnInit();
+
+      expect(comp.layerGroupsSharedCollection).toContain(layerGroup);
       expect(comp.avatarCharactor).toEqual(avatarCharactor);
     });
   });
@@ -120,6 +149,18 @@ describe('AvatarCharactor Management Update Component', () => {
       expect(avatarCharactorService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Compare relationships', () => {
+    describe('compareLayerGroup', () => {
+      it('Should forward to layerGroupService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(layerGroupService, 'compareLayerGroup');
+        comp.compareLayerGroup(entity, entity2);
+        expect(layerGroupService.compareLayerGroup).toHaveBeenCalledWith(entity, entity2);
+      });
     });
   });
 });

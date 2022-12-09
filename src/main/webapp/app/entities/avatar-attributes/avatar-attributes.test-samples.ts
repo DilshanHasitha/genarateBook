@@ -6,21 +6,22 @@ export const sampleWithRequiredData: IAvatarAttributes = {
 };
 
 export const sampleWithPartialData: IAvatarAttributes = {
-  id: 17865,
-  code: 'parsing',
-  description: 'web-readiness',
-  isActive: false,
-};
-
-export const sampleWithFullData: IAvatarAttributes = {
-  id: 58341,
-  code: 'XML orange back-end',
-  description: 'primary convergence definition',
+  id: 28180,
+  code: 'Web web-readiness engage',
+  description: 'Bedfordshire alliance Cotton',
   isActive: true,
 };
 
+export const sampleWithFullData: IAvatarAttributes = {
+  id: 11048,
+  code: 'convergence',
+  description: 'asymmetric',
+  isActive: false,
+  avatarAttributesCode: 'microchip solutions group',
+};
+
 export const sampleWithNewData: NewAvatarAttributes = {
-  description: 'calculating',
+  description: 'magnetic',
   id: null,
 };
 

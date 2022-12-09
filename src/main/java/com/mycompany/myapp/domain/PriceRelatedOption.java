@@ -61,6 +61,7 @@ public class PriceRelatedOption implements Serializable {
             "booksVariables",
             "avatarAttributes",
             "layerGroups",
+            "selections",
         },
         allowSetters = true
     )

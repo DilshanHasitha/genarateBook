@@ -52,6 +52,18 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
+          <th scope="col" jhiSortBy="isEditable">
+            <div class="d-flex">
+              <span>Is Editable</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="isText">
+            <div class="d-flex">
+              <span>Is Text</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -62,6 +74,8 @@
           </td>
           <td>{{ pageLayers.layerNo }}</td>
           <td>{{ pageLayers.isActive }}</td>
+          <td>{{ pageLayers.isEditable }}</td>
+          <td>{{ pageLayers.isText }}</td>
           <td class="text-end">
             <div class="btn-group">
               <button

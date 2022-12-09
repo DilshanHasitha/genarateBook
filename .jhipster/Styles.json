@@ -44,15 +44,6 @@
   "name": "Styles",
   "pagination": "pagination",
   "readOnly": false,
-  "relationships": [
-    {
-      "otherEntityField": "id",
-      "otherEntityName": "options",
-      "otherEntityRelationshipName": "styles",
-      "ownerSide": true,
-      "relationshipName": "options",
-      "relationshipType": "many-to-many"
-    }
-  ],
+  "relationships": [],
   "service": "serviceClass"
 }

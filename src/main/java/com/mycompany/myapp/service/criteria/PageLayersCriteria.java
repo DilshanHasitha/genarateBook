@@ -27,6 +27,10 @@ public class PageLayersCriteria implements Serializable, Criteria {
 
     private BooleanFilter isActive;
 
+    private BooleanFilter isEditable;
+
+    private BooleanFilter isText;
+
     private LongFilter pageElementDetailsId;
 
     private LongFilter booksPageId;
@@ -39,6 +43,8 @@ public class PageLayersCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.layerNo = other.layerNo == null ? null : other.layerNo.copy();
         this.isActive = other.isActive == null ? null : other.isActive.copy();
+        this.isEditable = other.isEditable == null ? null : other.isEditable.copy();
+        this.isText = other.isText == null ? null : other.isText.copy();
         this.pageElementDetailsId = other.pageElementDetailsId == null ? null : other.pageElementDetailsId.copy();
         this.booksPageId = other.booksPageId == null ? null : other.booksPageId.copy();
         this.distinct = other.distinct;
@@ -94,6 +100,36 @@ public class PageLayersCriteria implements Serializable, Criteria {
         this.isActive = isActive;
     }
 
+    public BooleanFilter getIsEditable() {
+        return isEditable;
+    }
+
+    public BooleanFilter isEditable() {
+        if (isEditable == null) {
+            isEditable = new BooleanFilter();
+        }
+        return isEditable;
+    }
+
+    public void setIsEditable(BooleanFilter isEditable) {
+        this.isEditable = isEditable;
+    }
+
+    public BooleanFilter getIsText() {
+        return isText;
+    }
+
+    public BooleanFilter isText() {
+        if (isText == null) {
+            isText = new BooleanFilter();
+        }
+        return isText;
+    }
+
+    public void setIsText(BooleanFilter isText) {
+        this.isText = isText;
+    }
+
     public LongFilter getPageElementDetailsId() {
         return pageElementDetailsId;
     }
@@ -145,6 +181,8 @@ public class PageLayersCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(layerNo, that.layerNo) &&
             Objects.equals(isActive, that.isActive) &&
+            Objects.equals(isEditable, that.isEditable) &&
+            Objects.equals(isText, that.isText) &&
             Objects.equals(pageElementDetailsId, that.pageElementDetailsId) &&
             Objects.equals(booksPageId, that.booksPageId) &&
             Objects.equals(distinct, that.distinct)
@@ -153,7 +191,7 @@ public class PageLayersCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, layerNo, isActive, pageElementDetailsId, booksPageId, distinct);
+        return Objects.hash(id, layerNo, isActive, isEditable, isText, pageElementDetailsId, booksPageId, distinct);
     }
 
     // prettier-ignore
@@ -163,6 +201,8 @@ public class PageLayersCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (layerNo != null ? "layerNo=" + layerNo + ", " : "") +
             (isActive != null ? "isActive=" + isActive + ", " : "") +
+            (isEditable != null ? "isEditable=" + isEditable + ", " : "") +
+            (isText != null ? "isText=" + isText + ", " : "") +
             (pageElementDetailsId != null ? "pageElementDetailsId=" + pageElementDetailsId + ", " : "") +
             (booksPageId != null ? "booksPageId=" + booksPageId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

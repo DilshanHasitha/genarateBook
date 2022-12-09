@@ -22,6 +22,8 @@ describe('PageLayers Form Service', () => {
             id: expect.any(Object),
             layerNo: expect.any(Object),
             isActive: expect.any(Object),
+            isEditable: expect.any(Object),
+            isText: expect.any(Object),
             pageElementDetails: expect.any(Object),
             booksPages: expect.any(Object),
           })
@@ -36,6 +38,8 @@ describe('PageLayers Form Service', () => {
             id: expect.any(Object),
             layerNo: expect.any(Object),
             isActive: expect.any(Object),
+            isEditable: expect.any(Object),
+            isText: expect.any(Object),
             pageElementDetails: expect.any(Object),
             booksPages: expect.any(Object),
           })

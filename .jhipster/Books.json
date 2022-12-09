@@ -105,6 +105,14 @@
       "ownerSide": true,
       "relationshipName": "layerGroup",
       "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "selections",
+      "otherEntityRelationshipName": "books",
+      "ownerSide": true,
+      "relationshipName": "selections",
+      "relationshipType": "many-to-many"
     }
   ],
   "service": "serviceClass"

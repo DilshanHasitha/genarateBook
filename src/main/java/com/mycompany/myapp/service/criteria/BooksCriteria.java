@@ -57,6 +57,8 @@ public class BooksCriteria implements Serializable, Criteria {
 
     private LongFilter layerGroupId;
 
+    private LongFilter selectionsId;
+
     private Boolean distinct;
 
     public BooksCriteria() {}
@@ -80,6 +82,7 @@ public class BooksCriteria implements Serializable, Criteria {
         this.booksVariablesId = other.booksVariablesId == null ? null : other.booksVariablesId.copy();
         this.avatarAttributesId = other.avatarAttributesId == null ? null : other.avatarAttributesId.copy();
         this.layerGroupId = other.layerGroupId == null ? null : other.layerGroupId.copy();
+        this.selectionsId = other.selectionsId == null ? null : other.selectionsId.copy();
         this.distinct = other.distinct;
     }
 
@@ -358,6 +361,21 @@ public class BooksCriteria implements Serializable, Criteria {
         this.layerGroupId = layerGroupId;
     }
 
+    public LongFilter getSelectionsId() {
+        return selectionsId;
+    }
+
+    public LongFilter selectionsId() {
+        if (selectionsId == null) {
+            selectionsId = new LongFilter();
+        }
+        return selectionsId;
+    }
+
+    public void setSelectionsId(LongFilter selectionsId) {
+        this.selectionsId = selectionsId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -394,6 +412,7 @@ public class BooksCriteria implements Serializable, Criteria {
             Objects.equals(booksVariablesId, that.booksVariablesId) &&
             Objects.equals(avatarAttributesId, that.avatarAttributesId) &&
             Objects.equals(layerGroupId, that.layerGroupId) &&
+            Objects.equals(selectionsId, that.selectionsId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -419,6 +438,7 @@ public class BooksCriteria implements Serializable, Criteria {
             booksVariablesId,
             avatarAttributesId,
             layerGroupId,
+            selectionsId,
             distinct
         );
     }
@@ -445,6 +465,7 @@ public class BooksCriteria implements Serializable, Criteria {
             (booksVariablesId != null ? "booksVariablesId=" + booksVariablesId + ", " : "") +
             (avatarAttributesId != null ? "avatarAttributesId=" + avatarAttributesId + ", " : "") +
             (layerGroupId != null ? "layerGroupId=" + layerGroupId + ", " : "") +
+            (selectionsId != null ? "selectionsId=" + selectionsId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

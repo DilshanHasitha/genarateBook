@@ -28,6 +28,8 @@ import { IAvatarAttributes } from 'app/entities/avatar-attributes/avatar-attribu
 import { AvatarAttributesService } from 'app/entities/avatar-attributes/service/avatar-attributes.service';
 import { ILayerGroup } from 'app/entities/layer-group/layer-group.model';
 import { LayerGroupService } from 'app/entities/layer-group/service/layer-group.service';
+import { ISelections } from 'app/entities/selections/selections.model';
+import { SelectionsService } from 'app/entities/selections/service/selections.service';
 
 import { BooksUpdateComponent } from './books-update.component';
 
@@ -46,6 +48,7 @@ describe('Books Management Update Component', () => {
   let booksVariablesService: BooksVariablesService;
   let avatarAttributesService: AvatarAttributesService;
   let layerGroupService: LayerGroupService;
+  let selectionsService: SelectionsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -77,6 +80,7 @@ describe('Books Management Update Component', () => {
     booksVariablesService = TestBed.inject(BooksVariablesService);
     avatarAttributesService = TestBed.inject(AvatarAttributesService);
     layerGroupService = TestBed.inject(LayerGroupService);
+    selectionsService = TestBed.inject(SelectionsService);
 
     comp = fixture.componentInstance;
   });
@@ -280,6 +284,28 @@ describe('Books Management Update Component', () => {
       expect(comp.layerGroupsSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call Selections query and add missing value', () => {
+      const books: IBooks = { id: 456 };
+      const selections: ISelections[] = [{ id: 53967 }];
+      books.selections = selections;
+
+      const selectionsCollection: ISelections[] = [{ id: 88439 }];
+      jest.spyOn(selectionsService, 'query').mockReturnValue(of(new HttpResponse({ body: selectionsCollection })));
+      const additionalSelections = [...selections];
+      const expectedCollection: ISelections[] = [...additionalSelections, ...selectionsCollection];
+      jest.spyOn(selectionsService, 'addSelectionsToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ books });
+      comp.ngOnInit();
+
+      expect(selectionsService.query).toHaveBeenCalled();
+      expect(selectionsService.addSelectionsToCollectionIfMissing).toHaveBeenCalledWith(
+        selectionsCollection,
+        ...additionalSelections.map(expect.objectContaining)
+      );
+      expect(comp.selectionsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const books: IBooks = { id: 456 };
       const pageSize: IPageSize = { id: 547 };
@@ -300,6 +326,8 @@ describe('Books Management Update Component', () => {
       books.avatarAttributes = [avatarAttributes];
       const layerGroup: ILayerGroup = { id: 26721 };
       books.layerGroups = [layerGroup];
+      const selections: ISelections = { id: 73120 };
+      books.selections = [selections];
 
       activatedRoute.data = of({ books });
       comp.ngOnInit();
@@ -313,6 +341,7 @@ describe('Books Management Update Component', () => {
       expect(comp.booksVariablesSharedCollection).toContain(booksVariables);
       expect(comp.avatarAttributesSharedCollection).toContain(avatarAttributes);
       expect(comp.layerGroupsSharedCollection).toContain(layerGroup);
+      expect(comp.selectionsSharedCollection).toContain(selections);
       expect(comp.books).toEqual(books);
     });
   });
@@ -473,6 +502,16 @@ describe('Books Management Update Component', () => {
         jest.spyOn(layerGroupService, 'compareLayerGroup');
         comp.compareLayerGroup(entity, entity2);
         expect(layerGroupService.compareLayerGroup).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
+    describe('compareSelections', () => {
+      it('Should forward to selectionsService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(selectionsService, 'compareSelections');
+        comp.compareSelections(entity, entity2);
+        expect(selectionsService.compareSelections).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

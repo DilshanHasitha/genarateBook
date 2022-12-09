@@ -184,6 +184,15 @@ public class BooksQueryService extends QueryService<Books> {
                         )
                     );
             }
+            if (criteria.getSelectionsId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getSelectionsId(),
+                            root -> root.join(Books_.selections, JoinType.LEFT).get(Selections_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

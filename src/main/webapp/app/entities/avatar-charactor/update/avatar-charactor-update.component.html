@@ -60,6 +60,23 @@
           <label class="form-label" for="field_y">Y</label>
           <input type="number" class="form-control" name="y" id="field_y" data-cy="y" formControlName="y" />
         </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_layerGroup">Layer Group</label>
+          <select
+            class="form-control"
+            id="field_layerGroup"
+            data-cy="layerGroup"
+            name="layerGroup"
+            formControlName="layerGroup"
+            [compareWith]="compareLayerGroup"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="layerGroupOption" *ngFor="let layerGroupOption of layerGroupsSharedCollection">
+              {{ layerGroupOption.id }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div>

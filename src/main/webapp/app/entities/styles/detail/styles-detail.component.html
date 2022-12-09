@@ -46,13 +46,6 @@
         <dd>
           <span>{{ styles.y }}</span>
         </dd>
-        <dt><span>Options</span></dt>
-        <dd>
-          <span *ngFor="let options of styles.options; let last = last">
-            <a [routerLink]="['/options', options.id, 'view']">{{ options.id }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
-        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

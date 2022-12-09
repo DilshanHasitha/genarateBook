@@ -109,12 +109,6 @@ public class StylesQueryService extends QueryService<Styles> {
             if (criteria.getY() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getY(), Styles_.y));
             }
-            if (criteria.getOptionsId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getOptionsId(), root -> root.join(Styles_.options, JoinType.LEFT).get(Options_.id))
-                    );
-            }
         }
         return specification;
     }

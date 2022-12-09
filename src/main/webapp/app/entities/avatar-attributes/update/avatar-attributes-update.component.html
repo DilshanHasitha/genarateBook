@@ -37,6 +37,18 @@
         </div>
 
         <div class="row mb-3">
+          <label class="form-label" for="field_avatarAttributesCode">Avatar Attributes Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="avatarAttributesCode"
+            id="field_avatarAttributesCode"
+            data-cy="avatarAttributesCode"
+            formControlName="avatarAttributesCode"
+          />
+        </div>
+
+        <div class="row mb-3">
           <label for="field_avatarCharactors">Avatar Charactor</label>
           <select
             class="form-control"
@@ -65,6 +77,21 @@
             [compareWith]="compareStyles"
           >
             <option [ngValue]="stylesOption" *ngFor="let stylesOption of stylesSharedCollection">{{ stylesOption.id }}</option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label for="field_options">Options</label>
+          <select
+            class="form-control"
+            id="field_options"
+            data-cy="options"
+            multiple
+            name="options"
+            formControlName="options"
+            [compareWith]="compareOptions"
+          >
+            <option [ngValue]="optionsOption" *ngFor="let optionsOption of optionsSharedCollection">{{ optionsOption.id }}</option>
           </select>
         </div>
       </div>

@@ -102,15 +102,6 @@ public class StylesService {
     }
 
     /**
-     * Get all the styles with eager load of many-to-many relationships.
-     *
-     * @return the list of entities.
-     */
-    public Page<Styles> findAllWithEagerRelationships(Pageable pageable) {
-        return stylesRepository.findAllWithEagerRelationships(pageable);
-    }
-
-    /**
      * Get one styles by id.
      *
      * @param id the id of the entity.
@@ -119,7 +110,7 @@ public class StylesService {
     @Transactional(readOnly = true)
     public Optional<Styles> findOne(Long id) {
         log.debug("Request to get Styles : {}", id);
-        return stylesRepository.findOneWithEagerRelationships(id);
+        return stylesRepository.findById(id);
     }
 
     /**

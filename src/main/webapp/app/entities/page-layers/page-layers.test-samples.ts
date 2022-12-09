@@ -6,18 +6,20 @@ export const sampleWithRequiredData: IPageLayers = {
 };
 
 export const sampleWithPartialData: IPageLayers = {
-  id: 1374,
-  layerNo: 48295,
+  id: 68992,
+  layerNo: 12183,
 };
 
 export const sampleWithFullData: IPageLayers = {
-  id: 68992,
-  layerNo: 12183,
+  id: 56816,
+  layerNo: 57044,
   isActive: true,
+  isEditable: false,
+  isText: true,
 };
 
 export const sampleWithNewData: NewPageLayers = {
-  layerNo: 57044,
+  layerNo: 81913,
   id: null,
 };
 

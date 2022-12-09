@@ -28,7 +28,6 @@ describe('Styles Form Service', () => {
             height: expect.any(Object),
             x: expect.any(Object),
             y: expect.any(Object),
-            options: expect.any(Object),
           })
         );
       });
@@ -47,7 +46,6 @@ describe('Styles Form Service', () => {
             height: expect.any(Object),
             x: expect.any(Object),
             y: expect.any(Object),
-            options: expect.any(Object),
           })
         );
       });

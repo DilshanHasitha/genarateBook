@@ -14,12 +14,14 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type PageLayersFormGroupInput = IPageLayers | PartialWithRequiredKeyOf<NewPageLayers>;
 
-type PageLayersFormDefaults = Pick<NewPageLayers, 'id' | 'isActive' | 'pageElementDetails' | 'booksPages'>;
+type PageLayersFormDefaults = Pick<NewPageLayers, 'id' | 'isActive' | 'isEditable' | 'isText' | 'pageElementDetails' | 'booksPages'>;
 
 type PageLayersFormGroupContent = {
   id: FormControl<IPageLayers['id'] | NewPageLayers['id']>;
   layerNo: FormControl<IPageLayers['layerNo']>;
   isActive: FormControl<IPageLayers['isActive']>;
+  isEditable: FormControl<IPageLayers['isEditable']>;
+  isText: FormControl<IPageLayers['isText']>;
   pageElementDetails: FormControl<IPageLayers['pageElementDetails']>;
   booksPages: FormControl<IPageLayers['booksPages']>;
 };
@@ -45,6 +47,8 @@ export class PageLayersFormService {
         validators: [Validators.required],
       }),
       isActive: new FormControl(pageLayersRawValue.isActive),
+      isEditable: new FormControl(pageLayersRawValue.isEditable),
+      isText: new FormControl(pageLayersRawValue.isText),
       pageElementDetails: new FormControl(pageLayersRawValue.pageElementDetails ?? []),
       booksPages: new FormControl(pageLayersRawValue.booksPages ?? []),
     });
@@ -68,6 +72,8 @@ export class PageLayersFormService {
     return {
       id: null,
       isActive: false,
+      isEditable: false,
+      isText: false,
       pageElementDetails: [],
       booksPages: [],
     };

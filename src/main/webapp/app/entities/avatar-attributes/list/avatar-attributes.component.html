@@ -58,6 +58,12 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
+          <th scope="col" jhiSortBy="avatarAttributesCode">
+            <div class="d-flex">
+              <span>Avatar Attributes Code</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -69,6 +75,7 @@
           <td>{{ avatarAttributes.code }}</td>
           <td>{{ avatarAttributes.description }}</td>
           <td>{{ avatarAttributes.isActive }}</td>
+          <td>{{ avatarAttributes.avatarAttributesCode }}</td>
           <td class="text-end">
             <div class="btn-group">
               <button

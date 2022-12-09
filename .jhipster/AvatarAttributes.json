@@ -17,6 +17,10 @@
     {
       "fieldName": "isActive",
       "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "avatarAttributesCode",
+      "fieldType": "String"
     }
   ],
   "fluentMethods": true,
@@ -45,6 +49,14 @@
       "otherEntityRelationshipName": "avatarAttributes",
       "ownerSide": true,
       "relationshipName": "styles",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "options",
+      "otherEntityRelationshipName": "avatarAttributes",
+      "ownerSide": true,
+      "relationshipName": "options",
       "relationshipType": "many-to-many"
     }
   ],

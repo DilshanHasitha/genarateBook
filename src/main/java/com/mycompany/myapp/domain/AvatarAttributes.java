@@ -35,6 +35,9 @@ public class AvatarAttributes implements Serializable {
     @Column(name = "is_active")
     private Boolean isActive;
 
+    @Column(name = "avatar_attributes_code")
+    private String avatarAttributesCode;
+
     @ManyToMany
     @JoinTable(
         name = "rel_avatar_attributes__avatar_charactor",
@@ -42,7 +45,7 @@ public class AvatarAttributes implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "avatar_charactor_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "avatarAttributes" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "avatarAttributes", "layerGroup" }, allowSetters = true)
     private Set<AvatarCharactor> avatarCharactors = new HashSet<>();
 
     @ManyToMany(mappedBy = "avatarAttributes")
@@ -58,6 +61,7 @@ public class AvatarAttributes implements Serializable {
             "booksVariables",
             "avatarAttributes",
             "layerGroups",
+            "selections",
         },
         allowSetters = true
     )
@@ -70,8 +74,16 @@ public class AvatarAttributes implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "styles_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "options" }, allowSetters = true)
     private Set<Styles> styles = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_avatar_attributes__options",
+        joinColumns = @JoinColumn(name = "avatar_attributes_id"),
+        inverseJoinColumns = @JoinColumn(name = "options_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<Options> options = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -125,6 +137,19 @@ public class AvatarAttributes implements Serializable {
 
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public String getAvatarAttributesCode() {
+        return this.avatarAttributesCode;
+    }
+
+    public AvatarAttributes avatarAttributesCode(String avatarAttributesCode) {
+        this.setAvatarAttributesCode(avatarAttributesCode);
+        return this;
+    }
+
+    public void setAvatarAttributesCode(String avatarAttributesCode) {
+        this.avatarAttributesCode = avatarAttributesCode;
     }
 
     public Set<AvatarCharactor> getAvatarCharactors() {
@@ -206,6 +231,29 @@ public class AvatarAttributes implements Serializable {
         return this;
     }
 
+    public Set<Options> getOptions() {
+        return this.options;
+    }
+
+    public void setOptions(Set<Options> options) {
+        this.options = options;
+    }
+
+    public AvatarAttributes options(Set<Options> options) {
+        this.setOptions(options);
+        return this;
+    }
+
+    public AvatarAttributes addOptions(Options options) {
+        this.options.add(options);
+        return this;
+    }
+
+    public AvatarAttributes removeOptions(Options options) {
+        this.options.remove(options);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -233,6 +281,7 @@ public class AvatarAttributes implements Serializable {
             ", code='" + getCode() + "'" +
             ", description='" + getDescription() + "'" +
             ", isActive='" + getIsActive() + "'" +
+            ", avatarAttributesCode='" + getAvatarAttributesCode() + "'" +
             "}";
     }
 }

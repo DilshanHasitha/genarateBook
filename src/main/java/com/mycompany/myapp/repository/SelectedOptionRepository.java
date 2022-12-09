@@ -29,4 +29,6 @@ public interface SelectedOptionRepository
     default Page<SelectedOption> findAllWithEagerRelationships(Pageable pageable) {
         return this.fetchBagRelationships(this.findAll(pageable));
     }
+
+    SelectedOption findOneByCodeAndBooks_Code(String characterCode, String bookCode);
 }

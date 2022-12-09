@@ -1,17 +1,8 @@
 package com.mycompany.myapp.service;
 
-import static org.hibernate.id.IdentifierGenerator.ENTITY_NAME;
-
 import com.mycompany.myapp.domain.AvatarAttributes;
-import com.mycompany.myapp.domain.AvatarCharactor;
-import com.mycompany.myapp.domain.Options;
-import com.mycompany.myapp.domain.Styles;
 import com.mycompany.myapp.repository.AvatarAttributesRepository;
-import com.mycompany.myapp.repository.StylesRepository;
-import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -29,24 +20,9 @@ public class AvatarAttributesService {
     private final Logger log = LoggerFactory.getLogger(AvatarAttributesService.class);
 
     private final AvatarAttributesRepository avatarAttributesRepository;
-    private final AvatarCharactorService avatarCharactorService;
-    private final StylesService stylesService;
 
-    private final OptionsService optionsService;
-    private final StylesRepository stylesRepository;
-
-    public AvatarAttributesService(
-        AvatarAttributesRepository avatarAttributesRepository,
-        AvatarCharactorService avatarCharactorService,
-        StylesService stylesService,
-        OptionsService optionsService,
-        StylesRepository stylesRepository
-    ) {
+    public AvatarAttributesService(AvatarAttributesRepository avatarAttributesRepository) {
         this.avatarAttributesRepository = avatarAttributesRepository;
-        this.avatarCharactorService = avatarCharactorService;
-        this.stylesService = stylesService;
-        this.optionsService = optionsService;
-        this.stylesRepository = stylesRepository;
     }
 
     /**
@@ -57,33 +33,6 @@ public class AvatarAttributesService {
      */
     public AvatarAttributes save(AvatarAttributes avatarAttributes) {
         log.debug("Request to save AvatarAttributes : {}", avatarAttributes);
-        for (AvatarCharactor avatarcharactor : avatarAttributes.getAvatarCharactors()) {
-            if (avatarcharactor.getId() == null) {
-                avatarCharactorService.save(avatarcharactor);
-            }
-        }
-
-        for (Styles styles : avatarAttributes.getStyles()) {
-            for (Options options : styles.getOptions()) {
-                if (options.getId() == null) {
-                    optionsService.save(options);
-                }
-            }
-            if (styles.getId() == null) {
-                stylesService.save(styles);
-            } else {
-                if (!Objects.equals(styles.getId(), styles.getId())) {
-                    throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-                }
-
-                if (!stylesRepository.existsById(styles.getId())) {
-                    throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-                }
-
-                Styles result = stylesService.update(styles);
-            }
-        }
-        //        if(avatarAttributes.get)
         return avatarAttributesRepository.save(avatarAttributes);
     }
 
@@ -118,6 +67,9 @@ public class AvatarAttributesService {
                 }
                 if (avatarAttributes.getIsActive() != null) {
                     existingAvatarAttributes.setIsActive(avatarAttributes.getIsActive());
+                }
+                if (avatarAttributes.getAvatarAttributesCode() != null) {
+                    existingAvatarAttributes.setAvatarAttributesCode(avatarAttributes.getAvatarAttributesCode());
                 }
 
                 return existingAvatarAttributes;

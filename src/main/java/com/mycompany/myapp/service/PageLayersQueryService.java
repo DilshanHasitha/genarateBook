@@ -91,6 +91,12 @@ public class PageLayersQueryService extends QueryService<PageLayers> {
             if (criteria.getIsActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getIsActive(), PageLayers_.isActive));
             }
+            if (criteria.getIsEditable() != null) {
+                specification = specification.and(buildSpecification(criteria.getIsEditable(), PageLayers_.isEditable));
+            }
+            if (criteria.getIsText() != null) {
+                specification = specification.and(buildSpecification(criteria.getIsText(), PageLayers_.isText));
+            }
             if (criteria.getPageElementDetailsId() != null) {
                 specification =
                     specification.and(

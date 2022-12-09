@@ -25,6 +25,8 @@ import { IAvatarAttributes } from 'app/entities/avatar-attributes/avatar-attribu
 import { AvatarAttributesService } from 'app/entities/avatar-attributes/service/avatar-attributes.service';
 import { ILayerGroup } from 'app/entities/layer-group/layer-group.model';
 import { LayerGroupService } from 'app/entities/layer-group/service/layer-group.service';
+import { ISelections } from 'app/entities/selections/selections.model';
+import { SelectionsService } from 'app/entities/selections/service/selections.service';
 
 @Component({
   selector: 'jhi-books-update',
@@ -43,6 +45,7 @@ export class BooksUpdateComponent implements OnInit {
   booksVariablesSharedCollection: IBooksVariables[] = [];
   avatarAttributesSharedCollection: IAvatarAttributes[] = [];
   layerGroupsSharedCollection: ILayerGroup[] = [];
+  selectionsSharedCollection: ISelections[] = [];
 
   editForm: BooksFormGroup = this.booksFormService.createBooksFormGroup();
 
@@ -58,6 +61,7 @@ export class BooksUpdateComponent implements OnInit {
     protected booksVariablesService: BooksVariablesService,
     protected avatarAttributesService: AvatarAttributesService,
     protected layerGroupService: LayerGroupService,
+    protected selectionsService: SelectionsService,
     protected activatedRoute: ActivatedRoute
   ) {}
 
@@ -83,6 +87,8 @@ export class BooksUpdateComponent implements OnInit {
     this.avatarAttributesService.compareAvatarAttributes(o1, o2);
 
   compareLayerGroup = (o1: ILayerGroup | null, o2: ILayerGroup | null): boolean => this.layerGroupService.compareLayerGroup(o1, o2);
+
+  compareSelections = (o1: ISelections | null, o2: ISelections | null): boolean => this.selectionsService.compareSelections(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ books }) => {
@@ -166,6 +172,10 @@ export class BooksUpdateComponent implements OnInit {
     this.layerGroupsSharedCollection = this.layerGroupService.addLayerGroupToCollectionIfMissing<ILayerGroup>(
       this.layerGroupsSharedCollection,
       ...(books.layerGroups ?? [])
+    );
+    this.selectionsSharedCollection = this.selectionsService.addSelectionsToCollectionIfMissing<ISelections>(
+      this.selectionsSharedCollection,
+      ...(books.selections ?? [])
     );
   }
 
@@ -268,5 +278,15 @@ export class BooksUpdateComponent implements OnInit {
         )
       )
       .subscribe((layerGroups: ILayerGroup[]) => (this.layerGroupsSharedCollection = layerGroups));
+
+    this.selectionsService
+      .query()
+      .pipe(map((res: HttpResponse<ISelections[]>) => res.body ?? []))
+      .pipe(
+        map((selections: ISelections[]) =>
+          this.selectionsService.addSelectionsToCollectionIfMissing<ISelections>(selections, ...(this.books?.selections ?? []))
+        )
+      )
+      .subscribe((selections: ISelections[]) => (this.selectionsSharedCollection = selections));
   }
 }

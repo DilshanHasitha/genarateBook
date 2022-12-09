@@ -10,6 +10,7 @@ import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.AvatarAttributes;
 import com.mycompany.myapp.domain.AvatarCharactor;
 import com.mycompany.myapp.domain.Books;
+import com.mycompany.myapp.domain.Options;
 import com.mycompany.myapp.domain.Styles;
 import com.mycompany.myapp.repository.AvatarAttributesRepository;
 import com.mycompany.myapp.service.AvatarAttributesService;
@@ -52,6 +53,9 @@ class AvatarAttributesResourceIT {
     private static final Boolean DEFAULT_IS_ACTIVE = false;
     private static final Boolean UPDATED_IS_ACTIVE = true;
 
+    private static final String DEFAULT_AVATAR_ATTRIBUTES_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_AVATAR_ATTRIBUTES_CODE = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/avatar-attributes";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -85,7 +89,8 @@ class AvatarAttributesResourceIT {
         AvatarAttributes avatarAttributes = new AvatarAttributes()
             .code(DEFAULT_CODE)
             .description(DEFAULT_DESCRIPTION)
-            .isActive(DEFAULT_IS_ACTIVE);
+            .isActive(DEFAULT_IS_ACTIVE)
+            .avatarAttributesCode(DEFAULT_AVATAR_ATTRIBUTES_CODE);
         return avatarAttributes;
     }
 
@@ -99,7 +104,8 @@ class AvatarAttributesResourceIT {
         AvatarAttributes avatarAttributes = new AvatarAttributes()
             .code(UPDATED_CODE)
             .description(UPDATED_DESCRIPTION)
-            .isActive(UPDATED_IS_ACTIVE);
+            .isActive(UPDATED_IS_ACTIVE)
+            .avatarAttributesCode(UPDATED_AVATAR_ATTRIBUTES_CODE);
         return avatarAttributes;
     }
 
@@ -126,6 +132,7 @@ class AvatarAttributesResourceIT {
         assertThat(testAvatarAttributes.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testAvatarAttributes.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testAvatarAttributes.getIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
+        assertThat(testAvatarAttributes.getAvatarAttributesCode()).isEqualTo(DEFAULT_AVATAR_ATTRIBUTES_CODE);
     }
 
     @Test
@@ -181,7 +188,8 @@ class AvatarAttributesResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(avatarAttributes.getId().intValue())))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())));
+            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].avatarAttributesCode").value(hasItem(DEFAULT_AVATAR_ATTRIBUTES_CODE)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -215,7 +223,8 @@ class AvatarAttributesResourceIT {
             .andExpect(jsonPath("$.id").value(avatarAttributes.getId().intValue()))
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()));
+            .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()))
+            .andExpect(jsonPath("$.avatarAttributesCode").value(DEFAULT_AVATAR_ATTRIBUTES_CODE));
     }
 
     @Test
@@ -407,6 +416,73 @@ class AvatarAttributesResourceIT {
 
     @Test
     @Transactional
+    void getAllAvatarAttributesByAvatarAttributesCodeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        avatarAttributesRepository.saveAndFlush(avatarAttributes);
+
+        // Get all the avatarAttributesList where avatarAttributesCode equals to DEFAULT_AVATAR_ATTRIBUTES_CODE
+        defaultAvatarAttributesShouldBeFound("avatarAttributesCode.equals=" + DEFAULT_AVATAR_ATTRIBUTES_CODE);
+
+        // Get all the avatarAttributesList where avatarAttributesCode equals to UPDATED_AVATAR_ATTRIBUTES_CODE
+        defaultAvatarAttributesShouldNotBeFound("avatarAttributesCode.equals=" + UPDATED_AVATAR_ATTRIBUTES_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarAttributesByAvatarAttributesCodeIsInShouldWork() throws Exception {
+        // Initialize the database
+        avatarAttributesRepository.saveAndFlush(avatarAttributes);
+
+        // Get all the avatarAttributesList where avatarAttributesCode in DEFAULT_AVATAR_ATTRIBUTES_CODE or UPDATED_AVATAR_ATTRIBUTES_CODE
+        defaultAvatarAttributesShouldBeFound(
+            "avatarAttributesCode.in=" + DEFAULT_AVATAR_ATTRIBUTES_CODE + "," + UPDATED_AVATAR_ATTRIBUTES_CODE
+        );
+
+        // Get all the avatarAttributesList where avatarAttributesCode equals to UPDATED_AVATAR_ATTRIBUTES_CODE
+        defaultAvatarAttributesShouldNotBeFound("avatarAttributesCode.in=" + UPDATED_AVATAR_ATTRIBUTES_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarAttributesByAvatarAttributesCodeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        avatarAttributesRepository.saveAndFlush(avatarAttributes);
+
+        // Get all the avatarAttributesList where avatarAttributesCode is not null
+        defaultAvatarAttributesShouldBeFound("avatarAttributesCode.specified=true");
+
+        // Get all the avatarAttributesList where avatarAttributesCode is null
+        defaultAvatarAttributesShouldNotBeFound("avatarAttributesCode.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarAttributesByAvatarAttributesCodeContainsSomething() throws Exception {
+        // Initialize the database
+        avatarAttributesRepository.saveAndFlush(avatarAttributes);
+
+        // Get all the avatarAttributesList where avatarAttributesCode contains DEFAULT_AVATAR_ATTRIBUTES_CODE
+        defaultAvatarAttributesShouldBeFound("avatarAttributesCode.contains=" + DEFAULT_AVATAR_ATTRIBUTES_CODE);
+
+        // Get all the avatarAttributesList where avatarAttributesCode contains UPDATED_AVATAR_ATTRIBUTES_CODE
+        defaultAvatarAttributesShouldNotBeFound("avatarAttributesCode.contains=" + UPDATED_AVATAR_ATTRIBUTES_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarAttributesByAvatarAttributesCodeNotContainsSomething() throws Exception {
+        // Initialize the database
+        avatarAttributesRepository.saveAndFlush(avatarAttributes);
+
+        // Get all the avatarAttributesList where avatarAttributesCode does not contain DEFAULT_AVATAR_ATTRIBUTES_CODE
+        defaultAvatarAttributesShouldNotBeFound("avatarAttributesCode.doesNotContain=" + DEFAULT_AVATAR_ATTRIBUTES_CODE);
+
+        // Get all the avatarAttributesList where avatarAttributesCode does not contain UPDATED_AVATAR_ATTRIBUTES_CODE
+        defaultAvatarAttributesShouldBeFound("avatarAttributesCode.doesNotContain=" + UPDATED_AVATAR_ATTRIBUTES_CODE);
+    }
+
+    @Test
+    @Transactional
     void getAllAvatarAttributesByAvatarCharactorIsEqualToSomething() throws Exception {
         AvatarCharactor avatarCharactor;
         if (TestUtil.findAll(em, AvatarCharactor.class).isEmpty()) {
@@ -474,6 +550,29 @@ class AvatarAttributesResourceIT {
         defaultAvatarAttributesShouldNotBeFound("stylesId.equals=" + (stylesId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllAvatarAttributesByOptionsIsEqualToSomething() throws Exception {
+        Options options;
+        if (TestUtil.findAll(em, Options.class).isEmpty()) {
+            avatarAttributesRepository.saveAndFlush(avatarAttributes);
+            options = OptionsResourceIT.createEntity(em);
+        } else {
+            options = TestUtil.findAll(em, Options.class).get(0);
+        }
+        em.persist(options);
+        em.flush();
+        avatarAttributes.addOptions(options);
+        avatarAttributesRepository.saveAndFlush(avatarAttributes);
+        Long optionsId = options.getId();
+
+        // Get all the avatarAttributesList where options equals to optionsId
+        defaultAvatarAttributesShouldBeFound("optionsId.equals=" + optionsId);
+
+        // Get all the avatarAttributesList where options equals to (optionsId + 1)
+        defaultAvatarAttributesShouldNotBeFound("optionsId.equals=" + (optionsId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -485,7 +584,8 @@ class AvatarAttributesResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(avatarAttributes.getId().intValue())))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())));
+            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].avatarAttributesCode").value(hasItem(DEFAULT_AVATAR_ATTRIBUTES_CODE)));
 
         // Check, that the count call also returns 1
         restAvatarAttributesMockMvc
@@ -533,7 +633,11 @@ class AvatarAttributesResourceIT {
         AvatarAttributes updatedAvatarAttributes = avatarAttributesRepository.findById(avatarAttributes.getId()).get();
         // Disconnect from session so that the updates on updatedAvatarAttributes are not directly saved in db
         em.detach(updatedAvatarAttributes);
-        updatedAvatarAttributes.code(UPDATED_CODE).description(UPDATED_DESCRIPTION).isActive(UPDATED_IS_ACTIVE);
+        updatedAvatarAttributes
+            .code(UPDATED_CODE)
+            .description(UPDATED_DESCRIPTION)
+            .isActive(UPDATED_IS_ACTIVE)
+            .avatarAttributesCode(UPDATED_AVATAR_ATTRIBUTES_CODE);
 
         restAvatarAttributesMockMvc
             .perform(
@@ -550,6 +654,7 @@ class AvatarAttributesResourceIT {
         assertThat(testAvatarAttributes.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testAvatarAttributes.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testAvatarAttributes.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+        assertThat(testAvatarAttributes.getAvatarAttributesCode()).isEqualTo(UPDATED_AVATAR_ATTRIBUTES_CODE);
     }
 
     @Test
@@ -622,7 +727,10 @@ class AvatarAttributesResourceIT {
         AvatarAttributes partialUpdatedAvatarAttributes = new AvatarAttributes();
         partialUpdatedAvatarAttributes.setId(avatarAttributes.getId());
 
-        partialUpdatedAvatarAttributes.description(UPDATED_DESCRIPTION).isActive(UPDATED_IS_ACTIVE);
+        partialUpdatedAvatarAttributes
+            .description(UPDATED_DESCRIPTION)
+            .isActive(UPDATED_IS_ACTIVE)
+            .avatarAttributesCode(UPDATED_AVATAR_ATTRIBUTES_CODE);
 
         restAvatarAttributesMockMvc
             .perform(
@@ -639,6 +747,7 @@ class AvatarAttributesResourceIT {
         assertThat(testAvatarAttributes.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testAvatarAttributes.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testAvatarAttributes.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+        assertThat(testAvatarAttributes.getAvatarAttributesCode()).isEqualTo(UPDATED_AVATAR_ATTRIBUTES_CODE);
     }
 
     @Test
@@ -653,7 +762,11 @@ class AvatarAttributesResourceIT {
         AvatarAttributes partialUpdatedAvatarAttributes = new AvatarAttributes();
         partialUpdatedAvatarAttributes.setId(avatarAttributes.getId());
 
-        partialUpdatedAvatarAttributes.code(UPDATED_CODE).description(UPDATED_DESCRIPTION).isActive(UPDATED_IS_ACTIVE);
+        partialUpdatedAvatarAttributes
+            .code(UPDATED_CODE)
+            .description(UPDATED_DESCRIPTION)
+            .isActive(UPDATED_IS_ACTIVE)
+            .avatarAttributesCode(UPDATED_AVATAR_ATTRIBUTES_CODE);
 
         restAvatarAttributesMockMvc
             .perform(
@@ -670,6 +783,7 @@ class AvatarAttributesResourceIT {
         assertThat(testAvatarAttributes.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testAvatarAttributes.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testAvatarAttributes.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+        assertThat(testAvatarAttributes.getAvatarAttributesCode()).isEqualTo(UPDATED_AVATAR_ATTRIBUTES_CODE);
     }
 
     @Test

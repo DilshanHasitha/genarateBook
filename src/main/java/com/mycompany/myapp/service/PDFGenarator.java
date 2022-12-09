@@ -1,15 +1,18 @@
 package com.mycompany.myapp.service;
 
 import static java.lang.Integer.parseInt;
+import static org.hibernate.id.IdentifierGenerator.ENTITY_NAME;
 
 import com.mycompany.myapp.domain.*;
+import com.mycompany.myapp.repository.SelectedOptionRepository;
+import com.mycompany.myapp.repository.SelectionsRepository;
+import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.base.JRBasePrintPage;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.*;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
@@ -22,12 +25,33 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class PDFGenarator {
 
+    private final SelectedOptionRepository selectedOptionRepository;
+    private final SelectionsRepository selectionsRepository;
+
+    public PDFGenarator(SelectedOptionRepository selectedOptionRepository, SelectionsRepository selectionsRepository) {
+        this.selectedOptionRepository = selectedOptionRepository;
+        this.selectionsRepository = selectionsRepository;
+    }
+
     public byte[] pdfCreator(Books books) throws IOException, JRException {
         List<JasperPrint> jasperPrintList = new ArrayList<JasperPrint>();
 
         JasperDesign jasperDesign = createPage(books);
+
+        // is page size null
+        if (books.getBooksPages().size() == 0) {
+            throw new BadRequestAlertException("A new books cannot have pages", ENTITY_NAME, "empty pages");
+        }
+
+        //sort BooksPage in ascending Order
+        books = sortBooksPage(books);
+
         for (BooksPage booksPage : books.getBooksPages()) {
-            jasperPrintList.add(createPageInner(sortPageLayer(booksPage), jasperDesign)); //sort ,create page & add to jasper list
+            //sort PageLayers in ascending Order
+            BooksPage booksPages = sortPageLayer(booksPage);
+            //create page & add to jasper list
+            JasperPrint jasperPrint = createPageInner(booksPages, jasperDesign);
+            jasperPrintList.add(jasperPrint);
         }
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -59,7 +83,7 @@ public class PDFGenarator {
 
     JasperPrint createPageInner(BooksPage booksPage, JasperDesign jasperDesign) {
         JRDesignBand band = new JRDesignBand();
-        band.setHeight(1122);
+        band.setHeight(800);
         //        band.setSplitType(SplitTypeEnum.STRETCH);
 
         SimpleJasperReportsContext jasperReportsContext = new SimpleJasperReportsContext();
@@ -69,9 +93,27 @@ public class PDFGenarator {
             for (PageLayersDetails layerDetails : layers.getPageElementDetails()) {
                 configMap.put(layerDetails.getName(), layerDetails.getDescription());
             }
-            if (configMap.get("type").equals("text")) {} else if (configMap.get("type").equals("img")) {
-                band.addElement(layers.getLayerNo(), createImage(configMap, jasperDesign));
+
+            if (!layers.getIsText()) {
+                if (layers.getIsEditable()) {
+                    String characterCode = configMap.get("characterCode");
+                    SelectedOption selectedOption = selectedOptionRepository.findOneByCodeAndBooks_Code("A", "DEMO");
+                    Map<String, String> selectedMap = new HashMap<>();
+                    for (SelectedOptionDetails selectedOptionDetails : selectedOption.getSelectedOptionDetails()) {
+                        selectedMap.put(selectedOptionDetails.getName(), selectedOptionDetails.getSelectedValue());
+                    }
+                    Selections selections = selectionsRepository.findOneByAvatarCodeAndStyleCodeAndOptionCode(
+                        "A",
+                        selectedMap.get("styleCode"),
+                        selectedMap.get("optionCode")
+                    );
+                    band.addElement(layers.getLayerNo(), createImages(selections, jasperDesign));
+                }
             }
+            //            if (configMap.get("type").equals("text")) {}
+            //            else if (configMap.get("type").equals("img")) {
+            //                band.addElement(layers.getLayerNo(), createImage(configMap, jasperDesign));
+            //            }
         }
         ((JRDesignSection) jasperDesign.getDetailSection()).addBand(band);
 
@@ -89,6 +131,19 @@ public class PDFGenarator {
             throw new RuntimeException(e);
         }
         return jasperPrint;
+    }
+
+    JRDesignImage createImages(Selections selections, JasperDesign jasperDesign) {
+        JRDesignExpression expression = new JRDesignExpression();
+        //       expression.setText("\"https://wikunum-lite-generic.s3.ap-south-1.amazonaws.com/storeImages/ADPanicBuying1665638023.jpeg\"");
+        expression.setText("\"" + selections.getImage() + "\"");
+        JRDesignImage image = new JRDesignImage(jasperDesign);
+        image.setX(selections.getX());
+        image.setY(selections.getY());
+        image.setWidth(selections.getWidth());
+        image.setHeight(selections.getHeight());
+        image.setExpression(expression);
+        return image;
     }
 
     JRDesignImage createImage(Map<String, String> configMap, JasperDesign jasperDesign) {
@@ -138,5 +193,25 @@ public class PDFGenarator {
         booksPage.setPageDetails(targetSet);
 
         return booksPage;
+    }
+
+    Books sortBooksPage(Books books) {
+        List<BooksPage> pages = new ArrayList<>(books.getBooksPages());
+        Collections.sort(
+            pages,
+            new Comparator<BooksPage>() {
+                public int compare(BooksPage o1, BooksPage o2) {
+                    return o1.getNum().compareTo(o2.getNum());
+                }
+            }
+        );
+        Set<BooksPage> targetSet = new HashSet<>(pages);
+        books.setBooksPages(targetSet);
+
+        return books;
+    }
+
+    SelectedOption getCustomerSelectedOption() {
+        return null;
     }
 }

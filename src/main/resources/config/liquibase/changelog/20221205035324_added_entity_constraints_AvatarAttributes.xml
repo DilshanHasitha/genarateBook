@@ -31,5 +31,17 @@
                                  constraintName="fk_rel_avatar_attributes__styles__styles_id"
                                  referencedColumnNames="id"
                                  referencedTableName="styles"/>
+
+        <addForeignKeyConstraint baseColumnNames="avatar_attributes_id"
+                                 baseTableName="rel_avatar_attributes__options"
+                                 constraintName="fk_rel_avatar_attributes__options__avatar_attributes_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="avatar_attributes"/>
+
+        <addForeignKeyConstraint baseColumnNames="options_id"
+                                 baseTableName="rel_avatar_attributes__options"
+                                 constraintName="fk_rel_avatar_attributes__options__options_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="options"/>
     </changeSet>
 </databaseChangeLog>

@@ -37,6 +37,7 @@ describe('Books Form Service', () => {
             booksVariables: expect.any(Object),
             avatarAttributes: expect.any(Object),
             layerGroups: expect.any(Object),
+            selections: expect.any(Object),
           })
         );
       });
@@ -64,6 +65,7 @@ describe('Books Form Service', () => {
             booksVariables: expect.any(Object),
             avatarAttributes: expect.any(Object),
             layerGroups: expect.any(Object),
+            selections: expect.any(Object),
           })
         );
       });

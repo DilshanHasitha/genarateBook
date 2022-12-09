@@ -29,7 +29,8 @@ public class BooksRepositoryWithBagRelationshipsImpl implements BooksRepositoryW
             .map(this::fetchBooksAttributes)
             .map(this::fetchBooksVariables)
             .map(this::fetchAvatarAttributes)
-            .map(this::fetchLayerGroups);
+            .map(this::fetchLayerGroups)
+            .map(this::fetchSelections);
     }
 
     @Override
@@ -48,6 +49,7 @@ public class BooksRepositoryWithBagRelationshipsImpl implements BooksRepositoryW
             .map(this::fetchBooksVariables)
             .map(this::fetchAvatarAttributes)
             .map(this::fetchLayerGroups)
+            .map(this::fetchSelections)
             .orElse(Collections.emptyList());
     }
 
@@ -190,6 +192,26 @@ public class BooksRepositoryWithBagRelationshipsImpl implements BooksRepositoryW
         IntStream.range(0, books.size()).forEach(index -> order.put(books.get(index).getId(), index));
         List<Books> result = entityManager
             .createQuery("select distinct books from Books books left join fetch books.layerGroups where books in :books", Books.class)
+            .setParameter("books", books)
+            .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
+            .getResultList();
+        Collections.sort(result, (o1, o2) -> Integer.compare(order.get(o1.getId()), order.get(o2.getId())));
+        return result;
+    }
+
+    Books fetchSelections(Books result) {
+        return entityManager
+            .createQuery("select books from Books books left join fetch books.selections where books is :books", Books.class)
+            .setParameter("books", result)
+            .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
+            .getSingleResult();
+    }
+
+    List<Books> fetchSelections(List<Books> books) {
+        HashMap<Object, Integer> order = new HashMap<>();
+        IntStream.range(0, books.size()).forEach(index -> order.put(books.get(index).getId(), index));
+        List<Books> result = entityManager
+            .createQuery("select distinct books from Books books left join fetch books.selections where books in :books", Books.class)
             .setParameter("books", books)
             .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
             .getResultList();

@@ -13,6 +13,8 @@ import { IAvatarCharactor } from 'app/entities/avatar-charactor/avatar-charactor
 import { AvatarCharactorService } from 'app/entities/avatar-charactor/service/avatar-charactor.service';
 import { IStyles } from 'app/entities/styles/styles.model';
 import { StylesService } from 'app/entities/styles/service/styles.service';
+import { IOptions } from 'app/entities/options/options.model';
+import { OptionsService } from 'app/entities/options/service/options.service';
 
 import { AvatarAttributesUpdateComponent } from './avatar-attributes-update.component';
 
@@ -24,6 +26,7 @@ describe('AvatarAttributes Management Update Component', () => {
   let avatarAttributesService: AvatarAttributesService;
   let avatarCharactorService: AvatarCharactorService;
   let stylesService: StylesService;
+  let optionsService: OptionsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -48,6 +51,7 @@ describe('AvatarAttributes Management Update Component', () => {
     avatarAttributesService = TestBed.inject(AvatarAttributesService);
     avatarCharactorService = TestBed.inject(AvatarCharactorService);
     stylesService = TestBed.inject(StylesService);
+    optionsService = TestBed.inject(OptionsService);
 
     comp = fixture.componentInstance;
   });
@@ -97,18 +101,43 @@ describe('AvatarAttributes Management Update Component', () => {
       expect(comp.stylesSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call Options query and add missing value', () => {
+      const avatarAttributes: IAvatarAttributes = { id: 456 };
+      const options: IOptions[] = [{ id: 27830 }];
+      avatarAttributes.options = options;
+
+      const optionsCollection: IOptions[] = [{ id: 25470 }];
+      jest.spyOn(optionsService, 'query').mockReturnValue(of(new HttpResponse({ body: optionsCollection })));
+      const additionalOptions = [...options];
+      const expectedCollection: IOptions[] = [...additionalOptions, ...optionsCollection];
+      jest.spyOn(optionsService, 'addOptionsToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ avatarAttributes });
+      comp.ngOnInit();
+
+      expect(optionsService.query).toHaveBeenCalled();
+      expect(optionsService.addOptionsToCollectionIfMissing).toHaveBeenCalledWith(
+        optionsCollection,
+        ...additionalOptions.map(expect.objectContaining)
+      );
+      expect(comp.optionsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const avatarAttributes: IAvatarAttributes = { id: 456 };
       const avatarCharactor: IAvatarCharactor = { id: 6430 };
       avatarAttributes.avatarCharactors = [avatarCharactor];
       const styles: IStyles = { id: 19969 };
       avatarAttributes.styles = [styles];
+      const options: IOptions = { id: 66925 };
+      avatarAttributes.options = [options];
 
       activatedRoute.data = of({ avatarAttributes });
       comp.ngOnInit();
 
       expect(comp.avatarCharactorsSharedCollection).toContain(avatarCharactor);
       expect(comp.stylesSharedCollection).toContain(styles);
+      expect(comp.optionsSharedCollection).toContain(options);
       expect(comp.avatarAttributes).toEqual(avatarAttributes);
     });
   });
@@ -199,6 +228,16 @@ describe('AvatarAttributes Management Update Component', () => {
         jest.spyOn(stylesService, 'compareStyles');
         comp.compareStyles(entity, entity2);
         expect(stylesService.compareStyles).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
+    describe('compareOptions', () => {
+      it('Should forward to optionsService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(optionsService, 'compareOptions');
+        comp.compareOptions(entity, entity2);
+        expect(optionsService.compareOptions).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

@@ -49,6 +49,12 @@ class PageLayersResourceIT {
     private static final Boolean DEFAULT_IS_ACTIVE = false;
     private static final Boolean UPDATED_IS_ACTIVE = true;
 
+    private static final Boolean DEFAULT_IS_EDITABLE = false;
+    private static final Boolean UPDATED_IS_EDITABLE = true;
+
+    private static final Boolean DEFAULT_IS_TEXT = false;
+    private static final Boolean UPDATED_IS_TEXT = true;
+
     private static final String ENTITY_API_URL = "/api/page-layers";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -79,7 +85,11 @@ class PageLayersResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static PageLayers createEntity(EntityManager em) {
-        PageLayers pageLayers = new PageLayers().layerNo(DEFAULT_LAYER_NO).isActive(DEFAULT_IS_ACTIVE);
+        PageLayers pageLayers = new PageLayers()
+            .layerNo(DEFAULT_LAYER_NO)
+            .isActive(DEFAULT_IS_ACTIVE)
+            .isEditable(DEFAULT_IS_EDITABLE)
+            .isText(DEFAULT_IS_TEXT);
         return pageLayers;
     }
 
@@ -90,7 +100,11 @@ class PageLayersResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static PageLayers createUpdatedEntity(EntityManager em) {
-        PageLayers pageLayers = new PageLayers().layerNo(UPDATED_LAYER_NO).isActive(UPDATED_IS_ACTIVE);
+        PageLayers pageLayers = new PageLayers()
+            .layerNo(UPDATED_LAYER_NO)
+            .isActive(UPDATED_IS_ACTIVE)
+            .isEditable(UPDATED_IS_EDITABLE)
+            .isText(UPDATED_IS_TEXT);
         return pageLayers;
     }
 
@@ -114,6 +128,8 @@ class PageLayersResourceIT {
         PageLayers testPageLayers = pageLayersList.get(pageLayersList.size() - 1);
         assertThat(testPageLayers.getLayerNo()).isEqualTo(DEFAULT_LAYER_NO);
         assertThat(testPageLayers.getIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
+        assertThat(testPageLayers.getIsEditable()).isEqualTo(DEFAULT_IS_EDITABLE);
+        assertThat(testPageLayers.getIsText()).isEqualTo(DEFAULT_IS_TEXT);
     }
 
     @Test
@@ -164,7 +180,9 @@ class PageLayersResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(pageLayers.getId().intValue())))
             .andExpect(jsonPath("$.[*].layerNo").value(hasItem(DEFAULT_LAYER_NO)))
-            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())));
+            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].isEditable").value(hasItem(DEFAULT_IS_EDITABLE.booleanValue())))
+            .andExpect(jsonPath("$.[*].isText").value(hasItem(DEFAULT_IS_TEXT.booleanValue())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -197,7 +215,9 @@ class PageLayersResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(pageLayers.getId().intValue()))
             .andExpect(jsonPath("$.layerNo").value(DEFAULT_LAYER_NO))
-            .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()));
+            .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()))
+            .andExpect(jsonPath("$.isEditable").value(DEFAULT_IS_EDITABLE.booleanValue()))
+            .andExpect(jsonPath("$.isText").value(DEFAULT_IS_TEXT.booleanValue()));
     }
 
     @Test
@@ -350,6 +370,84 @@ class PageLayersResourceIT {
 
     @Test
     @Transactional
+    void getAllPageLayersByIsEditableIsEqualToSomething() throws Exception {
+        // Initialize the database
+        pageLayersRepository.saveAndFlush(pageLayers);
+
+        // Get all the pageLayersList where isEditable equals to DEFAULT_IS_EDITABLE
+        defaultPageLayersShouldBeFound("isEditable.equals=" + DEFAULT_IS_EDITABLE);
+
+        // Get all the pageLayersList where isEditable equals to UPDATED_IS_EDITABLE
+        defaultPageLayersShouldNotBeFound("isEditable.equals=" + UPDATED_IS_EDITABLE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPageLayersByIsEditableIsInShouldWork() throws Exception {
+        // Initialize the database
+        pageLayersRepository.saveAndFlush(pageLayers);
+
+        // Get all the pageLayersList where isEditable in DEFAULT_IS_EDITABLE or UPDATED_IS_EDITABLE
+        defaultPageLayersShouldBeFound("isEditable.in=" + DEFAULT_IS_EDITABLE + "," + UPDATED_IS_EDITABLE);
+
+        // Get all the pageLayersList where isEditable equals to UPDATED_IS_EDITABLE
+        defaultPageLayersShouldNotBeFound("isEditable.in=" + UPDATED_IS_EDITABLE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPageLayersByIsEditableIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        pageLayersRepository.saveAndFlush(pageLayers);
+
+        // Get all the pageLayersList where isEditable is not null
+        defaultPageLayersShouldBeFound("isEditable.specified=true");
+
+        // Get all the pageLayersList where isEditable is null
+        defaultPageLayersShouldNotBeFound("isEditable.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPageLayersByIsTextIsEqualToSomething() throws Exception {
+        // Initialize the database
+        pageLayersRepository.saveAndFlush(pageLayers);
+
+        // Get all the pageLayersList where isText equals to DEFAULT_IS_TEXT
+        defaultPageLayersShouldBeFound("isText.equals=" + DEFAULT_IS_TEXT);
+
+        // Get all the pageLayersList where isText equals to UPDATED_IS_TEXT
+        defaultPageLayersShouldNotBeFound("isText.equals=" + UPDATED_IS_TEXT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPageLayersByIsTextIsInShouldWork() throws Exception {
+        // Initialize the database
+        pageLayersRepository.saveAndFlush(pageLayers);
+
+        // Get all the pageLayersList where isText in DEFAULT_IS_TEXT or UPDATED_IS_TEXT
+        defaultPageLayersShouldBeFound("isText.in=" + DEFAULT_IS_TEXT + "," + UPDATED_IS_TEXT);
+
+        // Get all the pageLayersList where isText equals to UPDATED_IS_TEXT
+        defaultPageLayersShouldNotBeFound("isText.in=" + UPDATED_IS_TEXT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPageLayersByIsTextIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        pageLayersRepository.saveAndFlush(pageLayers);
+
+        // Get all the pageLayersList where isText is not null
+        defaultPageLayersShouldBeFound("isText.specified=true");
+
+        // Get all the pageLayersList where isText is null
+        defaultPageLayersShouldNotBeFound("isText.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllPageLayersByPageElementDetailsIsEqualToSomething() throws Exception {
         PageLayersDetails pageElementDetails;
         if (TestUtil.findAll(em, PageLayersDetails.class).isEmpty()) {
@@ -404,7 +502,9 @@ class PageLayersResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(pageLayers.getId().intValue())))
             .andExpect(jsonPath("$.[*].layerNo").value(hasItem(DEFAULT_LAYER_NO)))
-            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())));
+            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].isEditable").value(hasItem(DEFAULT_IS_EDITABLE.booleanValue())))
+            .andExpect(jsonPath("$.[*].isText").value(hasItem(DEFAULT_IS_TEXT.booleanValue())));
 
         // Check, that the count call also returns 1
         restPageLayersMockMvc
@@ -452,7 +552,7 @@ class PageLayersResourceIT {
         PageLayers updatedPageLayers = pageLayersRepository.findById(pageLayers.getId()).get();
         // Disconnect from session so that the updates on updatedPageLayers are not directly saved in db
         em.detach(updatedPageLayers);
-        updatedPageLayers.layerNo(UPDATED_LAYER_NO).isActive(UPDATED_IS_ACTIVE);
+        updatedPageLayers.layerNo(UPDATED_LAYER_NO).isActive(UPDATED_IS_ACTIVE).isEditable(UPDATED_IS_EDITABLE).isText(UPDATED_IS_TEXT);
 
         restPageLayersMockMvc
             .perform(
@@ -468,6 +568,8 @@ class PageLayersResourceIT {
         PageLayers testPageLayers = pageLayersList.get(pageLayersList.size() - 1);
         assertThat(testPageLayers.getLayerNo()).isEqualTo(UPDATED_LAYER_NO);
         assertThat(testPageLayers.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+        assertThat(testPageLayers.getIsEditable()).isEqualTo(UPDATED_IS_EDITABLE);
+        assertThat(testPageLayers.getIsText()).isEqualTo(UPDATED_IS_TEXT);
     }
 
     @Test
@@ -538,7 +640,7 @@ class PageLayersResourceIT {
         PageLayers partialUpdatedPageLayers = new PageLayers();
         partialUpdatedPageLayers.setId(pageLayers.getId());
 
-        partialUpdatedPageLayers.layerNo(UPDATED_LAYER_NO);
+        partialUpdatedPageLayers.layerNo(UPDATED_LAYER_NO).isEditable(UPDATED_IS_EDITABLE);
 
         restPageLayersMockMvc
             .perform(
@@ -554,6 +656,8 @@ class PageLayersResourceIT {
         PageLayers testPageLayers = pageLayersList.get(pageLayersList.size() - 1);
         assertThat(testPageLayers.getLayerNo()).isEqualTo(UPDATED_LAYER_NO);
         assertThat(testPageLayers.getIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
+        assertThat(testPageLayers.getIsEditable()).isEqualTo(UPDATED_IS_EDITABLE);
+        assertThat(testPageLayers.getIsText()).isEqualTo(DEFAULT_IS_TEXT);
     }
 
     @Test
@@ -568,7 +672,11 @@ class PageLayersResourceIT {
         PageLayers partialUpdatedPageLayers = new PageLayers();
         partialUpdatedPageLayers.setId(pageLayers.getId());
 
-        partialUpdatedPageLayers.layerNo(UPDATED_LAYER_NO).isActive(UPDATED_IS_ACTIVE);
+        partialUpdatedPageLayers
+            .layerNo(UPDATED_LAYER_NO)
+            .isActive(UPDATED_IS_ACTIVE)
+            .isEditable(UPDATED_IS_EDITABLE)
+            .isText(UPDATED_IS_TEXT);
 
         restPageLayersMockMvc
             .perform(
@@ -584,6 +692,8 @@ class PageLayersResourceIT {
         PageLayers testPageLayers = pageLayersList.get(pageLayersList.size() - 1);
         assertThat(testPageLayers.getLayerNo()).isEqualTo(UPDATED_LAYER_NO);
         assertThat(testPageLayers.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+        assertThat(testPageLayers.getIsEditable()).isEqualTo(UPDATED_IS_EDITABLE);
+        assertThat(testPageLayers.getIsText()).isEqualTo(UPDATED_IS_TEXT);
     }
 
     @Test

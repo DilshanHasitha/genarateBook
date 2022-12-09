@@ -32,6 +32,12 @@ public class PageLayers implements Serializable {
     @Column(name = "is_active")
     private Boolean isActive;
 
+    @Column(name = "is_editable")
+    private Boolean isEditable;
+
+    @Column(name = "is_text")
+    private Boolean isText;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_page_layers__page_element_details",
@@ -86,6 +92,32 @@ public class PageLayers implements Serializable {
 
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public Boolean getIsEditable() {
+        return this.isEditable;
+    }
+
+    public PageLayers isEditable(Boolean isEditable) {
+        this.setIsEditable(isEditable);
+        return this;
+    }
+
+    public void setIsEditable(Boolean isEditable) {
+        this.isEditable = isEditable;
+    }
+
+    public Boolean getIsText() {
+        return this.isText;
+    }
+
+    public PageLayers isText(Boolean isText) {
+        this.setIsText(isText);
+        return this;
+    }
+
+    public void setIsText(Boolean isText) {
+        this.isText = isText;
     }
 
     public Set<PageLayersDetails> getPageElementDetails() {
@@ -170,6 +202,8 @@ public class PageLayers implements Serializable {
             "id=" + getId() +
             ", layerNo=" + getLayerNo() +
             ", isActive='" + getIsActive() + "'" +
+            ", isEditable='" + getIsEditable() + "'" +
+            ", isText='" + getIsText() + "'" +
             "}";
     }
 }

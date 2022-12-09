@@ -199,6 +199,23 @@
             </option>
           </select>
         </div>
+
+        <div class="row mb-3">
+          <label for="field_selections">Selections</label>
+          <select
+            class="form-control"
+            id="field_selections"
+            data-cy="selections"
+            multiple
+            name="selections"
+            formControlName="selections"
+            [compareWith]="compareSelections"
+          >
+            <option [ngValue]="selectionsOption" *ngFor="let selectionsOption of selectionsSharedCollection">
+              {{ selectionsOption.id }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div>

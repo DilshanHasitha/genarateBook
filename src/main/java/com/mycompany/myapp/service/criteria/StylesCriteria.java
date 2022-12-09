@@ -39,8 +39,6 @@ public class StylesCriteria implements Serializable, Criteria {
 
     private IntegerFilter y;
 
-    private LongFilter optionsId;
-
     private Boolean distinct;
 
     public StylesCriteria() {}
@@ -55,7 +53,6 @@ public class StylesCriteria implements Serializable, Criteria {
         this.height = other.height == null ? null : other.height.copy();
         this.x = other.x == null ? null : other.x.copy();
         this.y = other.y == null ? null : other.y.copy();
-        this.optionsId = other.optionsId == null ? null : other.optionsId.copy();
         this.distinct = other.distinct;
     }
 
@@ -199,21 +196,6 @@ public class StylesCriteria implements Serializable, Criteria {
         this.y = y;
     }
 
-    public LongFilter getOptionsId() {
-        return optionsId;
-    }
-
-    public LongFilter optionsId() {
-        if (optionsId == null) {
-            optionsId = new LongFilter();
-        }
-        return optionsId;
-    }
-
-    public void setOptionsId(LongFilter optionsId) {
-        this.optionsId = optionsId;
-    }
-
     public Boolean getDistinct() {
         return distinct;
     }
@@ -241,14 +223,13 @@ public class StylesCriteria implements Serializable, Criteria {
             Objects.equals(height, that.height) &&
             Objects.equals(x, that.x) &&
             Objects.equals(y, that.y) &&
-            Objects.equals(optionsId, that.optionsId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, code, description, imgURL, isActive, width, height, x, y, optionsId, distinct);
+        return Objects.hash(id, code, description, imgURL, isActive, width, height, x, y, distinct);
     }
 
     // prettier-ignore
@@ -264,7 +245,6 @@ public class StylesCriteria implements Serializable, Criteria {
             (height != null ? "height=" + height + ", " : "") +
             (x != null ? "x=" + x + ", " : "") +
             (y != null ? "y=" + y + ", " : "") +
-            (optionsId != null ? "optionsId=" + optionsId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

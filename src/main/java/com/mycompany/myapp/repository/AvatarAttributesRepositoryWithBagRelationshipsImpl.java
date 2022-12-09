@@ -22,7 +22,7 @@ public class AvatarAttributesRepositoryWithBagRelationshipsImpl implements Avata
 
     @Override
     public Optional<AvatarAttributes> fetchBagRelationships(Optional<AvatarAttributes> avatarAttributes) {
-        return avatarAttributes.map(this::fetchAvatarCharactors).map(this::fetchStyles);
+        return avatarAttributes.map(this::fetchAvatarCharactors).map(this::fetchStyles).map(this::fetchOptions);
     }
 
     @Override
@@ -36,7 +36,12 @@ public class AvatarAttributesRepositoryWithBagRelationshipsImpl implements Avata
 
     @Override
     public List<AvatarAttributes> fetchBagRelationships(List<AvatarAttributes> avatarAttributes) {
-        return Optional.of(avatarAttributes).map(this::fetchAvatarCharactors).map(this::fetchStyles).orElse(Collections.emptyList());
+        return Optional
+            .of(avatarAttributes)
+            .map(this::fetchAvatarCharactors)
+            .map(this::fetchStyles)
+            .map(this::fetchOptions)
+            .orElse(Collections.emptyList());
     }
 
     AvatarAttributes fetchAvatarCharactors(AvatarAttributes result) {
@@ -82,6 +87,32 @@ public class AvatarAttributesRepositoryWithBagRelationshipsImpl implements Avata
         List<AvatarAttributes> result = entityManager
             .createQuery(
                 "select distinct avatarAttributes from AvatarAttributes avatarAttributes left join fetch avatarAttributes.styles where avatarAttributes in :avatarAttributes",
+                AvatarAttributes.class
+            )
+            .setParameter("avatarAttributes", avatarAttributes)
+            .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
+            .getResultList();
+        Collections.sort(result, (o1, o2) -> Integer.compare(order.get(o1.getId()), order.get(o2.getId())));
+        return result;
+    }
+
+    AvatarAttributes fetchOptions(AvatarAttributes result) {
+        return entityManager
+            .createQuery(
+                "select avatarAttributes from AvatarAttributes avatarAttributes left join fetch avatarAttributes.options where avatarAttributes is :avatarAttributes",
+                AvatarAttributes.class
+            )
+            .setParameter("avatarAttributes", result)
+            .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
+            .getSingleResult();
+    }
+
+    List<AvatarAttributes> fetchOptions(List<AvatarAttributes> avatarAttributes) {
+        HashMap<Object, Integer> order = new HashMap<>();
+        IntStream.range(0, avatarAttributes.size()).forEach(index -> order.put(avatarAttributes.get(index).getId(), index));
+        List<AvatarAttributes> result = entityManager
+            .createQuery(
+                "select distinct avatarAttributes from AvatarAttributes avatarAttributes left join fetch avatarAttributes.options where avatarAttributes in :avatarAttributes",
                 AvatarAttributes.class
             )
             .setParameter("avatarAttributes", avatarAttributes)

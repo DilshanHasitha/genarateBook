@@ -105,6 +105,13 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
+        <dt><span>Selections</span></dt>
+        <dd>
+          <span *ngFor="let selections of books.selections; let last = last">
+            <a [routerLink]="['/selections', selections.id, 'view']">{{ selections.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

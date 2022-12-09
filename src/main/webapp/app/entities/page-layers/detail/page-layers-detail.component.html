@@ -22,6 +22,14 @@
         <dd>
           <span>{{ pageLayers.isActive }}</span>
         </dd>
+        <dt><span>Is Editable</span></dt>
+        <dd>
+          <span>{{ pageLayers.isEditable }}</span>
+        </dd>
+        <dt><span>Is Text</span></dt>
+        <dd>
+          <span>{{ pageLayers.isText }}</span>
+        </dd>
         <dt><span>Page Element Details</span></dt>
         <dd>
           <span *ngFor="let pageElementDetails of pageLayers.pageElementDetails; let last = last">

@@ -1,23 +1,18 @@
 package com.mycompany.myapp.web.rest;
 
-import com.mycompany.myapp.domain.LayerDetails;
 import com.mycompany.myapp.domain.LayerGroup;
-import com.mycompany.myapp.domain.Layers;
 import com.mycompany.myapp.repository.LayerGroupRepository;
 import com.mycompany.myapp.service.LayerGroupQueryService;
 import com.mycompany.myapp.service.LayerGroupService;
-import com.mycompany.myapp.service.PDFGenarator;
 import com.mycompany.myapp.service.criteria.LayerGroupCriteria;
-import com.mycompany.myapp.service.dto.RequestTransDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import net.sf.jasperreports.engine.JRException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,18 +46,14 @@ public class LayerGroupResource {
 
     private final LayerGroupQueryService layerGroupQueryService;
 
-    private final PDFGenarator pdfGenarator;
-
     public LayerGroupResource(
         LayerGroupService layerGroupService,
         LayerGroupRepository layerGroupRepository,
-        LayerGroupQueryService layerGroupQueryService,
-        PDFGenarator pdfGenarator
+        LayerGroupQueryService layerGroupQueryService
     ) {
         this.layerGroupService = layerGroupService;
         this.layerGroupRepository = layerGroupRepository;
         this.layerGroupQueryService = layerGroupQueryService;
-        this.pdfGenarator = pdfGenarator;
     }
 
     /**

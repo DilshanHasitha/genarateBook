@@ -1,7 +1,6 @@
 package com.mycompany.myapp.repository;
 
 import com.mycompany.myapp.domain.Books;
-import com.mycompany.myapp.domain.LayerGroup;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -33,5 +32,5 @@ public interface BooksRepository extends BooksRepositoryWithBagRelationships, Jp
         return this.fetchBagRelationships(this.findAll(pageable));
     }
 
-    Books findOneByCode(String code);
+    Optional<Books> findOneByCode(String Code);
 }

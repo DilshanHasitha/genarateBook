@@ -1,0 +1,103 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-selections-heading" data-cy="SelectionsCreateUpdateHeading">Create or edit a Selections</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_avatarCode">Avatar Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="avatarCode"
+            id="field_avatarCode"
+            data-cy="avatarCode"
+            formControlName="avatarCode"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_styleCode">Style Code</label>
+          <input type="text" class="form-control" name="styleCode" id="field_styleCode" data-cy="styleCode" formControlName="styleCode" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_optionCode">Option Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="optionCode"
+            id="field_optionCode"
+            data-cy="optionCode"
+            formControlName="optionCode"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_image">Image</label>
+          <input type="text" class="form-control" name="image" id="field_image" data-cy="image" formControlName="image" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_height">Height</label>
+          <input type="number" class="form-control" name="height" id="field_height" data-cy="height" formControlName="height" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_x">X</label>
+          <input type="number" class="form-control" name="x" id="field_x" data-cy="x" formControlName="x" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_y">Y</label>
+          <input type="number" class="form-control" name="y" id="field_y" data-cy="y" formControlName="y" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_isActive">Is Active</label>
+          <input type="checkbox" class="form-check" name="isActive" id="field_isActive" data-cy="isActive" formControlName="isActive" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_width">Width</label>
+          <input type="number" class="form-control" name="width" id="field_width" data-cy="width" formControlName="width" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_avatarAttributesCode">Avatar Attributes Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="avatarAttributesCode"
+            id="field_avatarAttributesCode"
+            data-cy="avatarAttributesCode"
+            formControlName="avatarAttributesCode"
+          />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

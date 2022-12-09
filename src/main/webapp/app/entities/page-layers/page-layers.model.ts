@@ -5,6 +5,8 @@ export interface IPageLayers {
   id: number;
   layerNo?: number | null;
   isActive?: boolean | null;
+  isEditable?: boolean | null;
+  isText?: boolean | null;
   pageElementDetails?: Pick<IPageLayersDetails, 'id'>[] | null;
   booksPages?: Pick<IBooksPage, 'id'>[] | null;
 }
