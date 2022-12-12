@@ -39,6 +39,10 @@ public class StylesCriteria implements Serializable, Criteria {
 
     private IntegerFilter y;
 
+    private BooleanFilter isText;
+
+    private LongFilter stylesDetailsId;
+
     private Boolean distinct;
 
     public StylesCriteria() {}
@@ -53,6 +57,8 @@ public class StylesCriteria implements Serializable, Criteria {
         this.height = other.height == null ? null : other.height.copy();
         this.x = other.x == null ? null : other.x.copy();
         this.y = other.y == null ? null : other.y.copy();
+        this.isText = other.isText == null ? null : other.isText.copy();
+        this.stylesDetailsId = other.stylesDetailsId == null ? null : other.stylesDetailsId.copy();
         this.distinct = other.distinct;
     }
 
@@ -196,6 +202,36 @@ public class StylesCriteria implements Serializable, Criteria {
         this.y = y;
     }
 
+    public BooleanFilter getIsText() {
+        return isText;
+    }
+
+    public BooleanFilter isText() {
+        if (isText == null) {
+            isText = new BooleanFilter();
+        }
+        return isText;
+    }
+
+    public void setIsText(BooleanFilter isText) {
+        this.isText = isText;
+    }
+
+    public LongFilter getStylesDetailsId() {
+        return stylesDetailsId;
+    }
+
+    public LongFilter stylesDetailsId() {
+        if (stylesDetailsId == null) {
+            stylesDetailsId = new LongFilter();
+        }
+        return stylesDetailsId;
+    }
+
+    public void setStylesDetailsId(LongFilter stylesDetailsId) {
+        this.stylesDetailsId = stylesDetailsId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -223,13 +259,15 @@ public class StylesCriteria implements Serializable, Criteria {
             Objects.equals(height, that.height) &&
             Objects.equals(x, that.x) &&
             Objects.equals(y, that.y) &&
+            Objects.equals(isText, that.isText) &&
+            Objects.equals(stylesDetailsId, that.stylesDetailsId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, code, description, imgURL, isActive, width, height, x, y, distinct);
+        return Objects.hash(id, code, description, imgURL, isActive, width, height, x, y, isText, stylesDetailsId, distinct);
     }
 
     // prettier-ignore
@@ -245,6 +283,8 @@ public class StylesCriteria implements Serializable, Criteria {
             (height != null ? "height=" + height + ", " : "") +
             (x != null ? "x=" + x + ", " : "") +
             (y != null ? "y=" + y + ", " : "") +
+            (isText != null ? "isText=" + isText + ", " : "") +
+            (stylesDetailsId != null ? "stylesDetailsId=" + stylesDetailsId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

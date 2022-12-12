@@ -108,6 +108,10 @@ public class CacheConfiguration {
             createCache(cm, com.mycompany.myapp.domain.AvatarAttributes.class.getName() + ".styles");
             createCache(cm, com.mycompany.myapp.domain.Selections.class.getName());
             createCache(cm, com.mycompany.myapp.domain.Books.class.getName() + ".selections");
+            createCache(cm, com.mycompany.myapp.domain.Character.class.getName());
+            createCache(cm, com.mycompany.myapp.domain.Character.class.getName() + ".avatarCharactors");
+            createCache(cm, com.mycompany.myapp.domain.StylesDetails.class.getName());
+            createCache(cm, com.mycompany.myapp.domain.Styles.class.getName() + ".stylesDetails");
             // jhipster-needle-ehcache-add-entry
         };
     }

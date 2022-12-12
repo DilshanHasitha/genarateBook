@@ -37,6 +37,11 @@
     {
       "fieldName": "y",
       "fieldType": "Integer"
+    },
+    {
+      "fieldName": "isText",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
     }
   ],
   "fluentMethods": true,
@@ -44,6 +49,15 @@
   "name": "Styles",
   "pagination": "pagination",
   "readOnly": false,
-  "relationships": [],
+  "relationships": [
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "stylesDetails",
+      "otherEntityRelationshipName": "styles",
+      "ownerSide": true,
+      "relationshipName": "stylesDetails",
+      "relationshipType": "many-to-many"
+    }
+  ],
   "service": "serviceClass"
 }

@@ -1,0 +1,34 @@
+{
+  "changelogDate": "20221212102703",
+  "dto": "no",
+  "entityTableName": "jhi_character",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean"
+    }
+  ],
+  "jpaMetamodelFiltering": false,
+  "name": "Character",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "avatarCharactor",
+      "otherEntityRelationshipName": "character",
+      "ownerSide": true,
+      "relationshipName": "avatarCharactor",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

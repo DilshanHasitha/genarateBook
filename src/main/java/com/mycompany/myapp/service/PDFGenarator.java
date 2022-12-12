@@ -12,7 +12,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.base.JRBasePrintPage;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.*;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
@@ -50,7 +53,12 @@ public class PDFGenarator {
             //sort PageLayers in ascending Order
             BooksPage booksPages = sortPageLayer(booksPage);
             //create page & add to jasper list
-            JasperPrint jasperPrint = createPageInner(booksPages, jasperDesign);
+            JasperPrint jasperPrint = new JasperPrint();
+
+            JRPrintPage a = new JRBasePrintPage();
+
+            jasperPrint.addPage(a);
+            jasperPrint = createPageInner(booksPages, jasperDesign, books);
             jasperPrintList.add(jasperPrint);
         }
 
@@ -81,9 +89,9 @@ public class PDFGenarator {
         return jasperDesign;
     }
 
-    JasperPrint createPageInner(BooksPage booksPage, JasperDesign jasperDesign) {
+    JasperPrint createPageInner(BooksPage booksPage, JasperDesign jasperDesign, Books books) {
         JRDesignBand band = new JRDesignBand();
-        band.setHeight(800);
+        band.setHeight(books.getPageSize().getHeight());
         //        band.setSplitType(SplitTypeEnum.STRETCH);
 
         SimpleJasperReportsContext jasperReportsContext = new SimpleJasperReportsContext();
@@ -108,6 +116,25 @@ public class PDFGenarator {
                         selectedMap.get("optionCode")
                     );
                     band.addElement(layers.getLayerNo(), createImages(selections, jasperDesign));
+                } else {
+                    band.addElement(layers.getLayerNo(), createImage(configMap, jasperDesign));
+                }
+            } else {
+                if (layers.getIsEditable()) {
+                    //                    String editableTextCode = configMap.get("editableTextCode");
+                    String text = configMap.get("text");
+                    //                    SelectedOption selectedOption =selectedOptionRepository.findOneByCodeAndBooks_Code(editableTextCode, "DEMO");
+                    //                    SelectedOption selectedOption = selectedOptionRepository.findOneByCodeAndBooks_Code("A", "DEMO");
+                    //                    Map<String, String> selectedMap = new HashMap<>();
+                    //                    for (SelectedOptionDetails selectedOptionDetails : selectedOption.getSelectedOptionDetails()) {
+                    //                        selectedMap.put(selectedOptionDetails.getName(), selectedOptionDetails.getSelectedValue());
+                    //                    }
+                    //                    Selections selections = selectionsRepository.findOneByAvatarCodeAndStyleCodeAndOptionCode(
+                    //                        "A",
+                    //                        selectedMap.get("styleCode"),
+                    //                        selectedMap.get("optionCode")
+                    //                    );
+                    band.addElement(layers.getLayerNo(), createText("dilshan", "dilshan", 0, 0));
                 }
             }
             //            if (configMap.get("type").equals("text")) {}
@@ -159,22 +186,26 @@ public class PDFGenarator {
         return image;
     }
 
-    JRDesignStaticText createText(String text, int x, int y) {
+    JRDesignStaticText createText(String text, String editableTextCode, int x, int y) {
+        String before = "{{userName}}'s Best Friends";
+        System.out.println(before);
+        String after = before.replace("{{userName}}", text);
+
         JRDesignStaticText staticText = new JRDesignStaticText();
 
         staticText.setX(x);
         staticText.setY(y);
-        staticText.setWidth(300);
-        staticText.setHeight(100);
-        staticText.setFontSize(70F);
-        staticText.setForecolor(Color.BLUE);
+        staticText.setWidth(500);
+        staticText.setHeight(200);
+        staticText.setFontSize(50F);
+        staticText.setForecolor(Color.BLACK);
         staticText.setFontName("Dancing Script");
-        staticText.setPdfFontName("https://alphadevs-logos.s3.ap-south-1.amazonaws.com/Teko-Bold.ttf");
+        staticText.setPdfFontName("https://alphadevs-logos.s3.ap-south-1.amazonaws.com/DancingScript-Bold.ttf");
         staticText.setPdfEncoding("Cp1252");
         staticText.setPdfEmbedded(true);
         staticText.setMode(ModeEnum.TRANSPARENT);
         staticText.setHorizontalTextAlign(HorizontalTextAlignEnum.CENTER);
-        staticText.setText(text);
+        staticText.setText(after);
         return staticText;
     }
 
@@ -210,6 +241,8 @@ public class PDFGenarator {
 
         return books;
     }
+
+    void editableTextArray(String text) {}
 
     SelectedOption getCustomerSelectedOption() {
         return null;

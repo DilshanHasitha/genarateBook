@@ -60,6 +60,31 @@
           <label class="form-label" for="field_y">Y</label>
           <input type="number" class="form-control" name="y" id="field_y" data-cy="y" formControlName="y" />
         </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_isText">Is Text</label>
+          <input type="checkbox" class="form-check" name="isText" id="field_isText" data-cy="isText" formControlName="isText" />
+          <div *ngIf="editForm.get('isText')!.invalid && (editForm.get('isText')!.dirty || editForm.get('isText')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('isText')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label for="field_stylesDetails">Styles Details</label>
+          <select
+            class="form-control"
+            id="field_stylesDetails"
+            data-cy="stylesDetails"
+            multiple
+            name="stylesDetails"
+            formControlName="stylesDetails"
+            [compareWith]="compareStylesDetails"
+          >
+            <option [ngValue]="stylesDetailsOption" *ngFor="let stylesDetailsOption of stylesDetailsSharedCollection">
+              {{ stylesDetailsOption.id }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div>

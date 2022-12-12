@@ -1,6 +1,8 @@
 package com.mycompany.myapp.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -46,6 +48,19 @@ public class Styles implements Serializable {
 
     @Column(name = "y")
     private Integer y;
+
+    @NotNull
+    @Column(name = "is_text", nullable = false)
+    private Boolean isText;
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_styles__styles_details",
+        joinColumns = @JoinColumn(name = "styles_id"),
+        inverseJoinColumns = @JoinColumn(name = "styles_details_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<StylesDetails> stylesDetails = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -166,6 +181,42 @@ public class Styles implements Serializable {
         this.y = y;
     }
 
+    public Boolean getIsText() {
+        return this.isText;
+    }
+
+    public Styles isText(Boolean isText) {
+        this.setIsText(isText);
+        return this;
+    }
+
+    public void setIsText(Boolean isText) {
+        this.isText = isText;
+    }
+
+    public Set<StylesDetails> getStylesDetails() {
+        return this.stylesDetails;
+    }
+
+    public void setStylesDetails(Set<StylesDetails> stylesDetails) {
+        this.stylesDetails = stylesDetails;
+    }
+
+    public Styles stylesDetails(Set<StylesDetails> stylesDetails) {
+        this.setStylesDetails(stylesDetails);
+        return this;
+    }
+
+    public Styles addStylesDetails(StylesDetails stylesDetails) {
+        this.stylesDetails.add(stylesDetails);
+        return this;
+    }
+
+    public Styles removeStylesDetails(StylesDetails stylesDetails) {
+        this.stylesDetails.remove(stylesDetails);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -198,6 +249,7 @@ public class Styles implements Serializable {
             ", height=" + getHeight() +
             ", x=" + getX() +
             ", y=" + getY() +
+            ", isText='" + getIsText() + "'" +
             "}";
     }
 }

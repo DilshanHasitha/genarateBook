@@ -3,30 +3,34 @@ import { IStyles, NewStyles } from './styles.model';
 export const sampleWithRequiredData: IStyles = {
   id: 78144,
   description: 'program',
+  isText: false,
 };
 
 export const sampleWithPartialData: IStyles = {
-  id: 15592,
-  description: 'redundant Soft',
-  isActive: false,
-  x: 90912,
-  y: 4128,
+  id: 53645,
+  description: 'content multi-byte Lead',
+  imgURL: 'strategize blue generating',
+  height: 73509,
+  x: 83374,
+  isText: true,
 };
 
 export const sampleWithFullData: IStyles = {
-  id: 13944,
-  code: 'strategize blue generating',
-  description: 'parsing Account Small',
-  imgURL: 'Programmable capacitor Borders',
+  id: 73834,
+  code: 'blockchains Baby',
+  description: 'Leu',
+  imgURL: 'Optimization optical withdrawal',
   isActive: true,
-  width: 57712,
-  height: 63328,
-  x: 32141,
-  y: 40827,
+  width: 45789,
+  height: 57787,
+  x: 93108,
+  y: 25102,
+  isText: false,
 };
 
 export const sampleWithNewData: NewStyles = {
-  description: 'Pass Business-focused District',
+  description: 'District copy',
+  isText: false,
   id: null,
 };
 

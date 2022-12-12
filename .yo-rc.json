@@ -43,14 +43,16 @@
       "AvatarAttributes",
       "Layers",
       "LayerDetails",
-      "Selections"
+      "Selections",
+      "Character",
+      "StylesDetails"
     ],
     "entitySuffix": "",
     "jhiPrefix": "jhi",
     "jhipsterVersion": "7.9.3",
     "jwtSecretKey": "ODk5ZjAzYTIyMjQ4NmRhMDgzM2YxZGE5Y2MyOTc1ODljOWIyNWUwZjJhNjg2NzVkOTA0MWJmYWFiNTAzNmEwNWQxM2E4ZmYyOGIxYmJlMWRlMmNhNWI0YzQzMmM5MjViZDU5YjczMzlhZWI2YjNjZjk4ZDE5ZjI0ZDA2MDcwNzY=",
     "languages": ["en", "fr"],
-    "lastLiquibaseTimestamp": 1670558703000,
+    "lastLiquibaseTimestamp": 1670842613000,
     "messageBroker": false,
     "microfrontend": false,
     "microfrontends": [],

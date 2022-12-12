@@ -126,6 +126,16 @@ import { RouterModule } from '@angular/router';
         data: { pageTitle: 'Selections' },
         loadChildren: () => import('./selections/selections.module').then(m => m.SelectionsModule),
       },
+      {
+        path: 'character',
+        data: { pageTitle: 'Characters' },
+        loadChildren: () => import('./character/character.module').then(m => m.CharacterModule),
+      },
+      {
+        path: 'styles-details',
+        data: { pageTitle: 'StylesDetails' },
+        loadChildren: () => import('./styles-details/styles-details.module').then(m => m.StylesDetailsModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

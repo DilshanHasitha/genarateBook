@@ -2,21 +2,31 @@ package com.mycompany.myapp.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.Styles;
+import com.mycompany.myapp.domain.StylesDetails;
 import com.mycompany.myapp.repository.StylesRepository;
+import com.mycompany.myapp.service.StylesService;
 import com.mycompany.myapp.service.criteria.StylesCriteria;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link StylesResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class StylesResourceIT {
@@ -58,6 +69,9 @@ class StylesResourceIT {
     private static final Integer UPDATED_Y = 2;
     private static final Integer SMALLER_Y = 1 - 1;
 
+    private static final Boolean DEFAULT_IS_TEXT = false;
+    private static final Boolean UPDATED_IS_TEXT = true;
+
     private static final String ENTITY_API_URL = "/api/styles";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -66,6 +80,12 @@ class StylesResourceIT {
 
     @Autowired
     private StylesRepository stylesRepository;
+
+    @Mock
+    private StylesRepository stylesRepositoryMock;
+
+    @Mock
+    private StylesService stylesServiceMock;
 
     @Autowired
     private EntityManager em;
@@ -90,7 +110,8 @@ class StylesResourceIT {
             .width(DEFAULT_WIDTH)
             .height(DEFAULT_HEIGHT)
             .x(DEFAULT_X)
-            .y(DEFAULT_Y);
+            .y(DEFAULT_Y)
+            .isText(DEFAULT_IS_TEXT);
         return styles;
     }
 
@@ -109,7 +130,8 @@ class StylesResourceIT {
             .width(UPDATED_WIDTH)
             .height(UPDATED_HEIGHT)
             .x(UPDATED_X)
-            .y(UPDATED_Y);
+            .y(UPDATED_Y)
+            .isText(UPDATED_IS_TEXT);
         return styles;
     }
 
@@ -139,6 +161,7 @@ class StylesResourceIT {
         assertThat(testStyles.getHeight()).isEqualTo(DEFAULT_HEIGHT);
         assertThat(testStyles.getX()).isEqualTo(DEFAULT_X);
         assertThat(testStyles.getY()).isEqualTo(DEFAULT_Y);
+        assertThat(testStyles.getIsText()).isEqualTo(DEFAULT_IS_TEXT);
     }
 
     @Test
@@ -178,6 +201,23 @@ class StylesResourceIT {
 
     @Test
     @Transactional
+    void checkIsTextIsRequired() throws Exception {
+        int databaseSizeBeforeTest = stylesRepository.findAll().size();
+        // set the field null
+        styles.setIsText(null);
+
+        // Create the Styles, which fails.
+
+        restStylesMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(styles)))
+            .andExpect(status().isBadRequest());
+
+        List<Styles> stylesList = stylesRepository.findAll();
+        assertThat(stylesList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllStyles() throws Exception {
         // Initialize the database
         stylesRepository.saveAndFlush(styles);
@@ -195,7 +235,25 @@ class StylesResourceIT {
             .andExpect(jsonPath("$.[*].width").value(hasItem(DEFAULT_WIDTH)))
             .andExpect(jsonPath("$.[*].height").value(hasItem(DEFAULT_HEIGHT)))
             .andExpect(jsonPath("$.[*].x").value(hasItem(DEFAULT_X)))
-            .andExpect(jsonPath("$.[*].y").value(hasItem(DEFAULT_Y)));
+            .andExpect(jsonPath("$.[*].y").value(hasItem(DEFAULT_Y)))
+            .andExpect(jsonPath("$.[*].isText").value(hasItem(DEFAULT_IS_TEXT.booleanValue())));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllStylesWithEagerRelationshipsIsEnabled() throws Exception {
+        when(stylesServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restStylesMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(stylesServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllStylesWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(stylesServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restStylesMockMvc.perform(get(ENTITY_API_URL + "?eagerload=false")).andExpect(status().isOk());
+        verify(stylesRepositoryMock, times(1)).findAll(any(Pageable.class));
     }
 
     @Test
@@ -217,7 +275,8 @@ class StylesResourceIT {
             .andExpect(jsonPath("$.width").value(DEFAULT_WIDTH))
             .andExpect(jsonPath("$.height").value(DEFAULT_HEIGHT))
             .andExpect(jsonPath("$.x").value(DEFAULT_X))
-            .andExpect(jsonPath("$.y").value(DEFAULT_Y));
+            .andExpect(jsonPath("$.y").value(DEFAULT_Y))
+            .andExpect(jsonPath("$.isText").value(DEFAULT_IS_TEXT.booleanValue()));
     }
 
     @Test
@@ -836,6 +895,68 @@ class StylesResourceIT {
         defaultStylesShouldBeFound("y.greaterThan=" + SMALLER_Y);
     }
 
+    @Test
+    @Transactional
+    void getAllStylesByIsTextIsEqualToSomething() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where isText equals to DEFAULT_IS_TEXT
+        defaultStylesShouldBeFound("isText.equals=" + DEFAULT_IS_TEXT);
+
+        // Get all the stylesList where isText equals to UPDATED_IS_TEXT
+        defaultStylesShouldNotBeFound("isText.equals=" + UPDATED_IS_TEXT);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByIsTextIsInShouldWork() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where isText in DEFAULT_IS_TEXT or UPDATED_IS_TEXT
+        defaultStylesShouldBeFound("isText.in=" + DEFAULT_IS_TEXT + "," + UPDATED_IS_TEXT);
+
+        // Get all the stylesList where isText equals to UPDATED_IS_TEXT
+        defaultStylesShouldNotBeFound("isText.in=" + UPDATED_IS_TEXT);
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByIsTextIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        stylesRepository.saveAndFlush(styles);
+
+        // Get all the stylesList where isText is not null
+        defaultStylesShouldBeFound("isText.specified=true");
+
+        // Get all the stylesList where isText is null
+        defaultStylesShouldNotBeFound("isText.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllStylesByStylesDetailsIsEqualToSomething() throws Exception {
+        StylesDetails stylesDetails;
+        if (TestUtil.findAll(em, StylesDetails.class).isEmpty()) {
+            stylesRepository.saveAndFlush(styles);
+            stylesDetails = StylesDetailsResourceIT.createEntity(em);
+        } else {
+            stylesDetails = TestUtil.findAll(em, StylesDetails.class).get(0);
+        }
+        em.persist(stylesDetails);
+        em.flush();
+        styles.addStylesDetails(stylesDetails);
+        stylesRepository.saveAndFlush(styles);
+        Long stylesDetailsId = stylesDetails.getId();
+
+        // Get all the stylesList where stylesDetails equals to stylesDetailsId
+        defaultStylesShouldBeFound("stylesDetailsId.equals=" + stylesDetailsId);
+
+        // Get all the stylesList where stylesDetails equals to (stylesDetailsId + 1)
+        defaultStylesShouldNotBeFound("stylesDetailsId.equals=" + (stylesDetailsId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -852,7 +973,8 @@ class StylesResourceIT {
             .andExpect(jsonPath("$.[*].width").value(hasItem(DEFAULT_WIDTH)))
             .andExpect(jsonPath("$.[*].height").value(hasItem(DEFAULT_HEIGHT)))
             .andExpect(jsonPath("$.[*].x").value(hasItem(DEFAULT_X)))
-            .andExpect(jsonPath("$.[*].y").value(hasItem(DEFAULT_Y)));
+            .andExpect(jsonPath("$.[*].y").value(hasItem(DEFAULT_Y)))
+            .andExpect(jsonPath("$.[*].isText").value(hasItem(DEFAULT_IS_TEXT.booleanValue())));
 
         // Check, that the count call also returns 1
         restStylesMockMvc
@@ -908,7 +1030,8 @@ class StylesResourceIT {
             .width(UPDATED_WIDTH)
             .height(UPDATED_HEIGHT)
             .x(UPDATED_X)
-            .y(UPDATED_Y);
+            .y(UPDATED_Y)
+            .isText(UPDATED_IS_TEXT);
 
         restStylesMockMvc
             .perform(
@@ -930,6 +1053,7 @@ class StylesResourceIT {
         assertThat(testStyles.getHeight()).isEqualTo(UPDATED_HEIGHT);
         assertThat(testStyles.getX()).isEqualTo(UPDATED_X);
         assertThat(testStyles.getY()).isEqualTo(UPDATED_Y);
+        assertThat(testStyles.getIsText()).isEqualTo(UPDATED_IS_TEXT);
     }
 
     @Test
@@ -1005,7 +1129,8 @@ class StylesResourceIT {
             .description(UPDATED_DESCRIPTION)
             .imgURL(UPDATED_IMG_URL)
             .isActive(UPDATED_IS_ACTIVE)
-            .x(UPDATED_X);
+            .x(UPDATED_X)
+            .isText(UPDATED_IS_TEXT);
 
         restStylesMockMvc
             .perform(
@@ -1027,6 +1152,7 @@ class StylesResourceIT {
         assertThat(testStyles.getHeight()).isEqualTo(DEFAULT_HEIGHT);
         assertThat(testStyles.getX()).isEqualTo(UPDATED_X);
         assertThat(testStyles.getY()).isEqualTo(DEFAULT_Y);
+        assertThat(testStyles.getIsText()).isEqualTo(UPDATED_IS_TEXT);
     }
 
     @Test
@@ -1049,7 +1175,8 @@ class StylesResourceIT {
             .width(UPDATED_WIDTH)
             .height(UPDATED_HEIGHT)
             .x(UPDATED_X)
-            .y(UPDATED_Y);
+            .y(UPDATED_Y)
+            .isText(UPDATED_IS_TEXT);
 
         restStylesMockMvc
             .perform(
@@ -1071,6 +1198,7 @@ class StylesResourceIT {
         assertThat(testStyles.getHeight()).isEqualTo(UPDATED_HEIGHT);
         assertThat(testStyles.getX()).isEqualTo(UPDATED_X);
         assertThat(testStyles.getY()).isEqualTo(UPDATED_Y);
+        assertThat(testStyles.getIsText()).isEqualTo(UPDATED_IS_TEXT);
     }
 
     @Test

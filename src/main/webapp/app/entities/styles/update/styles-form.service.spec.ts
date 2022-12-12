@@ -28,6 +28,8 @@ describe('Styles Form Service', () => {
             height: expect.any(Object),
             x: expect.any(Object),
             y: expect.any(Object),
+            isText: expect.any(Object),
+            stylesDetails: expect.any(Object),
           })
         );
       });
@@ -46,6 +48,8 @@ describe('Styles Form Service', () => {
             height: expect.any(Object),
             x: expect.any(Object),
             y: expect.any(Object),
+            isText: expect.any(Object),
+            stylesDetails: expect.any(Object),
           })
         );
       });

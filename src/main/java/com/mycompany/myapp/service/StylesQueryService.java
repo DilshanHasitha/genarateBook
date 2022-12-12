@@ -109,6 +109,18 @@ public class StylesQueryService extends QueryService<Styles> {
             if (criteria.getY() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getY(), Styles_.y));
             }
+            if (criteria.getIsText() != null) {
+                specification = specification.and(buildSpecification(criteria.getIsText(), Styles_.isText));
+            }
+            if (criteria.getStylesDetailsId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getStylesDetailsId(),
+                            root -> root.join(Styles_.stylesDetails, JoinType.LEFT).get(StylesDetails_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

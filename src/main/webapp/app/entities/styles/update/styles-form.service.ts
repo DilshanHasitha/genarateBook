@@ -14,7 +14,7 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type StylesFormGroupInput = IStyles | PartialWithRequiredKeyOf<NewStyles>;
 
-type StylesFormDefaults = Pick<NewStyles, 'id' | 'isActive'>;
+type StylesFormDefaults = Pick<NewStyles, 'id' | 'isActive' | 'isText' | 'stylesDetails'>;
 
 type StylesFormGroupContent = {
   id: FormControl<IStyles['id'] | NewStyles['id']>;
@@ -26,6 +26,8 @@ type StylesFormGroupContent = {
   height: FormControl<IStyles['height']>;
   x: FormControl<IStyles['x']>;
   y: FormControl<IStyles['y']>;
+  isText: FormControl<IStyles['isText']>;
+  stylesDetails: FormControl<IStyles['stylesDetails']>;
 };
 
 export type StylesFormGroup = FormGroup<StylesFormGroupContent>;
@@ -55,6 +57,10 @@ export class StylesFormService {
       height: new FormControl(stylesRawValue.height),
       x: new FormControl(stylesRawValue.x),
       y: new FormControl(stylesRawValue.y),
+      isText: new FormControl(stylesRawValue.isText, {
+        validators: [Validators.required],
+      }),
+      stylesDetails: new FormControl(stylesRawValue.stylesDetails ?? []),
     });
   }
 
@@ -76,6 +82,8 @@ export class StylesFormService {
     return {
       id: null,
       isActive: false,
+      isText: false,
+      stylesDetails: [],
     };
   }
 }
