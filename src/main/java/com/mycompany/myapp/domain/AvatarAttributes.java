@@ -38,7 +38,10 @@ public class AvatarAttributes implements Serializable {
     @Column(name = "avatar_attributes_code")
     private String avatarAttributesCode;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @Column(name = "template_text")
+    private String templateText;
+
+    @ManyToMany
     @JoinTable(
         name = "rel_avatar_attributes__avatar_charactor",
         joinColumns = @JoinColumn(name = "avatar_attributes_id"),
@@ -67,13 +70,14 @@ public class AvatarAttributes implements Serializable {
     )
     private Set<Books> books = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
         name = "rel_avatar_attributes__styles",
         joinColumns = @JoinColumn(name = "avatar_attributes_id"),
         inverseJoinColumns = @JoinColumn(name = "styles_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "stylesDetails" }, allowSetters = true)
     private Set<Styles> styles = new HashSet<>();
 
     @ManyToMany
@@ -84,6 +88,9 @@ public class AvatarAttributes implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Options> options = new HashSet<>();
+
+    @ManyToOne
+    private OptionType optionType;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -150,6 +157,19 @@ public class AvatarAttributes implements Serializable {
 
     public void setAvatarAttributesCode(String avatarAttributesCode) {
         this.avatarAttributesCode = avatarAttributesCode;
+    }
+
+    public String getTemplateText() {
+        return this.templateText;
+    }
+
+    public AvatarAttributes templateText(String templateText) {
+        this.setTemplateText(templateText);
+        return this;
+    }
+
+    public void setTemplateText(String templateText) {
+        this.templateText = templateText;
     }
 
     public Set<AvatarCharactor> getAvatarCharactors() {
@@ -254,6 +274,19 @@ public class AvatarAttributes implements Serializable {
         return this;
     }
 
+    public OptionType getOptionType() {
+        return this.optionType;
+    }
+
+    public void setOptionType(OptionType optionType) {
+        this.optionType = optionType;
+    }
+
+    public AvatarAttributes optionType(OptionType optionType) {
+        this.setOptionType(optionType);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -282,6 +315,7 @@ public class AvatarAttributes implements Serializable {
             ", description='" + getDescription() + "'" +
             ", isActive='" + getIsActive() + "'" +
             ", avatarAttributesCode='" + getAvatarAttributesCode() + "'" +
+            ", templateText='" + getTemplateText() + "'" +
             "}";
     }
 }

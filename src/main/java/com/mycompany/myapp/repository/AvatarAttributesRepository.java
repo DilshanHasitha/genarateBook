@@ -20,14 +20,28 @@ public interface AvatarAttributesRepository
     extends
         AvatarAttributesRepositoryWithBagRelationships, JpaRepository<AvatarAttributes, Long>, JpaSpecificationExecutor<AvatarAttributes> {
     default Optional<AvatarAttributes> findOneWithEagerRelationships(Long id) {
-        return this.fetchBagRelationships(this.findById(id));
+        return this.fetchBagRelationships(this.findOneWithToOneRelationships(id));
     }
 
     default List<AvatarAttributes> findAllWithEagerRelationships() {
-        return this.fetchBagRelationships(this.findAll());
+        return this.fetchBagRelationships(this.findAllWithToOneRelationships());
     }
 
     default Page<AvatarAttributes> findAllWithEagerRelationships(Pageable pageable) {
-        return this.fetchBagRelationships(this.findAll(pageable));
+        return this.fetchBagRelationships(this.findAllWithToOneRelationships(pageable));
     }
+
+    @Query(
+        value = "select distinct avatarAttributes from AvatarAttributes avatarAttributes left join fetch avatarAttributes.optionType",
+        countQuery = "select count(distinct avatarAttributes) from AvatarAttributes avatarAttributes"
+    )
+    Page<AvatarAttributes> findAllWithToOneRelationships(Pageable pageable);
+
+    @Query("select distinct avatarAttributes from AvatarAttributes avatarAttributes left join fetch avatarAttributes.optionType")
+    List<AvatarAttributes> findAllWithToOneRelationships();
+
+    @Query(
+        "select avatarAttributes from AvatarAttributes avatarAttributes left join fetch avatarAttributes.optionType where avatarAttributes.id =:id"
+    )
+    Optional<AvatarAttributes> findOneWithToOneRelationships(@Param("id") Long id);
 }

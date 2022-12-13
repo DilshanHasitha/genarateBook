@@ -13,6 +13,8 @@ import { IStyles } from 'app/entities/styles/styles.model';
 import { StylesService } from 'app/entities/styles/service/styles.service';
 import { IOptions } from 'app/entities/options/options.model';
 import { OptionsService } from 'app/entities/options/service/options.service';
+import { IOptionType } from 'app/entities/option-type/option-type.model';
+import { OptionTypeService } from 'app/entities/option-type/service/option-type.service';
 
 @Component({
   selector: 'jhi-avatar-attributes-update',
@@ -25,6 +27,7 @@ export class AvatarAttributesUpdateComponent implements OnInit {
   avatarCharactorsSharedCollection: IAvatarCharactor[] = [];
   stylesSharedCollection: IStyles[] = [];
   optionsSharedCollection: IOptions[] = [];
+  optionTypesSharedCollection: IOptionType[] = [];
 
   editForm: AvatarAttributesFormGroup = this.avatarAttributesFormService.createAvatarAttributesFormGroup();
 
@@ -34,6 +37,7 @@ export class AvatarAttributesUpdateComponent implements OnInit {
     protected avatarCharactorService: AvatarCharactorService,
     protected stylesService: StylesService,
     protected optionsService: OptionsService,
+    protected optionTypeService: OptionTypeService,
     protected activatedRoute: ActivatedRoute
   ) {}
 
@@ -43,6 +47,8 @@ export class AvatarAttributesUpdateComponent implements OnInit {
   compareStyles = (o1: IStyles | null, o2: IStyles | null): boolean => this.stylesService.compareStyles(o1, o2);
 
   compareOptions = (o1: IOptions | null, o2: IOptions | null): boolean => this.optionsService.compareOptions(o1, o2);
+
+  compareOptionType = (o1: IOptionType | null, o2: IOptionType | null): boolean => this.optionTypeService.compareOptionType(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ avatarAttributes }) => {
@@ -104,6 +110,10 @@ export class AvatarAttributesUpdateComponent implements OnInit {
       this.optionsSharedCollection,
       ...(avatarAttributes.options ?? [])
     );
+    this.optionTypesSharedCollection = this.optionTypeService.addOptionTypeToCollectionIfMissing<IOptionType>(
+      this.optionTypesSharedCollection,
+      avatarAttributes.optionType
+    );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -139,5 +149,15 @@ export class AvatarAttributesUpdateComponent implements OnInit {
         )
       )
       .subscribe((options: IOptions[]) => (this.optionsSharedCollection = options));
+
+    this.optionTypeService
+      .query()
+      .pipe(map((res: HttpResponse<IOptionType[]>) => res.body ?? []))
+      .pipe(
+        map((optionTypes: IOptionType[]) =>
+          this.optionTypeService.addOptionTypeToCollectionIfMissing<IOptionType>(optionTypes, this.avatarAttributes?.optionType)
+        )
+      )
+      .subscribe((optionTypes: IOptionType[]) => (this.optionTypesSharedCollection = optionTypes));
   }
 }

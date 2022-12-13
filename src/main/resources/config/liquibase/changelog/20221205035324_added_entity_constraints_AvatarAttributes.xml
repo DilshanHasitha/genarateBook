@@ -43,5 +43,11 @@
                                  constraintName="fk_rel_avatar_attributes__options__options_id"
                                  referencedColumnNames="id"
                                  referencedTableName="options"/>
+
+        <addForeignKeyConstraint baseColumnNames="option_type_id"
+                                 baseTableName="avatar_attributes"
+                                 constraintName="fk_avatar_attributes__option_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="option_type"/>
     </changeSet>
 </databaseChangeLog>

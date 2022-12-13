@@ -38,21 +38,21 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="code">
-            <div class="d-flex">
-              <span>Code</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="description">
-            <div class="d-flex">
-              <span>Description</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
           <th scope="col" jhiSortBy="isActive">
             <div class="d-flex">
               <span>Is Active</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="templateValue">
+            <div class="d-flex">
+              <span>Template Value</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="replaceValue">
+            <div class="d-flex">
+              <span>Replace Value</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
@@ -64,9 +64,9 @@
           <td>
             <a [routerLink]="['/styles-details', stylesDetails.id, 'view']">{{ stylesDetails.id }}</a>
           </td>
-          <td>{{ stylesDetails.code }}</td>
-          <td>{{ stylesDetails.description }}</td>
           <td>{{ stylesDetails.isActive }}</td>
+          <td>{{ stylesDetails.templateValue }}</td>
+          <td>{{ stylesDetails.replaceValue }}</td>
           <td class="text-end">
             <div class="btn-group">
               <button

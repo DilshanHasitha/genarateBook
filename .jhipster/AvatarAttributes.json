@@ -21,6 +21,10 @@
     {
       "fieldName": "avatarAttributesCode",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "templateText",
+      "fieldType": "String"
     }
   ],
   "fluentMethods": true,
@@ -58,6 +62,12 @@
       "ownerSide": true,
       "relationshipName": "options",
       "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "code",
+      "otherEntityName": "optionType",
+      "relationshipName": "optionType",
+      "relationshipType": "many-to-one"
     }
   ],
   "service": "serviceClass"

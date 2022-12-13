@@ -22,10 +22,12 @@ type AvatarAttributesFormGroupContent = {
   description: FormControl<IAvatarAttributes['description']>;
   isActive: FormControl<IAvatarAttributes['isActive']>;
   avatarAttributesCode: FormControl<IAvatarAttributes['avatarAttributesCode']>;
+  templateText: FormControl<IAvatarAttributes['templateText']>;
   avatarCharactors: FormControl<IAvatarAttributes['avatarCharactors']>;
   books: FormControl<IAvatarAttributes['books']>;
   styles: FormControl<IAvatarAttributes['styles']>;
   options: FormControl<IAvatarAttributes['options']>;
+  optionType: FormControl<IAvatarAttributes['optionType']>;
 };
 
 export type AvatarAttributesFormGroup = FormGroup<AvatarAttributesFormGroupContent>;
@@ -51,10 +53,12 @@ export class AvatarAttributesFormService {
       }),
       isActive: new FormControl(avatarAttributesRawValue.isActive),
       avatarAttributesCode: new FormControl(avatarAttributesRawValue.avatarAttributesCode),
+      templateText: new FormControl(avatarAttributesRawValue.templateText),
       avatarCharactors: new FormControl(avatarAttributesRawValue.avatarCharactors ?? []),
       books: new FormControl(avatarAttributesRawValue.books ?? []),
       styles: new FormControl(avatarAttributesRawValue.styles ?? []),
       options: new FormControl(avatarAttributesRawValue.options ?? []),
+      optionType: new FormControl(avatarAttributesRawValue.optionType),
     });
   }
 

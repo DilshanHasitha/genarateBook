@@ -3,16 +3,16 @@
   "dto": "no",
   "fields": [
     {
-      "fieldName": "code",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "description",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "isActive",
       "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "templateValue",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "replaceValue",
+      "fieldType": "String"
     }
   ],
   "jpaMetamodelFiltering": false,

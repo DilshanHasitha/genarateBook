@@ -10,6 +10,7 @@ import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.AvatarAttributes;
 import com.mycompany.myapp.domain.AvatarCharactor;
 import com.mycompany.myapp.domain.Books;
+import com.mycompany.myapp.domain.OptionType;
 import com.mycompany.myapp.domain.Options;
 import com.mycompany.myapp.domain.Styles;
 import com.mycompany.myapp.repository.AvatarAttributesRepository;
@@ -56,6 +57,9 @@ class AvatarAttributesResourceIT {
     private static final String DEFAULT_AVATAR_ATTRIBUTES_CODE = "AAAAAAAAAA";
     private static final String UPDATED_AVATAR_ATTRIBUTES_CODE = "BBBBBBBBBB";
 
+    private static final String DEFAULT_TEMPLATE_TEXT = "AAAAAAAAAA";
+    private static final String UPDATED_TEMPLATE_TEXT = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/avatar-attributes";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -90,7 +94,8 @@ class AvatarAttributesResourceIT {
             .code(DEFAULT_CODE)
             .description(DEFAULT_DESCRIPTION)
             .isActive(DEFAULT_IS_ACTIVE)
-            .avatarAttributesCode(DEFAULT_AVATAR_ATTRIBUTES_CODE);
+            .avatarAttributesCode(DEFAULT_AVATAR_ATTRIBUTES_CODE)
+            .templateText(DEFAULT_TEMPLATE_TEXT);
         return avatarAttributes;
     }
 
@@ -105,7 +110,8 @@ class AvatarAttributesResourceIT {
             .code(UPDATED_CODE)
             .description(UPDATED_DESCRIPTION)
             .isActive(UPDATED_IS_ACTIVE)
-            .avatarAttributesCode(UPDATED_AVATAR_ATTRIBUTES_CODE);
+            .avatarAttributesCode(UPDATED_AVATAR_ATTRIBUTES_CODE)
+            .templateText(UPDATED_TEMPLATE_TEXT);
         return avatarAttributes;
     }
 
@@ -133,6 +139,7 @@ class AvatarAttributesResourceIT {
         assertThat(testAvatarAttributes.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testAvatarAttributes.getIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
         assertThat(testAvatarAttributes.getAvatarAttributesCode()).isEqualTo(DEFAULT_AVATAR_ATTRIBUTES_CODE);
+        assertThat(testAvatarAttributes.getTemplateText()).isEqualTo(DEFAULT_TEMPLATE_TEXT);
     }
 
     @Test
@@ -189,7 +196,8 @@ class AvatarAttributesResourceIT {
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
-            .andExpect(jsonPath("$.[*].avatarAttributesCode").value(hasItem(DEFAULT_AVATAR_ATTRIBUTES_CODE)));
+            .andExpect(jsonPath("$.[*].avatarAttributesCode").value(hasItem(DEFAULT_AVATAR_ATTRIBUTES_CODE)))
+            .andExpect(jsonPath("$.[*].templateText").value(hasItem(DEFAULT_TEMPLATE_TEXT)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -224,7 +232,8 @@ class AvatarAttributesResourceIT {
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()))
-            .andExpect(jsonPath("$.avatarAttributesCode").value(DEFAULT_AVATAR_ATTRIBUTES_CODE));
+            .andExpect(jsonPath("$.avatarAttributesCode").value(DEFAULT_AVATAR_ATTRIBUTES_CODE))
+            .andExpect(jsonPath("$.templateText").value(DEFAULT_TEMPLATE_TEXT));
     }
 
     @Test
@@ -483,6 +492,71 @@ class AvatarAttributesResourceIT {
 
     @Test
     @Transactional
+    void getAllAvatarAttributesByTemplateTextIsEqualToSomething() throws Exception {
+        // Initialize the database
+        avatarAttributesRepository.saveAndFlush(avatarAttributes);
+
+        // Get all the avatarAttributesList where templateText equals to DEFAULT_TEMPLATE_TEXT
+        defaultAvatarAttributesShouldBeFound("templateText.equals=" + DEFAULT_TEMPLATE_TEXT);
+
+        // Get all the avatarAttributesList where templateText equals to UPDATED_TEMPLATE_TEXT
+        defaultAvatarAttributesShouldNotBeFound("templateText.equals=" + UPDATED_TEMPLATE_TEXT);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarAttributesByTemplateTextIsInShouldWork() throws Exception {
+        // Initialize the database
+        avatarAttributesRepository.saveAndFlush(avatarAttributes);
+
+        // Get all the avatarAttributesList where templateText in DEFAULT_TEMPLATE_TEXT or UPDATED_TEMPLATE_TEXT
+        defaultAvatarAttributesShouldBeFound("templateText.in=" + DEFAULT_TEMPLATE_TEXT + "," + UPDATED_TEMPLATE_TEXT);
+
+        // Get all the avatarAttributesList where templateText equals to UPDATED_TEMPLATE_TEXT
+        defaultAvatarAttributesShouldNotBeFound("templateText.in=" + UPDATED_TEMPLATE_TEXT);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarAttributesByTemplateTextIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        avatarAttributesRepository.saveAndFlush(avatarAttributes);
+
+        // Get all the avatarAttributesList where templateText is not null
+        defaultAvatarAttributesShouldBeFound("templateText.specified=true");
+
+        // Get all the avatarAttributesList where templateText is null
+        defaultAvatarAttributesShouldNotBeFound("templateText.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarAttributesByTemplateTextContainsSomething() throws Exception {
+        // Initialize the database
+        avatarAttributesRepository.saveAndFlush(avatarAttributes);
+
+        // Get all the avatarAttributesList where templateText contains DEFAULT_TEMPLATE_TEXT
+        defaultAvatarAttributesShouldBeFound("templateText.contains=" + DEFAULT_TEMPLATE_TEXT);
+
+        // Get all the avatarAttributesList where templateText contains UPDATED_TEMPLATE_TEXT
+        defaultAvatarAttributesShouldNotBeFound("templateText.contains=" + UPDATED_TEMPLATE_TEXT);
+    }
+
+    @Test
+    @Transactional
+    void getAllAvatarAttributesByTemplateTextNotContainsSomething() throws Exception {
+        // Initialize the database
+        avatarAttributesRepository.saveAndFlush(avatarAttributes);
+
+        // Get all the avatarAttributesList where templateText does not contain DEFAULT_TEMPLATE_TEXT
+        defaultAvatarAttributesShouldNotBeFound("templateText.doesNotContain=" + DEFAULT_TEMPLATE_TEXT);
+
+        // Get all the avatarAttributesList where templateText does not contain UPDATED_TEMPLATE_TEXT
+        defaultAvatarAttributesShouldBeFound("templateText.doesNotContain=" + UPDATED_TEMPLATE_TEXT);
+    }
+
+    @Test
+    @Transactional
     void getAllAvatarAttributesByAvatarCharactorIsEqualToSomething() throws Exception {
         AvatarCharactor avatarCharactor;
         if (TestUtil.findAll(em, AvatarCharactor.class).isEmpty()) {
@@ -573,6 +647,29 @@ class AvatarAttributesResourceIT {
         defaultAvatarAttributesShouldNotBeFound("optionsId.equals=" + (optionsId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllAvatarAttributesByOptionTypeIsEqualToSomething() throws Exception {
+        OptionType optionType;
+        if (TestUtil.findAll(em, OptionType.class).isEmpty()) {
+            avatarAttributesRepository.saveAndFlush(avatarAttributes);
+            optionType = OptionTypeResourceIT.createEntity(em);
+        } else {
+            optionType = TestUtil.findAll(em, OptionType.class).get(0);
+        }
+        em.persist(optionType);
+        em.flush();
+        avatarAttributes.setOptionType(optionType);
+        avatarAttributesRepository.saveAndFlush(avatarAttributes);
+        Long optionTypeId = optionType.getId();
+
+        // Get all the avatarAttributesList where optionType equals to optionTypeId
+        defaultAvatarAttributesShouldBeFound("optionTypeId.equals=" + optionTypeId);
+
+        // Get all the avatarAttributesList where optionType equals to (optionTypeId + 1)
+        defaultAvatarAttributesShouldNotBeFound("optionTypeId.equals=" + (optionTypeId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -585,7 +682,8 @@ class AvatarAttributesResourceIT {
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
-            .andExpect(jsonPath("$.[*].avatarAttributesCode").value(hasItem(DEFAULT_AVATAR_ATTRIBUTES_CODE)));
+            .andExpect(jsonPath("$.[*].avatarAttributesCode").value(hasItem(DEFAULT_AVATAR_ATTRIBUTES_CODE)))
+            .andExpect(jsonPath("$.[*].templateText").value(hasItem(DEFAULT_TEMPLATE_TEXT)));
 
         // Check, that the count call also returns 1
         restAvatarAttributesMockMvc
@@ -637,7 +735,8 @@ class AvatarAttributesResourceIT {
             .code(UPDATED_CODE)
             .description(UPDATED_DESCRIPTION)
             .isActive(UPDATED_IS_ACTIVE)
-            .avatarAttributesCode(UPDATED_AVATAR_ATTRIBUTES_CODE);
+            .avatarAttributesCode(UPDATED_AVATAR_ATTRIBUTES_CODE)
+            .templateText(UPDATED_TEMPLATE_TEXT);
 
         restAvatarAttributesMockMvc
             .perform(
@@ -655,6 +754,7 @@ class AvatarAttributesResourceIT {
         assertThat(testAvatarAttributes.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testAvatarAttributes.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
         assertThat(testAvatarAttributes.getAvatarAttributesCode()).isEqualTo(UPDATED_AVATAR_ATTRIBUTES_CODE);
+        assertThat(testAvatarAttributes.getTemplateText()).isEqualTo(UPDATED_TEMPLATE_TEXT);
     }
 
     @Test
@@ -730,7 +830,8 @@ class AvatarAttributesResourceIT {
         partialUpdatedAvatarAttributes
             .description(UPDATED_DESCRIPTION)
             .isActive(UPDATED_IS_ACTIVE)
-            .avatarAttributesCode(UPDATED_AVATAR_ATTRIBUTES_CODE);
+            .avatarAttributesCode(UPDATED_AVATAR_ATTRIBUTES_CODE)
+            .templateText(UPDATED_TEMPLATE_TEXT);
 
         restAvatarAttributesMockMvc
             .perform(
@@ -748,6 +849,7 @@ class AvatarAttributesResourceIT {
         assertThat(testAvatarAttributes.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testAvatarAttributes.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
         assertThat(testAvatarAttributes.getAvatarAttributesCode()).isEqualTo(UPDATED_AVATAR_ATTRIBUTES_CODE);
+        assertThat(testAvatarAttributes.getTemplateText()).isEqualTo(UPDATED_TEMPLATE_TEXT);
     }
 
     @Test
@@ -766,7 +868,8 @@ class AvatarAttributesResourceIT {
             .code(UPDATED_CODE)
             .description(UPDATED_DESCRIPTION)
             .isActive(UPDATED_IS_ACTIVE)
-            .avatarAttributesCode(UPDATED_AVATAR_ATTRIBUTES_CODE);
+            .avatarAttributesCode(UPDATED_AVATAR_ATTRIBUTES_CODE)
+            .templateText(UPDATED_TEMPLATE_TEXT);
 
         restAvatarAttributesMockMvc
             .perform(
@@ -784,6 +887,7 @@ class AvatarAttributesResourceIT {
         assertThat(testAvatarAttributes.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testAvatarAttributes.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
         assertThat(testAvatarAttributes.getAvatarAttributesCode()).isEqualTo(UPDATED_AVATAR_ATTRIBUTES_CODE);
+        assertThat(testAvatarAttributes.getTemplateText()).isEqualTo(UPDATED_TEMPLATE_TEXT);
     }
 
     @Test

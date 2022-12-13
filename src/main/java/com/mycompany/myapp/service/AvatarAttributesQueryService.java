@@ -98,6 +98,9 @@ public class AvatarAttributesQueryService extends QueryService<AvatarAttributes>
                 specification =
                     specification.and(buildStringSpecification(criteria.getAvatarAttributesCode(), AvatarAttributes_.avatarAttributesCode));
             }
+            if (criteria.getTemplateText() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getTemplateText(), AvatarAttributes_.templateText));
+            }
             if (criteria.getAvatarCharactorId() != null) {
                 specification =
                     specification.and(
@@ -128,6 +131,15 @@ public class AvatarAttributesQueryService extends QueryService<AvatarAttributes>
                         buildSpecification(
                             criteria.getOptionsId(),
                             root -> root.join(AvatarAttributes_.options, JoinType.LEFT).get(Options_.id)
+                        )
+                    );
+            }
+            if (criteria.getOptionTypeId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getOptionTypeId(),
+                            root -> root.join(AvatarAttributes_.optionType, JoinType.LEFT).get(OptionType_.id)
                         )
                     );
             }

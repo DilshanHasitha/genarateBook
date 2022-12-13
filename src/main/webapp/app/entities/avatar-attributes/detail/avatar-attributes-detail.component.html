@@ -30,6 +30,10 @@
         <dd>
           <span>{{ avatarAttributes.avatarAttributesCode }}</span>
         </dd>
+        <dt><span>Template Text</span></dt>
+        <dd>
+          <span>{{ avatarAttributes.templateText }}</span>
+        </dd>
         <dt><span>Avatar Charactor</span></dt>
         <dd>
           <span *ngFor="let avatarCharactor of avatarAttributes.avatarCharactors; let last = last">
@@ -50,6 +54,12 @@
             <a [routerLink]="['/options', options.id, 'view']">{{ options.id }}</a
             >{{ last ? '' : ', ' }}
           </span>
+        </dd>
+        <dt><span>Option Type</span></dt>
+        <dd>
+          <div *ngIf="avatarAttributes.optionType">
+            <a [routerLink]="['/option-type', avatarAttributes.optionType.id, 'view']">{{ avatarAttributes.optionType.code }}</a>
+          </div>
         </dd>
       </dl>
 

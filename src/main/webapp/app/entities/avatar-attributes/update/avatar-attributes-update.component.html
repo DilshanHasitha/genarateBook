@@ -49,6 +49,18 @@
         </div>
 
         <div class="row mb-3">
+          <label class="form-label" for="field_templateText">Template Text</label>
+          <input
+            type="text"
+            class="form-control"
+            name="templateText"
+            id="field_templateText"
+            data-cy="templateText"
+            formControlName="templateText"
+          />
+        </div>
+
+        <div class="row mb-3">
           <label for="field_avatarCharactors">Avatar Charactor</label>
           <select
             class="form-control"
@@ -92,6 +104,23 @@
             [compareWith]="compareOptions"
           >
             <option [ngValue]="optionsOption" *ngFor="let optionsOption of optionsSharedCollection">{{ optionsOption.id }}</option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_optionType">Option Type</label>
+          <select
+            class="form-control"
+            id="field_optionType"
+            data-cy="optionType"
+            name="optionType"
+            formControlName="optionType"
+            [compareWith]="compareOptionType"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="optionTypeOption" *ngFor="let optionTypeOption of optionTypesSharedCollection">
+              {{ optionTypeOption.code }}
+            </option>
           </select>
         </div>
       </div>

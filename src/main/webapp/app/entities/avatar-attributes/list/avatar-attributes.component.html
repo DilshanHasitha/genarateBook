@@ -64,6 +64,18 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
+          <th scope="col" jhiSortBy="templateText">
+            <div class="d-flex">
+              <span>Template Text</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="optionType.code">
+            <div class="d-flex">
+              <span>Option Type</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -76,6 +88,12 @@
           <td>{{ avatarAttributes.description }}</td>
           <td>{{ avatarAttributes.isActive }}</td>
           <td>{{ avatarAttributes.avatarAttributesCode }}</td>
+          <td>{{ avatarAttributes.templateText }}</td>
+          <td>
+            <div *ngIf="avatarAttributes.optionType">
+              <a [routerLink]="['/option-type', avatarAttributes.optionType.id, 'view']">{{ avatarAttributes.optionType.code }}</a>
+            </div>
+          </td>
           <td class="text-end">
             <div class="btn-group">
               <button

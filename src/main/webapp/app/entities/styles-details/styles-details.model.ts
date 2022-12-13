@@ -1,8 +1,8 @@
 export interface IStylesDetails {
   id: number;
-  code?: string | null;
-  description?: string | null;
   isActive?: boolean | null;
+  templateValue?: string | null;
+  replaceValue?: string | null;
 }
 
 export type NewStylesDetails = Omit<IStylesDetails, 'id'> & { id: null };

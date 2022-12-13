@@ -58,14 +58,14 @@ public class StylesDetailsService {
         return stylesDetailsRepository
             .findById(stylesDetails.getId())
             .map(existingStylesDetails -> {
-                if (stylesDetails.getCode() != null) {
-                    existingStylesDetails.setCode(stylesDetails.getCode());
-                }
-                if (stylesDetails.getDescription() != null) {
-                    existingStylesDetails.setDescription(stylesDetails.getDescription());
-                }
                 if (stylesDetails.getIsActive() != null) {
                     existingStylesDetails.setIsActive(stylesDetails.getIsActive());
+                }
+                if (stylesDetails.getTemplateValue() != null) {
+                    existingStylesDetails.setTemplateValue(stylesDetails.getTemplateValue());
+                }
+                if (stylesDetails.getReplaceValue() != null) {
+                    existingStylesDetails.setReplaceValue(stylesDetails.getReplaceValue());
                 }
 
                 return existingStylesDetails;

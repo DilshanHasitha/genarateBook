@@ -24,10 +24,12 @@ describe('AvatarAttributes Form Service', () => {
             description: expect.any(Object),
             isActive: expect.any(Object),
             avatarAttributesCode: expect.any(Object),
+            templateText: expect.any(Object),
             avatarCharactors: expect.any(Object),
             books: expect.any(Object),
             styles: expect.any(Object),
             options: expect.any(Object),
+            optionType: expect.any(Object),
           })
         );
       });
@@ -42,10 +44,12 @@ describe('AvatarAttributes Form Service', () => {
             description: expect.any(Object),
             isActive: expect.any(Object),
             avatarAttributesCode: expect.any(Object),
+            templateText: expect.any(Object),
             avatarCharactors: expect.any(Object),
             books: expect.any(Object),
             styles: expect.any(Object),
             options: expect.any(Object),
+            optionType: expect.any(Object),
           })
         );
       });

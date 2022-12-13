@@ -29,14 +29,14 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class StylesDetailsResourceIT {
 
-    private static final String DEFAULT_CODE = "AAAAAAAAAA";
-    private static final String UPDATED_CODE = "BBBBBBBBBB";
-
-    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
-    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
-
     private static final Boolean DEFAULT_IS_ACTIVE = false;
     private static final Boolean UPDATED_IS_ACTIVE = true;
+
+    private static final String DEFAULT_TEMPLATE_VALUE = "AAAAAAAAAA";
+    private static final String UPDATED_TEMPLATE_VALUE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_REPLACE_VALUE = "AAAAAAAAAA";
+    private static final String UPDATED_REPLACE_VALUE = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/styles-details";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -62,7 +62,10 @@ class StylesDetailsResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static StylesDetails createEntity(EntityManager em) {
-        StylesDetails stylesDetails = new StylesDetails().code(DEFAULT_CODE).description(DEFAULT_DESCRIPTION).isActive(DEFAULT_IS_ACTIVE);
+        StylesDetails stylesDetails = new StylesDetails()
+            .isActive(DEFAULT_IS_ACTIVE)
+            .templateValue(DEFAULT_TEMPLATE_VALUE)
+            .replaceValue(DEFAULT_REPLACE_VALUE);
         return stylesDetails;
     }
 
@@ -73,7 +76,10 @@ class StylesDetailsResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static StylesDetails createUpdatedEntity(EntityManager em) {
-        StylesDetails stylesDetails = new StylesDetails().code(UPDATED_CODE).description(UPDATED_DESCRIPTION).isActive(UPDATED_IS_ACTIVE);
+        StylesDetails stylesDetails = new StylesDetails()
+            .isActive(UPDATED_IS_ACTIVE)
+            .templateValue(UPDATED_TEMPLATE_VALUE)
+            .replaceValue(UPDATED_REPLACE_VALUE);
         return stylesDetails;
     }
 
@@ -95,9 +101,9 @@ class StylesDetailsResourceIT {
         List<StylesDetails> stylesDetailsList = stylesDetailsRepository.findAll();
         assertThat(stylesDetailsList).hasSize(databaseSizeBeforeCreate + 1);
         StylesDetails testStylesDetails = stylesDetailsList.get(stylesDetailsList.size() - 1);
-        assertThat(testStylesDetails.getCode()).isEqualTo(DEFAULT_CODE);
-        assertThat(testStylesDetails.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testStylesDetails.getIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
+        assertThat(testStylesDetails.getTemplateValue()).isEqualTo(DEFAULT_TEMPLATE_VALUE);
+        assertThat(testStylesDetails.getReplaceValue()).isEqualTo(DEFAULT_REPLACE_VALUE);
     }
 
     @Test
@@ -130,9 +136,9 @@ class StylesDetailsResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(stylesDetails.getId().intValue())))
-            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())));
+            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].templateValue").value(hasItem(DEFAULT_TEMPLATE_VALUE)))
+            .andExpect(jsonPath("$.[*].replaceValue").value(hasItem(DEFAULT_REPLACE_VALUE)));
     }
 
     @Test
@@ -147,9 +153,9 @@ class StylesDetailsResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(stylesDetails.getId().intValue()))
-            .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
-            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()));
+            .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()))
+            .andExpect(jsonPath("$.templateValue").value(DEFAULT_TEMPLATE_VALUE))
+            .andExpect(jsonPath("$.replaceValue").value(DEFAULT_REPLACE_VALUE));
     }
 
     @Test
@@ -171,7 +177,7 @@ class StylesDetailsResourceIT {
         StylesDetails updatedStylesDetails = stylesDetailsRepository.findById(stylesDetails.getId()).get();
         // Disconnect from session so that the updates on updatedStylesDetails are not directly saved in db
         em.detach(updatedStylesDetails);
-        updatedStylesDetails.code(UPDATED_CODE).description(UPDATED_DESCRIPTION).isActive(UPDATED_IS_ACTIVE);
+        updatedStylesDetails.isActive(UPDATED_IS_ACTIVE).templateValue(UPDATED_TEMPLATE_VALUE).replaceValue(UPDATED_REPLACE_VALUE);
 
         restStylesDetailsMockMvc
             .perform(
@@ -185,9 +191,9 @@ class StylesDetailsResourceIT {
         List<StylesDetails> stylesDetailsList = stylesDetailsRepository.findAll();
         assertThat(stylesDetailsList).hasSize(databaseSizeBeforeUpdate);
         StylesDetails testStylesDetails = stylesDetailsList.get(stylesDetailsList.size() - 1);
-        assertThat(testStylesDetails.getCode()).isEqualTo(UPDATED_CODE);
-        assertThat(testStylesDetails.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testStylesDetails.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+        assertThat(testStylesDetails.getTemplateValue()).isEqualTo(UPDATED_TEMPLATE_VALUE);
+        assertThat(testStylesDetails.getReplaceValue()).isEqualTo(UPDATED_REPLACE_VALUE);
     }
 
     @Test
@@ -258,7 +264,7 @@ class StylesDetailsResourceIT {
         StylesDetails partialUpdatedStylesDetails = new StylesDetails();
         partialUpdatedStylesDetails.setId(stylesDetails.getId());
 
-        partialUpdatedStylesDetails.code(UPDATED_CODE).description(UPDATED_DESCRIPTION).isActive(UPDATED_IS_ACTIVE);
+        partialUpdatedStylesDetails.isActive(UPDATED_IS_ACTIVE).templateValue(UPDATED_TEMPLATE_VALUE).replaceValue(UPDATED_REPLACE_VALUE);
 
         restStylesDetailsMockMvc
             .perform(
@@ -272,9 +278,9 @@ class StylesDetailsResourceIT {
         List<StylesDetails> stylesDetailsList = stylesDetailsRepository.findAll();
         assertThat(stylesDetailsList).hasSize(databaseSizeBeforeUpdate);
         StylesDetails testStylesDetails = stylesDetailsList.get(stylesDetailsList.size() - 1);
-        assertThat(testStylesDetails.getCode()).isEqualTo(UPDATED_CODE);
-        assertThat(testStylesDetails.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testStylesDetails.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+        assertThat(testStylesDetails.getTemplateValue()).isEqualTo(UPDATED_TEMPLATE_VALUE);
+        assertThat(testStylesDetails.getReplaceValue()).isEqualTo(UPDATED_REPLACE_VALUE);
     }
 
     @Test
@@ -289,7 +295,7 @@ class StylesDetailsResourceIT {
         StylesDetails partialUpdatedStylesDetails = new StylesDetails();
         partialUpdatedStylesDetails.setId(stylesDetails.getId());
 
-        partialUpdatedStylesDetails.code(UPDATED_CODE).description(UPDATED_DESCRIPTION).isActive(UPDATED_IS_ACTIVE);
+        partialUpdatedStylesDetails.isActive(UPDATED_IS_ACTIVE).templateValue(UPDATED_TEMPLATE_VALUE).replaceValue(UPDATED_REPLACE_VALUE);
 
         restStylesDetailsMockMvc
             .perform(
@@ -303,9 +309,9 @@ class StylesDetailsResourceIT {
         List<StylesDetails> stylesDetailsList = stylesDetailsRepository.findAll();
         assertThat(stylesDetailsList).hasSize(databaseSizeBeforeUpdate);
         StylesDetails testStylesDetails = stylesDetailsList.get(stylesDetailsList.size() - 1);
-        assertThat(testStylesDetails.getCode()).isEqualTo(UPDATED_CODE);
-        assertThat(testStylesDetails.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testStylesDetails.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+        assertThat(testStylesDetails.getTemplateValue()).isEqualTo(UPDATED_TEMPLATE_VALUE);
+        assertThat(testStylesDetails.getReplaceValue()).isEqualTo(UPDATED_REPLACE_VALUE);
     }
 
     @Test

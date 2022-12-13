@@ -176,7 +176,7 @@ public class PDFGenarator {
 
     JRDesignStaticText createEditableText(String text, Set<SelectedOptionDetails> editableTex, Map<String, String> configMap) {
         for (SelectedOptionDetails selectedOptionDetails : editableTex) {
-            String target = selectedOptionDetails.getCode();
+            String target = selectedOptionDetails.getName();
             String value = selectedOptionDetails.getSelectedValue();
             text = text.replace(target, value);
         }
@@ -260,11 +260,28 @@ public class PDFGenarator {
         Optional<Books> books = booksRepository.findOneByCode("DEMO");
         if (books.isPresent()) {
             Books book = books.get();
-            for (SelectedOptionDetails selectedOptionDetails : selectedOption.getSelectedOptionDetails()) {}
+            for (SelectedOptionDetails selectedOptionDetails : selectedOption.getSelectedOptionDetails()) {
+                for (AvatarAttributes avatarAttributes : book.getAvatarAttributes()) {
+                    if (avatarAttributes.getDescription() == selectedOptionDetails.getName()) {
+                        if (!avatarAttributes.getTemplateText().isEmpty() && avatarAttributes.getOptionType().getCode() == "TEXT") {
+                            if (!selectedOptionDetails.getSelectedValue().isEmpty()) {
+                                templateText.put(avatarAttributes.getTemplateText(), selectedOptionDetails.getSelectedValue());
+                            }
+                        } else {
+                            for (Styles style : avatarAttributes.getStyles()) {
+                                if (style.getStylesDetails().size() > 0) {
+                                    for (StylesDetails styleDetails : style.getStylesDetails()) {
+                                        templateText.put(styleDetails.getTemplateValue(), styleDetails.getReplaceValue());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         } else {
             throw new BadRequestAlertException("A new books cannot already have an ID", ENTITY_NAME, "idexists");
         }
-
         return templateText;
     }
 }

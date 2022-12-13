@@ -71,6 +71,9 @@ public class AvatarAttributesService {
                 if (avatarAttributes.getAvatarAttributesCode() != null) {
                     existingAvatarAttributes.setAvatarAttributesCode(avatarAttributes.getAvatarAttributesCode());
                 }
+                if (avatarAttributes.getTemplateText() != null) {
+                    existingAvatarAttributes.setTemplateText(avatarAttributes.getTemplateText());
+                }
 
                 return existingAvatarAttributes;
             })

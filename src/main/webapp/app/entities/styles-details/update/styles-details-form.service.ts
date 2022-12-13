@@ -18,9 +18,9 @@ type StylesDetailsFormDefaults = Pick<NewStylesDetails, 'id' | 'isActive'>;
 
 type StylesDetailsFormGroupContent = {
   id: FormControl<IStylesDetails['id'] | NewStylesDetails['id']>;
-  code: FormControl<IStylesDetails['code']>;
-  description: FormControl<IStylesDetails['description']>;
   isActive: FormControl<IStylesDetails['isActive']>;
+  templateValue: FormControl<IStylesDetails['templateValue']>;
+  replaceValue: FormControl<IStylesDetails['replaceValue']>;
 };
 
 export type StylesDetailsFormGroup = FormGroup<StylesDetailsFormGroupContent>;
@@ -40,9 +40,9 @@ export class StylesDetailsFormService {
           validators: [Validators.required],
         }
       ),
-      code: new FormControl(stylesDetailsRawValue.code),
-      description: new FormControl(stylesDetailsRawValue.description),
       isActive: new FormControl(stylesDetailsRawValue.isActive),
+      templateValue: new FormControl(stylesDetailsRawValue.templateValue),
+      replaceValue: new FormControl(stylesDetailsRawValue.replaceValue),
     });
   }
 

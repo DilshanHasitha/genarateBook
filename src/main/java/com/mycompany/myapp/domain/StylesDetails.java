@@ -21,14 +21,14 @@ public class StylesDetails implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "code")
-    private String code;
-
-    @Column(name = "description")
-    private String description;
-
     @Column(name = "is_active")
     private Boolean isActive;
+
+    @Column(name = "template_value")
+    private String templateValue;
+
+    @Column(name = "replace_value")
+    private String replaceValue;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -45,32 +45,6 @@ public class StylesDetails implements Serializable {
         this.id = id;
     }
 
-    public String getCode() {
-        return this.code;
-    }
-
-    public StylesDetails code(String code) {
-        this.setCode(code);
-        return this;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public StylesDetails description(String description) {
-        this.setDescription(description);
-        return this;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Boolean getIsActive() {
         return this.isActive;
     }
@@ -82,6 +56,32 @@ public class StylesDetails implements Serializable {
 
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public String getTemplateValue() {
+        return this.templateValue;
+    }
+
+    public StylesDetails templateValue(String templateValue) {
+        this.setTemplateValue(templateValue);
+        return this;
+    }
+
+    public void setTemplateValue(String templateValue) {
+        this.templateValue = templateValue;
+    }
+
+    public String getReplaceValue() {
+        return this.replaceValue;
+    }
+
+    public StylesDetails replaceValue(String replaceValue) {
+        this.setReplaceValue(replaceValue);
+        return this;
+    }
+
+    public void setReplaceValue(String replaceValue) {
+        this.replaceValue = replaceValue;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -108,9 +108,9 @@ public class StylesDetails implements Serializable {
     public String toString() {
         return "StylesDetails{" +
             "id=" + getId() +
-            ", code='" + getCode() + "'" +
-            ", description='" + getDescription() + "'" +
             ", isActive='" + getIsActive() + "'" +
+            ", templateValue='" + getTemplateValue() + "'" +
+            ", replaceValue='" + getReplaceValue() + "'" +
             "}";
     }
 }

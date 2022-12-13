@@ -1,11 +1,11 @@
-id;code;description;is_active
-1;withdrawal Car;Coordinator bluetooth Handmade;true
-2;Branding;Wooden;false
-3;Technician;azure Ergonomic Checking;false
-4;Streets;impactful;false
-5;Concrete transmit system;Card Lead deposit;true
-6;Executive black overriding;discrete;true
-7;Won transmit bluetooth;Sleek Refined Health;true
-8;Buckinghamshire scale;invoice Vision-oriented Senior;true
-9;maroon;Handmade Plastic;false
-10;real-time;Tuna Functionality technologies;true
+id;is_active;template_value;replace_value
+1;true;deploy Unbranded;integrate withdrawal copy
+2;false;lavender Bahamian Refined;Technician
+3;true;Configuration;Rubber
+4;false;Health;Incredible
+5;false;RAM Handmade;system Web ubiquitous
+6;false;Chicken parsing;black overriding
+7;false;background;Won transmit bluetooth
+8;true;Cambridgeshire;Steel Streets Buckinghamshire
+9;false;Unit Manager Analyst;program
+10;false;mesh transmit;vertical Plastic

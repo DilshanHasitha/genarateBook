@@ -10,9 +10,9 @@ export const sampleWithPartialData: IStylesDetails = {
 
 export const sampleWithFullData: IStylesDetails = {
   id: 3750,
-  code: 'Sleek',
-  description: 'array',
-  isActive: true,
+  isActive: false,
+  templateValue: 'Borders',
+  replaceValue: 'killer impactful Tasty',
 };
 
 export const sampleWithNewData: NewStylesDetails = {

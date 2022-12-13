@@ -20,9 +20,9 @@ describe('StylesDetails Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
-            code: expect.any(Object),
-            description: expect.any(Object),
             isActive: expect.any(Object),
+            templateValue: expect.any(Object),
+            replaceValue: expect.any(Object),
           })
         );
       });
@@ -33,9 +33,9 @@ describe('StylesDetails Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
-            code: expect.any(Object),
-            description: expect.any(Object),
             isActive: expect.any(Object),
+            templateValue: expect.any(Object),
+            replaceValue: expect.any(Object),
           })
         );
       });

@@ -15,6 +15,8 @@ import { IStyles } from 'app/entities/styles/styles.model';
 import { StylesService } from 'app/entities/styles/service/styles.service';
 import { IOptions } from 'app/entities/options/options.model';
 import { OptionsService } from 'app/entities/options/service/options.service';
+import { IOptionType } from 'app/entities/option-type/option-type.model';
+import { OptionTypeService } from 'app/entities/option-type/service/option-type.service';
 
 import { AvatarAttributesUpdateComponent } from './avatar-attributes-update.component';
 
@@ -27,6 +29,7 @@ describe('AvatarAttributes Management Update Component', () => {
   let avatarCharactorService: AvatarCharactorService;
   let stylesService: StylesService;
   let optionsService: OptionsService;
+  let optionTypeService: OptionTypeService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -52,6 +55,7 @@ describe('AvatarAttributes Management Update Component', () => {
     avatarCharactorService = TestBed.inject(AvatarCharactorService);
     stylesService = TestBed.inject(StylesService);
     optionsService = TestBed.inject(OptionsService);
+    optionTypeService = TestBed.inject(OptionTypeService);
 
     comp = fixture.componentInstance;
   });
@@ -123,6 +127,28 @@ describe('AvatarAttributes Management Update Component', () => {
       expect(comp.optionsSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call OptionType query and add missing value', () => {
+      const avatarAttributes: IAvatarAttributes = { id: 456 };
+      const optionType: IOptionType = { id: 63302 };
+      avatarAttributes.optionType = optionType;
+
+      const optionTypeCollection: IOptionType[] = [{ id: 15784 }];
+      jest.spyOn(optionTypeService, 'query').mockReturnValue(of(new HttpResponse({ body: optionTypeCollection })));
+      const additionalOptionTypes = [optionType];
+      const expectedCollection: IOptionType[] = [...additionalOptionTypes, ...optionTypeCollection];
+      jest.spyOn(optionTypeService, 'addOptionTypeToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ avatarAttributes });
+      comp.ngOnInit();
+
+      expect(optionTypeService.query).toHaveBeenCalled();
+      expect(optionTypeService.addOptionTypeToCollectionIfMissing).toHaveBeenCalledWith(
+        optionTypeCollection,
+        ...additionalOptionTypes.map(expect.objectContaining)
+      );
+      expect(comp.optionTypesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const avatarAttributes: IAvatarAttributes = { id: 456 };
       const avatarCharactor: IAvatarCharactor = { id: 6430 };
@@ -131,6 +157,8 @@ describe('AvatarAttributes Management Update Component', () => {
       avatarAttributes.styles = [styles];
       const options: IOptions = { id: 66925 };
       avatarAttributes.options = [options];
+      const optionType: IOptionType = { id: 31085 };
+      avatarAttributes.optionType = optionType;
 
       activatedRoute.data = of({ avatarAttributes });
       comp.ngOnInit();
@@ -138,6 +166,7 @@ describe('AvatarAttributes Management Update Component', () => {
       expect(comp.avatarCharactorsSharedCollection).toContain(avatarCharactor);
       expect(comp.stylesSharedCollection).toContain(styles);
       expect(comp.optionsSharedCollection).toContain(options);
+      expect(comp.optionTypesSharedCollection).toContain(optionType);
       expect(comp.avatarAttributes).toEqual(avatarAttributes);
     });
   });
@@ -238,6 +267,16 @@ describe('AvatarAttributes Management Update Component', () => {
         jest.spyOn(optionsService, 'compareOptions');
         comp.compareOptions(entity, entity2);
         expect(optionsService.compareOptions).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
+    describe('compareOptionType', () => {
+      it('Should forward to optionTypeService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(optionTypeService, 'compareOptionType');
+        comp.compareOptionType(entity, entity2);
+        expect(optionTypeService.compareOptionType).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

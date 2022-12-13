@@ -31,6 +31,8 @@ public class AvatarAttributesCriteria implements Serializable, Criteria {
 
     private StringFilter avatarAttributesCode;
 
+    private StringFilter templateText;
+
     private LongFilter avatarCharactorId;
 
     private LongFilter booksId;
@@ -38,6 +40,8 @@ public class AvatarAttributesCriteria implements Serializable, Criteria {
     private LongFilter stylesId;
 
     private LongFilter optionsId;
+
+    private LongFilter optionTypeId;
 
     private Boolean distinct;
 
@@ -49,10 +53,12 @@ public class AvatarAttributesCriteria implements Serializable, Criteria {
         this.description = other.description == null ? null : other.description.copy();
         this.isActive = other.isActive == null ? null : other.isActive.copy();
         this.avatarAttributesCode = other.avatarAttributesCode == null ? null : other.avatarAttributesCode.copy();
+        this.templateText = other.templateText == null ? null : other.templateText.copy();
         this.avatarCharactorId = other.avatarCharactorId == null ? null : other.avatarCharactorId.copy();
         this.booksId = other.booksId == null ? null : other.booksId.copy();
         this.stylesId = other.stylesId == null ? null : other.stylesId.copy();
         this.optionsId = other.optionsId == null ? null : other.optionsId.copy();
+        this.optionTypeId = other.optionTypeId == null ? null : other.optionTypeId.copy();
         this.distinct = other.distinct;
     }
 
@@ -136,6 +142,21 @@ public class AvatarAttributesCriteria implements Serializable, Criteria {
         this.avatarAttributesCode = avatarAttributesCode;
     }
 
+    public StringFilter getTemplateText() {
+        return templateText;
+    }
+
+    public StringFilter templateText() {
+        if (templateText == null) {
+            templateText = new StringFilter();
+        }
+        return templateText;
+    }
+
+    public void setTemplateText(StringFilter templateText) {
+        this.templateText = templateText;
+    }
+
     public LongFilter getAvatarCharactorId() {
         return avatarCharactorId;
     }
@@ -196,6 +217,21 @@ public class AvatarAttributesCriteria implements Serializable, Criteria {
         this.optionsId = optionsId;
     }
 
+    public LongFilter getOptionTypeId() {
+        return optionTypeId;
+    }
+
+    public LongFilter optionTypeId() {
+        if (optionTypeId == null) {
+            optionTypeId = new LongFilter();
+        }
+        return optionTypeId;
+    }
+
+    public void setOptionTypeId(LongFilter optionTypeId) {
+        this.optionTypeId = optionTypeId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -219,10 +255,12 @@ public class AvatarAttributesCriteria implements Serializable, Criteria {
             Objects.equals(description, that.description) &&
             Objects.equals(isActive, that.isActive) &&
             Objects.equals(avatarAttributesCode, that.avatarAttributesCode) &&
+            Objects.equals(templateText, that.templateText) &&
             Objects.equals(avatarCharactorId, that.avatarCharactorId) &&
             Objects.equals(booksId, that.booksId) &&
             Objects.equals(stylesId, that.stylesId) &&
             Objects.equals(optionsId, that.optionsId) &&
+            Objects.equals(optionTypeId, that.optionTypeId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -235,10 +273,12 @@ public class AvatarAttributesCriteria implements Serializable, Criteria {
             description,
             isActive,
             avatarAttributesCode,
+            templateText,
             avatarCharactorId,
             booksId,
             stylesId,
             optionsId,
+            optionTypeId,
             distinct
         );
     }
@@ -252,10 +292,12 @@ public class AvatarAttributesCriteria implements Serializable, Criteria {
             (description != null ? "description=" + description + ", " : "") +
             (isActive != null ? "isActive=" + isActive + ", " : "") +
             (avatarAttributesCode != null ? "avatarAttributesCode=" + avatarAttributesCode + ", " : "") +
+            (templateText != null ? "templateText=" + templateText + ", " : "") +
             (avatarCharactorId != null ? "avatarCharactorId=" + avatarCharactorId + ", " : "") +
             (booksId != null ? "booksId=" + booksId + ", " : "") +
             (stylesId != null ? "stylesId=" + stylesId + ", " : "") +
             (optionsId != null ? "optionsId=" + optionsId + ", " : "") +
+            (optionTypeId != null ? "optionTypeId=" + optionTypeId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }
