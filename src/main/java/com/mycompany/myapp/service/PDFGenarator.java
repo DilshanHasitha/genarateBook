@@ -4,6 +4,7 @@ import static java.lang.Integer.parseInt;
 import static org.hibernate.id.IdentifierGenerator.ENTITY_NAME;
 
 import com.mycompany.myapp.domain.*;
+import com.mycompany.myapp.repository.BooksRepository;
 import com.mycompany.myapp.repository.SelectedOptionRepository;
 import com.mycompany.myapp.repository.SelectionsRepository;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
@@ -12,10 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.base.JRBasePrintPage;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.*;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
@@ -31,16 +29,22 @@ public class PDFGenarator {
     private final SelectedOptionRepository selectedOptionRepository;
     private final SelectionsRepository selectionsRepository;
 
-    public PDFGenarator(SelectedOptionRepository selectedOptionRepository, SelectionsRepository selectionsRepository) {
+    private final BooksRepository booksRepository;
+
+    public PDFGenarator(
+        SelectedOptionRepository selectedOptionRepository,
+        SelectionsRepository selectionsRepository,
+        BooksRepository booksRepository
+    ) {
         this.selectedOptionRepository = selectedOptionRepository;
         this.selectionsRepository = selectionsRepository;
+        this.booksRepository = booksRepository;
     }
 
     public byte[] pdfCreator(Books books) throws IOException, JRException {
         List<JasperPrint> jasperPrintList = new ArrayList<JasperPrint>();
 
         JasperDesign jasperDesign = createPage(books);
-
         // is page size null
         if (books.getBooksPages().size() == 0) {
             throw new BadRequestAlertException("A new books cannot have pages", ENTITY_NAME, "empty pages");
@@ -48,20 +52,15 @@ public class PDFGenarator {
 
         //sort BooksPage in ascending Order
         books = sortBooksPage(books);
-
+        JasperPrint jasperPrint = new JasperPrint();
         for (BooksPage booksPage : books.getBooksPages()) {
             //sort PageLayers in ascending Order
             BooksPage booksPages = sortPageLayer(booksPage);
             //create page & add to jasper list
-            JasperPrint jasperPrint = new JasperPrint();
 
-            JRPrintPage a = new JRBasePrintPage();
-
-            jasperPrint.addPage(a);
             jasperPrint = createPageInner(booksPages, jasperDesign, books);
-            jasperPrintList.add(jasperPrint);
         }
-
+        jasperPrintList.add(jasperPrint);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         JRPdfExporter exporter = new JRPdfExporter();
         //Add the list as a Parameter
@@ -115,33 +114,23 @@ public class PDFGenarator {
                         selectedMap.get("styleCode"),
                         selectedMap.get("optionCode")
                     );
-                    band.addElement(layers.getLayerNo(), createImages(selections, jasperDesign));
+                    band.addElement(layers.getLayerNo(), createEditableImages(selections, jasperDesign));
                 } else {
-                    band.addElement(layers.getLayerNo(), createImage(configMap, jasperDesign));
+                    band.addElement(layers.getLayerNo(), createNonEditableImages(configMap, jasperDesign));
                 }
             } else {
                 if (layers.getIsEditable()) {
-                    //                    String editableTextCode = configMap.get("editableTextCode");
                     String text = configMap.get("text");
-                    //                    SelectedOption selectedOption =selectedOptionRepository.findOneByCodeAndBooks_Code(editableTextCode, "DEMO");
-                    //                    SelectedOption selectedOption = selectedOptionRepository.findOneByCodeAndBooks_Code("A", "DEMO");
-                    //                    Map<String, String> selectedMap = new HashMap<>();
-                    //                    for (SelectedOptionDetails selectedOptionDetails : selectedOption.getSelectedOptionDetails()) {
-                    //                        selectedMap.put(selectedOptionDetails.getName(), selectedOptionDetails.getSelectedValue());
-                    //                    }
-                    //                    Selections selections = selectionsRepository.findOneByAvatarCodeAndStyleCodeAndOptionCode(
-                    //                        "A",
-                    //                        selectedMap.get("styleCode"),
-                    //                        selectedMap.get("optionCode")
-                    //                    );
-                    band.addElement(layers.getLayerNo(), createText("dilshan", "dilshan", 0, 0));
+                    SelectedOption selectedOption = selectedOptionRepository.findOneByCodeAndBooks_Code("editableText", "DEMO");
+                    Set<SelectedOptionDetails> editableText = selectedOption.getSelectedOptionDetails();
+                    band.addElement(layers.getLayerNo(), createEditableText(text, editableText, configMap));
+                } else {
+                    String text = configMap.get("text");
+                    band.addElement(layers.getLayerNo(), createNonEditableText(text, configMap));
                 }
             }
-            //            if (configMap.get("type").equals("text")) {}
-            //            else if (configMap.get("type").equals("img")) {
-            //                band.addElement(layers.getLayerNo(), createImage(configMap, jasperDesign));
-            //            }
         }
+
         ((JRDesignSection) jasperDesign.getDetailSection()).addBand(band);
 
         Collection<BooksPage> details = new HashSet<>();
@@ -160,7 +149,7 @@ public class PDFGenarator {
         return jasperPrint;
     }
 
-    JRDesignImage createImages(Selections selections, JasperDesign jasperDesign) {
+    JRDesignImage createEditableImages(Selections selections, JasperDesign jasperDesign) {
         JRDesignExpression expression = new JRDesignExpression();
         //       expression.setText("\"https://wikunum-lite-generic.s3.ap-south-1.amazonaws.com/storeImages/ADPanicBuying1665638023.jpeg\"");
         expression.setText("\"" + selections.getImage() + "\"");
@@ -173,9 +162,8 @@ public class PDFGenarator {
         return image;
     }
 
-    JRDesignImage createImage(Map<String, String> configMap, JasperDesign jasperDesign) {
+    JRDesignImage createNonEditableImages(Map<String, String> configMap, JasperDesign jasperDesign) {
         JRDesignExpression expression = new JRDesignExpression();
-        //       expression.setText("\"https://wikunum-lite-generic.s3.ap-south-1.amazonaws.com/storeImages/ADPanicBuying1665638023.jpeg\"");
         expression.setText("\"" + configMap.get("image") + "\"");
         JRDesignImage image = new JRDesignImage(jasperDesign);
         image.setX(parseInt(configMap.get("x")));
@@ -186,26 +174,44 @@ public class PDFGenarator {
         return image;
     }
 
-    JRDesignStaticText createText(String text, String editableTextCode, int x, int y) {
-        String before = "{{userName}}'s Best Friends";
-        System.out.println(before);
-        String after = before.replace("{{userName}}", text);
-
+    JRDesignStaticText createEditableText(String text, Set<SelectedOptionDetails> editableTex, Map<String, String> configMap) {
+        for (SelectedOptionDetails selectedOptionDetails : editableTex) {
+            String target = selectedOptionDetails.getCode();
+            String value = selectedOptionDetails.getSelectedValue();
+            text = text.replace(target, value);
+        }
         JRDesignStaticText staticText = new JRDesignStaticText();
 
-        staticText.setX(x);
-        staticText.setY(y);
-        staticText.setWidth(500);
-        staticText.setHeight(200);
-        staticText.setFontSize(50F);
+        staticText.setX(parseInt(configMap.get("x")));
+        staticText.setY(parseInt(configMap.get("y")));
+        staticText.setWidth(parseInt(configMap.get("width")));
+        staticText.setHeight(parseInt(configMap.get("height")));
+        staticText.setFontSize(Float.parseFloat(configMap.get("fontSize")));
         staticText.setForecolor(Color.BLACK);
-        staticText.setFontName("Dancing Script");
-        staticText.setPdfFontName("https://alphadevs-logos.s3.ap-south-1.amazonaws.com/DancingScript-Bold.ttf");
+        staticText.setPdfFontName(configMap.get("fontName"));
         staticText.setPdfEncoding("Cp1252");
         staticText.setPdfEmbedded(true);
         staticText.setMode(ModeEnum.TRANSPARENT);
         staticText.setHorizontalTextAlign(HorizontalTextAlignEnum.CENTER);
-        staticText.setText(after);
+        staticText.setText(text);
+        return staticText;
+    }
+
+    JRDesignStaticText createNonEditableText(String text, Map<String, String> configMap) {
+        JRDesignStaticText staticText = new JRDesignStaticText();
+
+        staticText.setX(parseInt(configMap.get("x")));
+        staticText.setY(parseInt(configMap.get("y")));
+        staticText.setWidth(parseInt(configMap.get("width")));
+        staticText.setHeight(parseInt(configMap.get("height")));
+        staticText.setFontSize(Float.parseFloat(configMap.get("fontSize")));
+        staticText.setForecolor(Color.BLACK);
+        staticText.setPdfFontName(configMap.get("fontName"));
+        staticText.setPdfEncoding("Cp1252");
+        staticText.setPdfEmbedded(true);
+        staticText.setMode(ModeEnum.TRANSPARENT);
+        staticText.setHorizontalTextAlign(HorizontalTextAlignEnum.CENTER);
+        staticText.setText(text);
         return staticText;
     }
 
@@ -246,5 +252,19 @@ public class PDFGenarator {
 
     SelectedOption getCustomerSelectedOption() {
         return null;
+    }
+
+    Map<String, String> getTemplateText(String customerCode) {
+        Map<String, String> templateText = new HashMap<>();
+        SelectedOption selectedOption = selectedOptionRepository.findOneByCodeAndBooks_Code(customerCode, "DEMO");
+        Optional<Books> books = booksRepository.findOneByCode("DEMO");
+        if (books.isPresent()) {
+            Books book = books.get();
+            for (SelectedOptionDetails selectedOptionDetails : selectedOption.getSelectedOptionDetails()) {}
+        } else {
+            throw new BadRequestAlertException("A new books cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+
+        return templateText;
     }
 }

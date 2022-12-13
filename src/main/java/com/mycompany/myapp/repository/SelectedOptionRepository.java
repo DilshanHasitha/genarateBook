@@ -30,5 +30,5 @@ public interface SelectedOptionRepository
         return this.fetchBagRelationships(this.findAll(pageable));
     }
 
-    SelectedOption findOneByCodeAndBooks_Code(String characterCode, String bookCode);
+    SelectedOption findOneByCodeAndBooks_Code(String Code, String bookCode);
 }

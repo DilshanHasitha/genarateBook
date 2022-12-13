@@ -108,7 +108,7 @@ public class Books implements Serializable {
     @JsonIgnoreProperties(value = { "books" }, allowSetters = true)
     private Set<BooksVariables> booksVariables = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_books__avatar_attributes",
         joinColumns = @JoinColumn(name = "books_id"),

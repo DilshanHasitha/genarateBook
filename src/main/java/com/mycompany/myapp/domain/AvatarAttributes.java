@@ -38,7 +38,7 @@ public class AvatarAttributes implements Serializable {
     @Column(name = "avatar_attributes_code")
     private String avatarAttributesCode;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_avatar_attributes__avatar_charactor",
         joinColumns = @JoinColumn(name = "avatar_attributes_id"),
@@ -67,7 +67,7 @@ public class AvatarAttributes implements Serializable {
     )
     private Set<Books> books = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_avatar_attributes__styles",
         joinColumns = @JoinColumn(name = "avatar_attributes_id"),

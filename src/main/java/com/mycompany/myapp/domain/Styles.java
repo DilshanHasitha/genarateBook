@@ -53,7 +53,7 @@ public class Styles implements Serializable {
     @Column(name = "is_text", nullable = false)
     private Boolean isText;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_styles__styles_details",
         joinColumns = @JoinColumn(name = "styles_id"),
