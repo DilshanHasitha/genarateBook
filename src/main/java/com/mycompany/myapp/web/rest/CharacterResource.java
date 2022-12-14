@@ -133,11 +133,10 @@ public class CharacterResource {
     /**
      * {@code GET  /characters} : get all the characters.
      *
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of characters in body.
      */
     @GetMapping("/characters")
-    public List<Character> getAllCharacters(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public List<Character> getAllCharacters() {
         log.debug("REST request to get all Characters");
         return characterService.findAll();
     }

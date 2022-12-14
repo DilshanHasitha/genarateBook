@@ -59,6 +59,9 @@ class SelectionsResourceIT {
     private static final String DEFAULT_AVATAR_ATTRIBUTES_CODE = "AAAAAAAAAA";
     private static final String UPDATED_AVATAR_ATTRIBUTES_CODE = "BBBBBBBBBB";
 
+    private static final String DEFAULT_AVATAR_STYLE = "AAAAAAAAAA";
+    private static final String UPDATED_AVATAR_STYLE = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/selections";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -93,7 +96,8 @@ class SelectionsResourceIT {
             .y(DEFAULT_Y)
             .isActive(DEFAULT_IS_ACTIVE)
             .width(DEFAULT_WIDTH)
-            .avatarAttributesCode(DEFAULT_AVATAR_ATTRIBUTES_CODE);
+            .avatarAttributesCode(DEFAULT_AVATAR_ATTRIBUTES_CODE)
+            .avatarStyle(DEFAULT_AVATAR_STYLE);
         return selections;
     }
 
@@ -114,7 +118,8 @@ class SelectionsResourceIT {
             .y(UPDATED_Y)
             .isActive(UPDATED_IS_ACTIVE)
             .width(UPDATED_WIDTH)
-            .avatarAttributesCode(UPDATED_AVATAR_ATTRIBUTES_CODE);
+            .avatarAttributesCode(UPDATED_AVATAR_ATTRIBUTES_CODE)
+            .avatarStyle(UPDATED_AVATAR_STYLE);
         return selections;
     }
 
@@ -146,6 +151,7 @@ class SelectionsResourceIT {
         assertThat(testSelections.getIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
         assertThat(testSelections.getWidth()).isEqualTo(DEFAULT_WIDTH);
         assertThat(testSelections.getAvatarAttributesCode()).isEqualTo(DEFAULT_AVATAR_ATTRIBUTES_CODE);
+        assertThat(testSelections.getAvatarStyle()).isEqualTo(DEFAULT_AVATAR_STYLE);
     }
 
     @Test
@@ -187,7 +193,8 @@ class SelectionsResourceIT {
             .andExpect(jsonPath("$.[*].y").value(hasItem(DEFAULT_Y)))
             .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
             .andExpect(jsonPath("$.[*].width").value(hasItem(DEFAULT_WIDTH)))
-            .andExpect(jsonPath("$.[*].avatarAttributesCode").value(hasItem(DEFAULT_AVATAR_ATTRIBUTES_CODE)));
+            .andExpect(jsonPath("$.[*].avatarAttributesCode").value(hasItem(DEFAULT_AVATAR_ATTRIBUTES_CODE)))
+            .andExpect(jsonPath("$.[*].avatarStyle").value(hasItem(DEFAULT_AVATAR_STYLE)));
     }
 
     @Test
@@ -211,7 +218,8 @@ class SelectionsResourceIT {
             .andExpect(jsonPath("$.y").value(DEFAULT_Y))
             .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()))
             .andExpect(jsonPath("$.width").value(DEFAULT_WIDTH))
-            .andExpect(jsonPath("$.avatarAttributesCode").value(DEFAULT_AVATAR_ATTRIBUTES_CODE));
+            .andExpect(jsonPath("$.avatarAttributesCode").value(DEFAULT_AVATAR_ATTRIBUTES_CODE))
+            .andExpect(jsonPath("$.avatarStyle").value(DEFAULT_AVATAR_STYLE));
     }
 
     @Test
@@ -243,7 +251,8 @@ class SelectionsResourceIT {
             .y(UPDATED_Y)
             .isActive(UPDATED_IS_ACTIVE)
             .width(UPDATED_WIDTH)
-            .avatarAttributesCode(UPDATED_AVATAR_ATTRIBUTES_CODE);
+            .avatarAttributesCode(UPDATED_AVATAR_ATTRIBUTES_CODE)
+            .avatarStyle(UPDATED_AVATAR_STYLE);
 
         restSelectionsMockMvc
             .perform(
@@ -267,6 +276,7 @@ class SelectionsResourceIT {
         assertThat(testSelections.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
         assertThat(testSelections.getWidth()).isEqualTo(UPDATED_WIDTH);
         assertThat(testSelections.getAvatarAttributesCode()).isEqualTo(UPDATED_AVATAR_ATTRIBUTES_CODE);
+        assertThat(testSelections.getAvatarStyle()).isEqualTo(UPDATED_AVATAR_STYLE);
     }
 
     @Test
@@ -343,7 +353,8 @@ class SelectionsResourceIT {
             .x(UPDATED_X)
             .y(UPDATED_Y)
             .isActive(UPDATED_IS_ACTIVE)
-            .width(UPDATED_WIDTH);
+            .width(UPDATED_WIDTH)
+            .avatarStyle(UPDATED_AVATAR_STYLE);
 
         restSelectionsMockMvc
             .perform(
@@ -367,6 +378,7 @@ class SelectionsResourceIT {
         assertThat(testSelections.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
         assertThat(testSelections.getWidth()).isEqualTo(UPDATED_WIDTH);
         assertThat(testSelections.getAvatarAttributesCode()).isEqualTo(DEFAULT_AVATAR_ATTRIBUTES_CODE);
+        assertThat(testSelections.getAvatarStyle()).isEqualTo(UPDATED_AVATAR_STYLE);
     }
 
     @Test
@@ -391,7 +403,8 @@ class SelectionsResourceIT {
             .y(UPDATED_Y)
             .isActive(UPDATED_IS_ACTIVE)
             .width(UPDATED_WIDTH)
-            .avatarAttributesCode(UPDATED_AVATAR_ATTRIBUTES_CODE);
+            .avatarAttributesCode(UPDATED_AVATAR_ATTRIBUTES_CODE)
+            .avatarStyle(UPDATED_AVATAR_STYLE);
 
         restSelectionsMockMvc
             .perform(
@@ -415,6 +428,7 @@ class SelectionsResourceIT {
         assertThat(testSelections.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
         assertThat(testSelections.getWidth()).isEqualTo(UPDATED_WIDTH);
         assertThat(testSelections.getAvatarAttributesCode()).isEqualTo(UPDATED_AVATAR_ATTRIBUTES_CODE);
+        assertThat(testSelections.getAvatarStyle()).isEqualTo(UPDATED_AVATAR_STYLE);
     }
 
     @Test

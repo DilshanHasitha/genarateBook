@@ -5,28 +5,29 @@ export const sampleWithRequiredData: ISelections = {
 };
 
 export const sampleWithPartialData: ISelections = {
-  id: 43770,
-  avatarCode: 'input Gloves',
-  optionCode: 'Refined Investor orange',
-  image: '24/7 sensor Kids',
-  x: 58690,
-  y: 67685,
+  id: 65665,
+  avatarCode: 'compress capability Refined',
+  optionCode: 'Credit leverage 24/7',
+  image: 'Road Card BEAC',
+  x: 1637,
+  y: 72278,
   isActive: true,
-  width: 73908,
+  width: 90272,
 };
 
 export const sampleWithFullData: ISelections = {
-  id: 1637,
-  avatarCode: 'invoice Soft RAM',
-  styleCode: 'payment sky',
-  optionCode: 'Luxembourg quantifying experiences',
-  image: 'morph iterate',
-  height: 5366,
-  x: 22911,
-  y: 46087,
+  id: 14123,
+  avatarCode: 'cross-platform',
+  styleCode: 'help-desk',
+  optionCode: "d'Ivoire magenta",
+  image: 'invoice Account',
+  height: 8960,
+  x: 51575,
+  y: 40252,
   isActive: false,
-  width: 92732,
-  avatarAttributesCode: 'orange Director Regional',
+  width: 21421,
+  avatarAttributesCode: 'Global Multi-lateral',
+  avatarStyle: 'Manager Cambridgeshire Unbranded',
 };
 
 export const sampleWithNewData: NewSelections = {

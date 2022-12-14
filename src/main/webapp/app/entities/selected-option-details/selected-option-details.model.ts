@@ -6,6 +6,8 @@ export interface ISelectedOptionDetails {
   name?: string | null;
   selectedValue?: string | null;
   isActive?: boolean | null;
+  selectedStyleCode?: string | null;
+  selectedOptionCode?: string | null;
   selectedOptions?: Pick<ISelectedOption, 'id'>[] | null;
 }
 

@@ -127,6 +127,15 @@ public class AvatarCharactorQueryService extends QueryService<AvatarCharactor> {
                         )
                     );
             }
+            if (criteria.getCharacterId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getCharacterId(),
+                            root -> root.join(AvatarCharactor_.character, JoinType.LEFT).get(Character_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

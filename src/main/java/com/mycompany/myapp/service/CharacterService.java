@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,15 +85,6 @@ public class CharacterService {
     }
 
     /**
-     * Get all the characters with eager load of many-to-many relationships.
-     *
-     * @return the list of entities.
-     */
-    public Page<Character> findAllWithEagerRelationships(Pageable pageable) {
-        return characterRepository.findAllWithEagerRelationships(pageable);
-    }
-
-    /**
      * Get one character by id.
      *
      * @param id the id of the entity.
@@ -104,7 +93,7 @@ public class CharacterService {
     @Transactional(readOnly = true)
     public Optional<Character> findOne(Long id) {
         log.debug("Request to get Character : {}", id);
-        return characterRepository.findOneWithEagerRelationships(id);
+        return characterRepository.findById(id);
     }
 
     /**

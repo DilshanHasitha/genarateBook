@@ -1,5 +1,6 @@
 import { IAvatarAttributes } from 'app/entities/avatar-attributes/avatar-attributes.model';
 import { ILayerGroup } from 'app/entities/layer-group/layer-group.model';
+import { ICharacter } from 'app/entities/character/character.model';
 
 export interface IAvatarCharactor {
   id: number;
@@ -13,6 +14,7 @@ export interface IAvatarCharactor {
   y?: number | null;
   avatarAttributes?: Pick<IAvatarAttributes, 'id'>[] | null;
   layerGroup?: Pick<ILayerGroup, 'id'> | null;
+  character?: Pick<ICharacter, 'id' | 'code'> | null;
 }
 
 export type NewAvatarCharactor = Omit<IAvatarCharactor, 'id'> & { id: null };

@@ -32,23 +32,6 @@
           <label class="form-label" for="field_isActive">Is Active</label>
           <input type="checkbox" class="form-check" name="isActive" id="field_isActive" data-cy="isActive" formControlName="isActive" />
         </div>
-
-        <div class="row mb-3">
-          <label for="field_avatarCharactors">Avatar Charactor</label>
-          <select
-            class="form-control"
-            id="field_avatarCharactors"
-            data-cy="avatarCharactor"
-            multiple
-            name="avatarCharactors"
-            formControlName="avatarCharactors"
-            [compareWith]="compareAvatarCharactor"
-          >
-            <option [ngValue]="avatarCharactorOption" *ngFor="let avatarCharactorOption of avatarCharactorsSharedCollection">
-              {{ avatarCharactorOption.id }}
-            </option>
-          </select>
-        </div>
       </div>
 
       <div>

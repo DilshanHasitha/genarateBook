@@ -9,8 +9,6 @@ import { of, Subject, from } from 'rxjs';
 import { CharacterFormService } from './character-form.service';
 import { CharacterService } from '../service/character.service';
 import { ICharacter } from '../character.model';
-import { IAvatarCharactor } from 'app/entities/avatar-charactor/avatar-charactor.model';
-import { AvatarCharactorService } from 'app/entities/avatar-charactor/service/avatar-charactor.service';
 
 import { CharacterUpdateComponent } from './character-update.component';
 
@@ -20,7 +18,6 @@ describe('Character Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let characterFormService: CharacterFormService;
   let characterService: CharacterService;
-  let avatarCharactorService: AvatarCharactorService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -43,43 +40,17 @@ describe('Character Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     characterFormService = TestBed.inject(CharacterFormService);
     characterService = TestBed.inject(CharacterService);
-    avatarCharactorService = TestBed.inject(AvatarCharactorService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('Should call AvatarCharactor query and add missing value', () => {
-      const character: ICharacter = { id: 456 };
-      const avatarCharactors: IAvatarCharactor[] = [{ id: 92140 }];
-      character.avatarCharactors = avatarCharactors;
-
-      const avatarCharactorCollection: IAvatarCharactor[] = [{ id: 98096 }];
-      jest.spyOn(avatarCharactorService, 'query').mockReturnValue(of(new HttpResponse({ body: avatarCharactorCollection })));
-      const additionalAvatarCharactors = [...avatarCharactors];
-      const expectedCollection: IAvatarCharactor[] = [...additionalAvatarCharactors, ...avatarCharactorCollection];
-      jest.spyOn(avatarCharactorService, 'addAvatarCharactorToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-      activatedRoute.data = of({ character });
-      comp.ngOnInit();
-
-      expect(avatarCharactorService.query).toHaveBeenCalled();
-      expect(avatarCharactorService.addAvatarCharactorToCollectionIfMissing).toHaveBeenCalledWith(
-        avatarCharactorCollection,
-        ...additionalAvatarCharactors.map(expect.objectContaining)
-      );
-      expect(comp.avatarCharactorsSharedCollection).toEqual(expectedCollection);
-    });
-
     it('Should update editForm', () => {
       const character: ICharacter = { id: 456 };
-      const avatarCharactor: IAvatarCharactor = { id: 19459 };
-      character.avatarCharactors = [avatarCharactor];
 
       activatedRoute.data = of({ character });
       comp.ngOnInit();
 
-      expect(comp.avatarCharactorsSharedCollection).toContain(avatarCharactor);
       expect(comp.character).toEqual(character);
     });
   });
@@ -149,18 +120,6 @@ describe('Character Management Update Component', () => {
       expect(characterService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('Compare relationships', () => {
-    describe('compareAvatarCharactor', () => {
-      it('Should forward to avatarCharactorService', () => {
-        const entity = { id: 123 };
-        const entity2 = { id: 456 };
-        jest.spyOn(avatarCharactorService, 'compareAvatarCharactor');
-        comp.compareAvatarCharactor(entity, entity2);
-        expect(avatarCharactorService.compareAvatarCharactor).toHaveBeenCalledWith(entity, entity2);
-      });
     });
   });
 });

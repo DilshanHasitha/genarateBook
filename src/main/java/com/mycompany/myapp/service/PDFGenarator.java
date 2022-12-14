@@ -43,6 +43,7 @@ public class PDFGenarator {
 
     public byte[] pdfCreator(Books books) throws IOException, JRException {
         List<JasperPrint> jasperPrintList = new ArrayList<JasperPrint>();
+        Map<String, String> getTemplateText = getTemplateText("CUSTOMER1");
 
         JasperDesign jasperDesign = createPage(books);
         // is page size null
@@ -58,7 +59,7 @@ public class PDFGenarator {
             BooksPage booksPages = sortPageLayer(booksPage);
             //create page & add to jasper list
 
-            jasperPrint = createPageInner(booksPages, jasperDesign, books);
+            jasperPrint = createPageInner(booksPages, jasperDesign, books, getTemplateText);
         }
         jasperPrintList.add(jasperPrint);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -88,7 +89,7 @@ public class PDFGenarator {
         return jasperDesign;
     }
 
-    JasperPrint createPageInner(BooksPage booksPage, JasperDesign jasperDesign, Books books) {
+    JasperPrint createPageInner(BooksPage booksPage, JasperDesign jasperDesign, Books books, Map<String, String> templateText) {
         JRDesignBand band = new JRDesignBand();
         band.setHeight(books.getPageSize().getHeight());
         //        band.setSplitType(SplitTypeEnum.STRETCH);
@@ -103,27 +104,30 @@ public class PDFGenarator {
 
             if (!layers.getIsText()) {
                 if (layers.getIsEditable()) {
-                    String characterCode = configMap.get("characterCode");
-                    SelectedOption selectedOption = selectedOptionRepository.findOneByCodeAndBooks_Code("A", "DEMO");
-                    Map<String, String> selectedMap = new HashMap<>();
+                    SelectedOption selectedOption = selectedOptionRepository.findOneByCodeAndBooks_Code("CUSTOMER1", "DEMO");
                     for (SelectedOptionDetails selectedOptionDetails : selectedOption.getSelectedOptionDetails()) {
-                        selectedMap.put(selectedOptionDetails.getName(), selectedOptionDetails.getSelectedValue());
+                        if (!selectedOptionDetails.getName().isEmpty() && !selectedOptionDetails.getCode().isEmpty()) {
+                            if (
+                                configMap.get("AvatarAttributesCode").equals(selectedOptionDetails.getName()) &&
+                                "AVATAR1".equals(selectedOptionDetails.getCode())
+                            ) {
+                                Selections selections = selectionsRepository.findOneByAvatarCodeAndStyleCodeAndOptionCodeAndAvatarAttributesCode(
+                                    "AVATAR1",
+                                    selectedOptionDetails.getSelectedStyleCode(),
+                                    selectedOptionDetails.getSelectedOptionCode(),
+                                    configMap.get("characterCode")
+                                );
+                                band.addElement(layers.getLayerNo(), createEditableImages(selections, jasperDesign));
+                            }
+                        }
                     }
-                    Selections selections = selectionsRepository.findOneByAvatarCodeAndStyleCodeAndOptionCode(
-                        "A",
-                        selectedMap.get("styleCode"),
-                        selectedMap.get("optionCode")
-                    );
-                    band.addElement(layers.getLayerNo(), createEditableImages(selections, jasperDesign));
                 } else {
                     band.addElement(layers.getLayerNo(), createNonEditableImages(configMap, jasperDesign));
                 }
             } else {
                 if (layers.getIsEditable()) {
                     String text = configMap.get("text");
-                    SelectedOption selectedOption = selectedOptionRepository.findOneByCodeAndBooks_Code("editableText", "DEMO");
-                    Set<SelectedOptionDetails> editableText = selectedOption.getSelectedOptionDetails();
-                    band.addElement(layers.getLayerNo(), createEditableText(text, editableText, configMap));
+                    band.addElement(layers.getLayerNo(), createEditableText(text, templateText, configMap));
                 } else {
                     String text = configMap.get("text");
                     band.addElement(layers.getLayerNo(), createNonEditableText(text, configMap));
@@ -174,11 +178,12 @@ public class PDFGenarator {
         return image;
     }
 
-    JRDesignStaticText createEditableText(String text, Set<SelectedOptionDetails> editableTex, Map<String, String> configMap) {
-        for (SelectedOptionDetails selectedOptionDetails : editableTex) {
-            String target = selectedOptionDetails.getName();
-            String value = selectedOptionDetails.getSelectedValue();
+    JRDesignStaticText createEditableText(String text, Map<String, String> templateText, Map<String, String> configMap) {
+        for (Map.Entry<String, String> entry : templateText.entrySet()) {
+            String target = entry.getKey();
+            String value = entry.getValue();
             text = text.replace(target, value);
+            // do something with key and/or tab
         }
         JRDesignStaticText staticText = new JRDesignStaticText();
 
@@ -187,7 +192,7 @@ public class PDFGenarator {
         staticText.setWidth(parseInt(configMap.get("width")));
         staticText.setHeight(parseInt(configMap.get("height")));
         staticText.setFontSize(Float.parseFloat(configMap.get("fontSize")));
-        staticText.setForecolor(Color.BLACK);
+        staticText.setForecolor(getColorByName("red"));
         staticText.setPdfFontName(configMap.get("fontName"));
         staticText.setPdfEncoding("Cp1252");
         staticText.setPdfEmbedded(true);
@@ -199,13 +204,12 @@ public class PDFGenarator {
 
     JRDesignStaticText createNonEditableText(String text, Map<String, String> configMap) {
         JRDesignStaticText staticText = new JRDesignStaticText();
-
         staticText.setX(parseInt(configMap.get("x")));
         staticText.setY(parseInt(configMap.get("y")));
         staticText.setWidth(parseInt(configMap.get("width")));
         staticText.setHeight(parseInt(configMap.get("height")));
         staticText.setFontSize(Float.parseFloat(configMap.get("fontSize")));
-        staticText.setForecolor(Color.BLACK);
+        staticText.setForecolor(Color.getColor("white"));
         staticText.setPdfFontName(configMap.get("fontName"));
         staticText.setPdfEncoding("Cp1252");
         staticText.setPdfEmbedded(true);
@@ -262,8 +266,13 @@ public class PDFGenarator {
             Books book = books.get();
             for (SelectedOptionDetails selectedOptionDetails : selectedOption.getSelectedOptionDetails()) {
                 for (AvatarAttributes avatarAttributes : book.getAvatarAttributes()) {
-                    if (avatarAttributes.getDescription() == selectedOptionDetails.getName()) {
-                        if (!avatarAttributes.getTemplateText().isEmpty() && avatarAttributes.getOptionType().getCode() == "TEXT") {
+                    if (avatarAttributes.getDescription().equals(selectedOptionDetails.getName())) {
+                        if (
+                            avatarAttributes.getTemplateText() != null &&
+                            !avatarAttributes.getTemplateText().isEmpty() &&
+                            avatarAttributes.getOptionType().getCode() != null &&
+                            "TEXT".equals(avatarAttributes.getOptionType().getCode())
+                        ) {
                             if (!selectedOptionDetails.getSelectedValue().isEmpty()) {
                                 templateText.put(avatarAttributes.getTemplateText(), selectedOptionDetails.getSelectedValue());
                             }
@@ -283,5 +292,14 @@ public class PDFGenarator {
             throw new BadRequestAlertException("A new books cannot already have an ID", ENTITY_NAME, "idexists");
         }
         return templateText;
+    }
+
+    public Color getColorByName(String name) {
+        try {
+            return (Color) Color.class.getField(name.toUpperCase()).get(null);
+        } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

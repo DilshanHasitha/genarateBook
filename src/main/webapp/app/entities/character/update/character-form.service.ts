@@ -14,14 +14,13 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type CharacterFormGroupInput = ICharacter | PartialWithRequiredKeyOf<NewCharacter>;
 
-type CharacterFormDefaults = Pick<NewCharacter, 'id' | 'isActive' | 'avatarCharactors'>;
+type CharacterFormDefaults = Pick<NewCharacter, 'id' | 'isActive'>;
 
 type CharacterFormGroupContent = {
   id: FormControl<ICharacter['id'] | NewCharacter['id']>;
   code: FormControl<ICharacter['code']>;
   description: FormControl<ICharacter['description']>;
   isActive: FormControl<ICharacter['isActive']>;
-  avatarCharactors: FormControl<ICharacter['avatarCharactors']>;
 };
 
 export type CharacterFormGroup = FormGroup<CharacterFormGroupContent>;
@@ -44,7 +43,6 @@ export class CharacterFormService {
       code: new FormControl(characterRawValue.code),
       description: new FormControl(characterRawValue.description),
       isActive: new FormControl(characterRawValue.isActive),
-      avatarCharactors: new FormControl(characterRawValue.avatarCharactors ?? []),
     });
   }
 
@@ -66,7 +64,6 @@ export class CharacterFormService {
     return {
       id: null,
       isActive: false,
-      avatarCharactors: [],
     };
   }
 }

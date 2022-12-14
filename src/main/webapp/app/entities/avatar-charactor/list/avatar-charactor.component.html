@@ -94,6 +94,12 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
+          <th scope="col" jhiSortBy="character.code">
+            <div class="d-flex">
+              <span>Character</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -113,6 +119,11 @@
           <td>
             <div *ngIf="avatarCharactor.layerGroup">
               <a [routerLink]="['/layer-group', avatarCharactor.layerGroup.id, 'view']">{{ avatarCharactor.layerGroup.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="avatarCharactor.character">
+              <a [routerLink]="['/character', avatarCharactor.character.id, 'view']">{{ avatarCharactor.character.code }}</a>
             </div>
           </td>
           <td class="text-end">

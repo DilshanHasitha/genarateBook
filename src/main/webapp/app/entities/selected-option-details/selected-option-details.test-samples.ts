@@ -5,18 +5,21 @@ export const sampleWithRequiredData: ISelectedOptionDetails = {
 };
 
 export const sampleWithPartialData: ISelectedOptionDetails = {
-  id: 40958,
-  code: 'withdrawal Specialist Developer',
-  name: 'National Agent',
+  id: 64602,
+  code: 'website toolset',
+  name: 'Underpass Zimbabwe',
   isActive: true,
+  selectedOptionCode: 'index Fantastic River',
 };
 
 export const sampleWithFullData: ISelectedOptionDetails = {
-  id: 76978,
-  code: 'blue high-level',
-  name: 'Myanmar Costa transmit',
-  selectedValue: 'hardware intangible',
+  id: 54339,
+  code: 'connecting Right-sized',
+  name: 'e-tailers',
+  selectedValue: 'intangible',
   isActive: true,
+  selectedStyleCode: 'primary',
+  selectedOptionCode: 'Designer Account quantify',
 };
 
 export const sampleWithNewData: NewSelectedOptionDetails = {

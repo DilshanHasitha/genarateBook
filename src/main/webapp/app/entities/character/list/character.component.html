@@ -56,12 +56,6 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="avatarCharactor.id">
-            <div class="d-flex">
-              <span>Avatar Charactor</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -73,12 +67,6 @@
           <td>{{ character.code }}</td>
           <td>{{ character.description }}</td>
           <td>{{ character.isActive }}</td>
-          <td>
-            <span *ngFor="let avatarCharactor of character.avatarCharactors; let last = last">
-              <a class="form-control-static" [routerLink]="['/avatar-charactor', avatarCharactor.id, 'view']">{{ avatarCharactor.id }}</a
-              >{{ last ? '' : ', ' }}
-            </span>
-          </td>
           <td class="text-end">
             <div class="btn-group">
               <button

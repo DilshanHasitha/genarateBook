@@ -11,5 +11,10 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface SelectionsRepository extends JpaRepository<Selections, Long> {
-    Selections findOneByAvatarCodeAndStyleCodeAndOptionCode(String avatarCode, String styleCode, String optionCode);
+    Selections findOneByAvatarCodeAndStyleCodeAndOptionCodeAndAvatarAttributesCode(
+        String avatarCode,
+        String styleCode,
+        String optionCode,
+        String angel
+    );
 }

@@ -20,15 +20,6 @@
   "name": "Character",
   "pagination": "no",
   "readOnly": false,
-  "relationships": [
-    {
-      "otherEntityField": "id",
-      "otherEntityName": "avatarCharactor",
-      "otherEntityRelationshipName": "character",
-      "ownerSide": true,
-      "relationshipName": "avatarCharactor",
-      "relationshipType": "many-to-many"
-    }
-  ],
+  "relationships": [],
   "service": "serviceClass"
 }

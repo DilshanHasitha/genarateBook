@@ -52,7 +52,7 @@ public class SelectedOption implements Serializable {
     @ManyToOne
     private Customer customer;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_selected_option__selected_option_details",
         joinColumns = @JoinColumn(name = "selected_option_id"),

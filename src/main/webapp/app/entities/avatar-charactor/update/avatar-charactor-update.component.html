@@ -77,6 +77,23 @@
             </option>
           </select>
         </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_character">Character</label>
+          <select
+            class="form-control"
+            id="field_character"
+            data-cy="character"
+            name="character"
+            formControlName="character"
+            [compareWith]="compareCharacter"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="characterOption" *ngFor="let characterOption of charactersSharedCollection">
+              {{ characterOption.code }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div>

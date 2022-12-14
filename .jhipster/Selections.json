@@ -41,6 +41,10 @@
     {
       "fieldName": "avatarAttributesCode",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "avatarStyle",
+      "fieldType": "String"
     }
   ],
   "jpaMetamodelFiltering": false,

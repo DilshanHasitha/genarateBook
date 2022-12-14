@@ -98,6 +98,16 @@ public class SelectedOptionDetailsQueryService extends QueryService<SelectedOpti
             if (criteria.getIsActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getIsActive(), SelectedOptionDetails_.isActive));
             }
+            if (criteria.getSelectedStyleCode() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getSelectedStyleCode(), SelectedOptionDetails_.selectedStyleCode));
+            }
+            if (criteria.getSelectedOptionCode() != null) {
+                specification =
+                    specification.and(
+                        buildStringSpecification(criteria.getSelectedOptionCode(), SelectedOptionDetails_.selectedOptionCode)
+                    );
+            }
             if (criteria.getSelectedOptionId() != null) {
                 specification =
                     specification.and(

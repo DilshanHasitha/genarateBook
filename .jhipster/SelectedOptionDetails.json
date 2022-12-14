@@ -20,6 +20,14 @@
     {
       "fieldName": "isActive",
       "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "selectedStyleCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "selectedOptionCode",
+      "fieldType": "String"
     }
   ],
   "fluentMethods": true,

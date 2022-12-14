@@ -13,5 +13,11 @@
                                  constraintName="fk_avatar_charactor__layer_group_id"
                                  referencedColumnNames="id"
                                  referencedTableName="layer_group"/>
+
+        <addForeignKeyConstraint baseColumnNames="character_id"
+                                 baseTableName="avatar_charactor"
+                                 constraintName="fk_avatar_charactor__character_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_character"/>
     </changeSet>
 </databaseChangeLog>

@@ -36,6 +36,12 @@ public class SelectedOptionDetails implements Serializable {
     @Column(name = "is_active")
     private Boolean isActive;
 
+    @Column(name = "selected_style_code")
+    private String selectedStyleCode;
+
+    @Column(name = "selected_option_code")
+    private String selectedOptionCode;
+
     @ManyToMany(mappedBy = "selectedOptionDetails")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "books", "customer", "selectedOptionDetails" }, allowSetters = true)
@@ -108,6 +114,32 @@ public class SelectedOptionDetails implements Serializable {
         this.isActive = isActive;
     }
 
+    public String getSelectedStyleCode() {
+        return this.selectedStyleCode;
+    }
+
+    public SelectedOptionDetails selectedStyleCode(String selectedStyleCode) {
+        this.setSelectedStyleCode(selectedStyleCode);
+        return this;
+    }
+
+    public void setSelectedStyleCode(String selectedStyleCode) {
+        this.selectedStyleCode = selectedStyleCode;
+    }
+
+    public String getSelectedOptionCode() {
+        return this.selectedOptionCode;
+    }
+
+    public SelectedOptionDetails selectedOptionCode(String selectedOptionCode) {
+        this.setSelectedOptionCode(selectedOptionCode);
+        return this;
+    }
+
+    public void setSelectedOptionCode(String selectedOptionCode) {
+        this.selectedOptionCode = selectedOptionCode;
+    }
+
     public Set<SelectedOption> getSelectedOptions() {
         return this.selectedOptions;
     }
@@ -167,6 +199,8 @@ public class SelectedOptionDetails implements Serializable {
             ", name='" + getName() + "'" +
             ", selectedValue='" + getSelectedValue() + "'" +
             ", isActive='" + getIsActive() + "'" +
+            ", selectedStyleCode='" + getSelectedStyleCode() + "'" +
+            ", selectedOptionCode='" + getSelectedOptionCode() + "'" +
             "}";
     }
 }

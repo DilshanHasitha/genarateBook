@@ -30,6 +30,14 @@
         <dd>
           <span>{{ selectedOptionDetails.isActive }}</span>
         </dd>
+        <dt><span>Selected Style Code</span></dt>
+        <dd>
+          <span>{{ selectedOptionDetails.selectedStyleCode }}</span>
+        </dd>
+        <dt><span>Selected Option Code</span></dt>
+        <dd>
+          <span>{{ selectedOptionDetails.selectedOptionCode }}</span>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

@@ -43,6 +43,12 @@ class SelectedOptionDetailsResourceIT {
     private static final Boolean DEFAULT_IS_ACTIVE = false;
     private static final Boolean UPDATED_IS_ACTIVE = true;
 
+    private static final String DEFAULT_SELECTED_STYLE_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_SELECTED_STYLE_CODE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_SELECTED_OPTION_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_SELECTED_OPTION_CODE = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/selected-option-details";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -71,7 +77,9 @@ class SelectedOptionDetailsResourceIT {
             .code(DEFAULT_CODE)
             .name(DEFAULT_NAME)
             .selectedValue(DEFAULT_SELECTED_VALUE)
-            .isActive(DEFAULT_IS_ACTIVE);
+            .isActive(DEFAULT_IS_ACTIVE)
+            .selectedStyleCode(DEFAULT_SELECTED_STYLE_CODE)
+            .selectedOptionCode(DEFAULT_SELECTED_OPTION_CODE);
         return selectedOptionDetails;
     }
 
@@ -86,7 +94,9 @@ class SelectedOptionDetailsResourceIT {
             .code(UPDATED_CODE)
             .name(UPDATED_NAME)
             .selectedValue(UPDATED_SELECTED_VALUE)
-            .isActive(UPDATED_IS_ACTIVE);
+            .isActive(UPDATED_IS_ACTIVE)
+            .selectedStyleCode(UPDATED_SELECTED_STYLE_CODE)
+            .selectedOptionCode(UPDATED_SELECTED_OPTION_CODE);
         return selectedOptionDetails;
     }
 
@@ -116,6 +126,8 @@ class SelectedOptionDetailsResourceIT {
         assertThat(testSelectedOptionDetails.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testSelectedOptionDetails.getSelectedValue()).isEqualTo(DEFAULT_SELECTED_VALUE);
         assertThat(testSelectedOptionDetails.getIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
+        assertThat(testSelectedOptionDetails.getSelectedStyleCode()).isEqualTo(DEFAULT_SELECTED_STYLE_CODE);
+        assertThat(testSelectedOptionDetails.getSelectedOptionCode()).isEqualTo(DEFAULT_SELECTED_OPTION_CODE);
     }
 
     @Test
@@ -155,7 +167,9 @@ class SelectedOptionDetailsResourceIT {
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].selectedValue").value(hasItem(DEFAULT_SELECTED_VALUE)))
-            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())));
+            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].selectedStyleCode").value(hasItem(DEFAULT_SELECTED_STYLE_CODE)))
+            .andExpect(jsonPath("$.[*].selectedOptionCode").value(hasItem(DEFAULT_SELECTED_OPTION_CODE)));
     }
 
     @Test
@@ -173,7 +187,9 @@ class SelectedOptionDetailsResourceIT {
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.selectedValue").value(DEFAULT_SELECTED_VALUE))
-            .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()));
+            .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()))
+            .andExpect(jsonPath("$.selectedStyleCode").value(DEFAULT_SELECTED_STYLE_CODE))
+            .andExpect(jsonPath("$.selectedOptionCode").value(DEFAULT_SELECTED_OPTION_CODE));
     }
 
     @Test
@@ -430,6 +446,140 @@ class SelectedOptionDetailsResourceIT {
 
     @Test
     @Transactional
+    void getAllSelectedOptionDetailsBySelectedStyleCodeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        selectedOptionDetailsRepository.saveAndFlush(selectedOptionDetails);
+
+        // Get all the selectedOptionDetailsList where selectedStyleCode equals to DEFAULT_SELECTED_STYLE_CODE
+        defaultSelectedOptionDetailsShouldBeFound("selectedStyleCode.equals=" + DEFAULT_SELECTED_STYLE_CODE);
+
+        // Get all the selectedOptionDetailsList where selectedStyleCode equals to UPDATED_SELECTED_STYLE_CODE
+        defaultSelectedOptionDetailsShouldNotBeFound("selectedStyleCode.equals=" + UPDATED_SELECTED_STYLE_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllSelectedOptionDetailsBySelectedStyleCodeIsInShouldWork() throws Exception {
+        // Initialize the database
+        selectedOptionDetailsRepository.saveAndFlush(selectedOptionDetails);
+
+        // Get all the selectedOptionDetailsList where selectedStyleCode in DEFAULT_SELECTED_STYLE_CODE or UPDATED_SELECTED_STYLE_CODE
+        defaultSelectedOptionDetailsShouldBeFound(
+            "selectedStyleCode.in=" + DEFAULT_SELECTED_STYLE_CODE + "," + UPDATED_SELECTED_STYLE_CODE
+        );
+
+        // Get all the selectedOptionDetailsList where selectedStyleCode equals to UPDATED_SELECTED_STYLE_CODE
+        defaultSelectedOptionDetailsShouldNotBeFound("selectedStyleCode.in=" + UPDATED_SELECTED_STYLE_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllSelectedOptionDetailsBySelectedStyleCodeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        selectedOptionDetailsRepository.saveAndFlush(selectedOptionDetails);
+
+        // Get all the selectedOptionDetailsList where selectedStyleCode is not null
+        defaultSelectedOptionDetailsShouldBeFound("selectedStyleCode.specified=true");
+
+        // Get all the selectedOptionDetailsList where selectedStyleCode is null
+        defaultSelectedOptionDetailsShouldNotBeFound("selectedStyleCode.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllSelectedOptionDetailsBySelectedStyleCodeContainsSomething() throws Exception {
+        // Initialize the database
+        selectedOptionDetailsRepository.saveAndFlush(selectedOptionDetails);
+
+        // Get all the selectedOptionDetailsList where selectedStyleCode contains DEFAULT_SELECTED_STYLE_CODE
+        defaultSelectedOptionDetailsShouldBeFound("selectedStyleCode.contains=" + DEFAULT_SELECTED_STYLE_CODE);
+
+        // Get all the selectedOptionDetailsList where selectedStyleCode contains UPDATED_SELECTED_STYLE_CODE
+        defaultSelectedOptionDetailsShouldNotBeFound("selectedStyleCode.contains=" + UPDATED_SELECTED_STYLE_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllSelectedOptionDetailsBySelectedStyleCodeNotContainsSomething() throws Exception {
+        // Initialize the database
+        selectedOptionDetailsRepository.saveAndFlush(selectedOptionDetails);
+
+        // Get all the selectedOptionDetailsList where selectedStyleCode does not contain DEFAULT_SELECTED_STYLE_CODE
+        defaultSelectedOptionDetailsShouldNotBeFound("selectedStyleCode.doesNotContain=" + DEFAULT_SELECTED_STYLE_CODE);
+
+        // Get all the selectedOptionDetailsList where selectedStyleCode does not contain UPDATED_SELECTED_STYLE_CODE
+        defaultSelectedOptionDetailsShouldBeFound("selectedStyleCode.doesNotContain=" + UPDATED_SELECTED_STYLE_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllSelectedOptionDetailsBySelectedOptionCodeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        selectedOptionDetailsRepository.saveAndFlush(selectedOptionDetails);
+
+        // Get all the selectedOptionDetailsList where selectedOptionCode equals to DEFAULT_SELECTED_OPTION_CODE
+        defaultSelectedOptionDetailsShouldBeFound("selectedOptionCode.equals=" + DEFAULT_SELECTED_OPTION_CODE);
+
+        // Get all the selectedOptionDetailsList where selectedOptionCode equals to UPDATED_SELECTED_OPTION_CODE
+        defaultSelectedOptionDetailsShouldNotBeFound("selectedOptionCode.equals=" + UPDATED_SELECTED_OPTION_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllSelectedOptionDetailsBySelectedOptionCodeIsInShouldWork() throws Exception {
+        // Initialize the database
+        selectedOptionDetailsRepository.saveAndFlush(selectedOptionDetails);
+
+        // Get all the selectedOptionDetailsList where selectedOptionCode in DEFAULT_SELECTED_OPTION_CODE or UPDATED_SELECTED_OPTION_CODE
+        defaultSelectedOptionDetailsShouldBeFound(
+            "selectedOptionCode.in=" + DEFAULT_SELECTED_OPTION_CODE + "," + UPDATED_SELECTED_OPTION_CODE
+        );
+
+        // Get all the selectedOptionDetailsList where selectedOptionCode equals to UPDATED_SELECTED_OPTION_CODE
+        defaultSelectedOptionDetailsShouldNotBeFound("selectedOptionCode.in=" + UPDATED_SELECTED_OPTION_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllSelectedOptionDetailsBySelectedOptionCodeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        selectedOptionDetailsRepository.saveAndFlush(selectedOptionDetails);
+
+        // Get all the selectedOptionDetailsList where selectedOptionCode is not null
+        defaultSelectedOptionDetailsShouldBeFound("selectedOptionCode.specified=true");
+
+        // Get all the selectedOptionDetailsList where selectedOptionCode is null
+        defaultSelectedOptionDetailsShouldNotBeFound("selectedOptionCode.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllSelectedOptionDetailsBySelectedOptionCodeContainsSomething() throws Exception {
+        // Initialize the database
+        selectedOptionDetailsRepository.saveAndFlush(selectedOptionDetails);
+
+        // Get all the selectedOptionDetailsList where selectedOptionCode contains DEFAULT_SELECTED_OPTION_CODE
+        defaultSelectedOptionDetailsShouldBeFound("selectedOptionCode.contains=" + DEFAULT_SELECTED_OPTION_CODE);
+
+        // Get all the selectedOptionDetailsList where selectedOptionCode contains UPDATED_SELECTED_OPTION_CODE
+        defaultSelectedOptionDetailsShouldNotBeFound("selectedOptionCode.contains=" + UPDATED_SELECTED_OPTION_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllSelectedOptionDetailsBySelectedOptionCodeNotContainsSomething() throws Exception {
+        // Initialize the database
+        selectedOptionDetailsRepository.saveAndFlush(selectedOptionDetails);
+
+        // Get all the selectedOptionDetailsList where selectedOptionCode does not contain DEFAULT_SELECTED_OPTION_CODE
+        defaultSelectedOptionDetailsShouldNotBeFound("selectedOptionCode.doesNotContain=" + DEFAULT_SELECTED_OPTION_CODE);
+
+        // Get all the selectedOptionDetailsList where selectedOptionCode does not contain UPDATED_SELECTED_OPTION_CODE
+        defaultSelectedOptionDetailsShouldBeFound("selectedOptionCode.doesNotContain=" + UPDATED_SELECTED_OPTION_CODE);
+    }
+
+    @Test
+    @Transactional
     void getAllSelectedOptionDetailsBySelectedOptionIsEqualToSomething() throws Exception {
         SelectedOption selectedOption;
         if (TestUtil.findAll(em, SelectedOption.class).isEmpty()) {
@@ -463,7 +613,9 @@ class SelectedOptionDetailsResourceIT {
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].selectedValue").value(hasItem(DEFAULT_SELECTED_VALUE)))
-            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())));
+            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].selectedStyleCode").value(hasItem(DEFAULT_SELECTED_STYLE_CODE)))
+            .andExpect(jsonPath("$.[*].selectedOptionCode").value(hasItem(DEFAULT_SELECTED_OPTION_CODE)));
 
         // Check, that the count call also returns 1
         restSelectedOptionDetailsMockMvc
@@ -515,7 +667,9 @@ class SelectedOptionDetailsResourceIT {
             .code(UPDATED_CODE)
             .name(UPDATED_NAME)
             .selectedValue(UPDATED_SELECTED_VALUE)
-            .isActive(UPDATED_IS_ACTIVE);
+            .isActive(UPDATED_IS_ACTIVE)
+            .selectedStyleCode(UPDATED_SELECTED_STYLE_CODE)
+            .selectedOptionCode(UPDATED_SELECTED_OPTION_CODE);
 
         restSelectedOptionDetailsMockMvc
             .perform(
@@ -533,6 +687,8 @@ class SelectedOptionDetailsResourceIT {
         assertThat(testSelectedOptionDetails.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testSelectedOptionDetails.getSelectedValue()).isEqualTo(UPDATED_SELECTED_VALUE);
         assertThat(testSelectedOptionDetails.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+        assertThat(testSelectedOptionDetails.getSelectedStyleCode()).isEqualTo(UPDATED_SELECTED_STYLE_CODE);
+        assertThat(testSelectedOptionDetails.getSelectedOptionCode()).isEqualTo(UPDATED_SELECTED_OPTION_CODE);
     }
 
     @Test
@@ -623,6 +779,8 @@ class SelectedOptionDetailsResourceIT {
         assertThat(testSelectedOptionDetails.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testSelectedOptionDetails.getSelectedValue()).isEqualTo(DEFAULT_SELECTED_VALUE);
         assertThat(testSelectedOptionDetails.getIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
+        assertThat(testSelectedOptionDetails.getSelectedStyleCode()).isEqualTo(DEFAULT_SELECTED_STYLE_CODE);
+        assertThat(testSelectedOptionDetails.getSelectedOptionCode()).isEqualTo(DEFAULT_SELECTED_OPTION_CODE);
     }
 
     @Test
@@ -641,7 +799,9 @@ class SelectedOptionDetailsResourceIT {
             .code(UPDATED_CODE)
             .name(UPDATED_NAME)
             .selectedValue(UPDATED_SELECTED_VALUE)
-            .isActive(UPDATED_IS_ACTIVE);
+            .isActive(UPDATED_IS_ACTIVE)
+            .selectedStyleCode(UPDATED_SELECTED_STYLE_CODE)
+            .selectedOptionCode(UPDATED_SELECTED_OPTION_CODE);
 
         restSelectedOptionDetailsMockMvc
             .perform(
@@ -659,6 +819,8 @@ class SelectedOptionDetailsResourceIT {
         assertThat(testSelectedOptionDetails.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testSelectedOptionDetails.getSelectedValue()).isEqualTo(UPDATED_SELECTED_VALUE);
         assertThat(testSelectedOptionDetails.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+        assertThat(testSelectedOptionDetails.getSelectedStyleCode()).isEqualTo(UPDATED_SELECTED_STYLE_CODE);
+        assertThat(testSelectedOptionDetails.getSelectedOptionCode()).isEqualTo(UPDATED_SELECTED_OPTION_CODE);
     }
 
     @Test

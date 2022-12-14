@@ -9,6 +9,8 @@ import { IAvatarCharactor } from '../avatar-charactor.model';
 import { AvatarCharactorService } from '../service/avatar-charactor.service';
 import { ILayerGroup } from 'app/entities/layer-group/layer-group.model';
 import { LayerGroupService } from 'app/entities/layer-group/service/layer-group.service';
+import { ICharacter } from 'app/entities/character/character.model';
+import { CharacterService } from 'app/entities/character/service/character.service';
 
 @Component({
   selector: 'jhi-avatar-charactor-update',
@@ -19,6 +21,7 @@ export class AvatarCharactorUpdateComponent implements OnInit {
   avatarCharactor: IAvatarCharactor | null = null;
 
   layerGroupsSharedCollection: ILayerGroup[] = [];
+  charactersSharedCollection: ICharacter[] = [];
 
   editForm: AvatarCharactorFormGroup = this.avatarCharactorFormService.createAvatarCharactorFormGroup();
 
@@ -26,10 +29,13 @@ export class AvatarCharactorUpdateComponent implements OnInit {
     protected avatarCharactorService: AvatarCharactorService,
     protected avatarCharactorFormService: AvatarCharactorFormService,
     protected layerGroupService: LayerGroupService,
+    protected characterService: CharacterService,
     protected activatedRoute: ActivatedRoute
   ) {}
 
   compareLayerGroup = (o1: ILayerGroup | null, o2: ILayerGroup | null): boolean => this.layerGroupService.compareLayerGroup(o1, o2);
+
+  compareCharacter = (o1: ICharacter | null, o2: ICharacter | null): boolean => this.characterService.compareCharacter(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ avatarCharactor }) => {
@@ -83,6 +89,10 @@ export class AvatarCharactorUpdateComponent implements OnInit {
       this.layerGroupsSharedCollection,
       avatarCharactor.layerGroup
     );
+    this.charactersSharedCollection = this.characterService.addCharacterToCollectionIfMissing<ICharacter>(
+      this.charactersSharedCollection,
+      avatarCharactor.character
+    );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -95,5 +105,15 @@ export class AvatarCharactorUpdateComponent implements OnInit {
         )
       )
       .subscribe((layerGroups: ILayerGroup[]) => (this.layerGroupsSharedCollection = layerGroups));
+
+    this.characterService
+      .query()
+      .pipe(map((res: HttpResponse<ICharacter[]>) => res.body ?? []))
+      .pipe(
+        map((characters: ICharacter[]) =>
+          this.characterService.addCharacterToCollectionIfMissing<ICharacter>(characters, this.avatarCharactor?.character)
+        )
+      )
+      .subscribe((characters: ICharacter[]) => (this.charactersSharedCollection = characters));
   }
 }

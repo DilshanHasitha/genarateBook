@@ -52,6 +52,12 @@
             <a [routerLink]="['/layer-group', avatarCharactor.layerGroup.id, 'view']">{{ avatarCharactor.layerGroup.id }}</a>
           </div>
         </dd>
+        <dt><span>Character</span></dt>
+        <dd>
+          <div *ngIf="avatarCharactor.character">
+            <a [routerLink]="['/character', avatarCharactor.character.id, 'view']">{{ avatarCharactor.character.code }}</a>
+          </div>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

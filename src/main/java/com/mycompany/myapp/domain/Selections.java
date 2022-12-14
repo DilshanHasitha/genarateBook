@@ -51,6 +51,9 @@ public class Selections implements Serializable {
     @Column(name = "avatar_attributes_code")
     private String avatarAttributesCode;
 
+    @Column(name = "avatar_style")
+    private String avatarStyle;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -196,6 +199,19 @@ public class Selections implements Serializable {
         this.avatarAttributesCode = avatarAttributesCode;
     }
 
+    public String getAvatarStyle() {
+        return this.avatarStyle;
+    }
+
+    public Selections avatarStyle(String avatarStyle) {
+        this.setAvatarStyle(avatarStyle);
+        return this;
+    }
+
+    public void setAvatarStyle(String avatarStyle) {
+        this.avatarStyle = avatarStyle;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -230,6 +246,7 @@ public class Selections implements Serializable {
             ", isActive='" + getIsActive() + "'" +
             ", width=" + getWidth() +
             ", avatarAttributesCode='" + getAvatarAttributesCode() + "'" +
+            ", avatarStyle='" + getAvatarStyle() + "'" +
             "}";
     }
 }

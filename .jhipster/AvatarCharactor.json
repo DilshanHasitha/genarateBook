@@ -60,6 +60,12 @@
       "ownerSide": true,
       "relationshipName": "layerGroup",
       "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityField": "code",
+      "otherEntityName": "character",
+      "relationshipName": "character",
+      "relationshipType": "many-to-one"
     }
   ],
   "service": "serviceClass"

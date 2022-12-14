@@ -10,6 +10,7 @@ export interface ISelections {
   isActive?: boolean | null;
   width?: number | null;
   avatarAttributesCode?: string | null;
+  avatarStyle?: string | null;
 }
 
 export type NewSelections = Omit<ISelections, 'id'> & { id: null };

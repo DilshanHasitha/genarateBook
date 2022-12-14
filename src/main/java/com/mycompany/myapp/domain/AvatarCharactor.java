@@ -52,13 +52,16 @@ public class AvatarCharactor implements Serializable {
 
     @ManyToMany(mappedBy = "avatarCharactors")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "avatarCharactors", "books", "styles", "options" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "avatarCharactors", "books", "styles", "options", "optionType" }, allowSetters = true)
     private Set<AvatarAttributes> avatarAttributes = new HashSet<>();
 
     @JsonIgnoreProperties(value = { "layers", "books" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
     private LayerGroup layerGroup;
+
+    @ManyToOne
+    private Character character;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -220,6 +223,19 @@ public class AvatarCharactor implements Serializable {
 
     public AvatarCharactor layerGroup(LayerGroup layerGroup) {
         this.setLayerGroup(layerGroup);
+        return this;
+    }
+
+    public Character getCharacter() {
+        return this.character;
+    }
+
+    public void setCharacter(Character character) {
+        this.character = character;
+    }
+
+    public AvatarCharactor character(Character character) {
+        this.setCharacter(character);
         return this;
     }
 

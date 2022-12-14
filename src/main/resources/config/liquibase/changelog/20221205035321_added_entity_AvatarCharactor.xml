@@ -41,6 +41,9 @@
             <column name="layer_group_id" type="bigint">
                 <constraints nullable="true" unique="true" uniqueConstraintName="ux_avatar_charactor__layer_group_id" />
             </column>
+            <column name="character_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>

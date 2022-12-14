@@ -28,6 +28,7 @@ type AvatarCharactorFormGroupContent = {
   y: FormControl<IAvatarCharactor['y']>;
   avatarAttributes: FormControl<IAvatarCharactor['avatarAttributes']>;
   layerGroup: FormControl<IAvatarCharactor['layerGroup']>;
+  character: FormControl<IAvatarCharactor['character']>;
 };
 
 export type AvatarCharactorFormGroup = FormGroup<AvatarCharactorFormGroupContent>;
@@ -59,6 +60,7 @@ export class AvatarCharactorFormService {
       y: new FormControl(avatarCharactorRawValue.y),
       avatarAttributes: new FormControl(avatarCharactorRawValue.avatarAttributes ?? []),
       layerGroup: new FormControl(avatarCharactorRawValue.layerGroup),
+      character: new FormControl(avatarCharactorRawValue.character),
     });
   }
 

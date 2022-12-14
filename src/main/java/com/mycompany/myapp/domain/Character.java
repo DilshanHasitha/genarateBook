@@ -1,9 +1,6 @@
 package com.mycompany.myapp.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -32,16 +29,6 @@ public class Character implements Serializable {
 
     @Column(name = "is_active")
     private Boolean isActive;
-
-    @ManyToMany
-    @JoinTable(
-        name = "rel_jhi_character__avatar_charactor",
-        joinColumns = @JoinColumn(name = "jhi_character_id"),
-        inverseJoinColumns = @JoinColumn(name = "avatar_charactor_id")
-    )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "avatarAttributes", "layerGroup" }, allowSetters = true)
-    private Set<AvatarCharactor> avatarCharactors = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -95,29 +82,6 @@ public class Character implements Serializable {
 
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
-    }
-
-    public Set<AvatarCharactor> getAvatarCharactors() {
-        return this.avatarCharactors;
-    }
-
-    public void setAvatarCharactors(Set<AvatarCharactor> avatarCharactors) {
-        this.avatarCharactors = avatarCharactors;
-    }
-
-    public Character avatarCharactors(Set<AvatarCharactor> avatarCharactors) {
-        this.setAvatarCharactors(avatarCharactors);
-        return this;
-    }
-
-    public Character addAvatarCharactor(AvatarCharactor avatarCharactor) {
-        this.avatarCharactors.add(avatarCharactor);
-        return this;
-    }
-
-    public Character removeAvatarCharactor(AvatarCharactor avatarCharactor) {
-        this.avatarCharactors.remove(avatarCharactor);
-        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

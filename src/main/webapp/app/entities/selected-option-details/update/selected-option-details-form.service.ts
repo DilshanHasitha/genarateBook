@@ -22,6 +22,8 @@ type SelectedOptionDetailsFormGroupContent = {
   name: FormControl<ISelectedOptionDetails['name']>;
   selectedValue: FormControl<ISelectedOptionDetails['selectedValue']>;
   isActive: FormControl<ISelectedOptionDetails['isActive']>;
+  selectedStyleCode: FormControl<ISelectedOptionDetails['selectedStyleCode']>;
+  selectedOptionCode: FormControl<ISelectedOptionDetails['selectedOptionCode']>;
   selectedOptions: FormControl<ISelectedOptionDetails['selectedOptions']>;
 };
 
@@ -48,6 +50,8 @@ export class SelectedOptionDetailsFormService {
       name: new FormControl(selectedOptionDetailsRawValue.name),
       selectedValue: new FormControl(selectedOptionDetailsRawValue.selectedValue),
       isActive: new FormControl(selectedOptionDetailsRawValue.isActive),
+      selectedStyleCode: new FormControl(selectedOptionDetailsRawValue.selectedStyleCode),
+      selectedOptionCode: new FormControl(selectedOptionDetailsRawValue.selectedOptionCode),
       selectedOptions: new FormControl(selectedOptionDetailsRawValue.selectedOptions ?? []),
     });
   }

@@ -23,7 +23,6 @@ describe('Character Form Service', () => {
             code: expect.any(Object),
             description: expect.any(Object),
             isActive: expect.any(Object),
-            avatarCharactors: expect.any(Object),
           })
         );
       });
@@ -37,7 +36,6 @@ describe('Character Form Service', () => {
             code: expect.any(Object),
             description: expect.any(Object),
             isActive: expect.any(Object),
-            avatarCharactors: expect.any(Object),
           })
         );
       });

@@ -30,6 +30,7 @@ describe('AvatarCharactor Form Service', () => {
             y: expect.any(Object),
             avatarAttributes: expect.any(Object),
             layerGroup: expect.any(Object),
+            character: expect.any(Object),
           })
         );
       });
@@ -50,6 +51,7 @@ describe('AvatarCharactor Form Service', () => {
             y: expect.any(Object),
             avatarAttributes: expect.any(Object),
             layerGroup: expect.any(Object),
+            character: expect.any(Object),
           })
         );
       });

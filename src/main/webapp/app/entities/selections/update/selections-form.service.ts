@@ -28,6 +28,7 @@ type SelectionsFormGroupContent = {
   isActive: FormControl<ISelections['isActive']>;
   width: FormControl<ISelections['width']>;
   avatarAttributesCode: FormControl<ISelections['avatarAttributesCode']>;
+  avatarStyle: FormControl<ISelections['avatarStyle']>;
 };
 
 export type SelectionsFormGroup = FormGroup<SelectionsFormGroupContent>;
@@ -57,6 +58,7 @@ export class SelectionsFormService {
       isActive: new FormControl(selectionsRawValue.isActive),
       width: new FormControl(selectionsRawValue.width),
       avatarAttributesCode: new FormControl(selectionsRawValue.avatarAttributesCode),
+      avatarStyle: new FormControl(selectionsRawValue.avatarStyle),
     });
   }
 

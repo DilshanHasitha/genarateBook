@@ -27,20 +27,6 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="20221212102703-1-relations" author="jhipster">
-
-        <createTable tableName="rel_jhi_character__avatar_charactor">
-            <column name="avatar_charactor_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="jhi_character_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-        <addPrimaryKey columnNames="jhi_character_id, avatar_charactor_id" tableName="rel_jhi_character__avatar_charactor"/>
-    </changeSet>
-
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 
     <!--

@@ -30,6 +30,7 @@ describe('Selections Form Service', () => {
             isActive: expect.any(Object),
             width: expect.any(Object),
             avatarAttributesCode: expect.any(Object),
+            avatarStyle: expect.any(Object),
           })
         );
       });
@@ -50,6 +51,7 @@ describe('Selections Form Service', () => {
             isActive: expect.any(Object),
             width: expect.any(Object),
             avatarAttributesCode: expect.any(Object),
+            avatarStyle: expect.any(Object),
           })
         );
       });

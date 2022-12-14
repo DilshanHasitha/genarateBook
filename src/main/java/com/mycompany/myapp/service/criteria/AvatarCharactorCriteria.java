@@ -43,6 +43,8 @@ public class AvatarCharactorCriteria implements Serializable, Criteria {
 
     private LongFilter layerGroupId;
 
+    private LongFilter characterId;
+
     private Boolean distinct;
 
     public AvatarCharactorCriteria() {}
@@ -59,6 +61,7 @@ public class AvatarCharactorCriteria implements Serializable, Criteria {
         this.y = other.y == null ? null : other.y.copy();
         this.avatarAttributesId = other.avatarAttributesId == null ? null : other.avatarAttributesId.copy();
         this.layerGroupId = other.layerGroupId == null ? null : other.layerGroupId.copy();
+        this.characterId = other.characterId == null ? null : other.characterId.copy();
         this.distinct = other.distinct;
     }
 
@@ -232,6 +235,21 @@ public class AvatarCharactorCriteria implements Serializable, Criteria {
         this.layerGroupId = layerGroupId;
     }
 
+    public LongFilter getCharacterId() {
+        return characterId;
+    }
+
+    public LongFilter characterId() {
+        if (characterId == null) {
+            characterId = new LongFilter();
+        }
+        return characterId;
+    }
+
+    public void setCharacterId(LongFilter characterId) {
+        this.characterId = characterId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -261,13 +279,28 @@ public class AvatarCharactorCriteria implements Serializable, Criteria {
             Objects.equals(y, that.y) &&
             Objects.equals(avatarAttributesId, that.avatarAttributesId) &&
             Objects.equals(layerGroupId, that.layerGroupId) &&
+            Objects.equals(characterId, that.characterId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, code, description, isActive, imgUrl, width, height, x, y, avatarAttributesId, layerGroupId, distinct);
+        return Objects.hash(
+            id,
+            code,
+            description,
+            isActive,
+            imgUrl,
+            width,
+            height,
+            x,
+            y,
+            avatarAttributesId,
+            layerGroupId,
+            characterId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -285,6 +318,7 @@ public class AvatarCharactorCriteria implements Serializable, Criteria {
             (y != null ? "y=" + y + ", " : "") +
             (avatarAttributesId != null ? "avatarAttributesId=" + avatarAttributesId + ", " : "") +
             (layerGroupId != null ? "layerGroupId=" + layerGroupId + ", " : "") +
+            (characterId != null ? "characterId=" + characterId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

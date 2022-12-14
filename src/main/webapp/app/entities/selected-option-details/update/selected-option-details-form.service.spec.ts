@@ -24,6 +24,8 @@ describe('SelectedOptionDetails Form Service', () => {
             name: expect.any(Object),
             selectedValue: expect.any(Object),
             isActive: expect.any(Object),
+            selectedStyleCode: expect.any(Object),
+            selectedOptionCode: expect.any(Object),
             selectedOptions: expect.any(Object),
           })
         );
@@ -39,6 +41,8 @@ describe('SelectedOptionDetails Form Service', () => {
             name: expect.any(Object),
             selectedValue: expect.any(Object),
             isActive: expect.any(Object),
+            selectedStyleCode: expect.any(Object),
+            selectedOptionCode: expect.any(Object),
             selectedOptions: expect.any(Object),
           })
         );
