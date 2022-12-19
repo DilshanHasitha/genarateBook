@@ -65,7 +65,6 @@ public class Books implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "books_page_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "pageDetails", "books" }, allowSetters = true)
     private Set<BooksPage> booksPages = new HashSet<>();
 
     @ManyToMany
@@ -75,7 +74,6 @@ public class Books implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "price_related_option_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "optionType", "priceRelatedOptionDetails", "books" }, allowSetters = true)
     private Set<PriceRelatedOption> priceRelatedOptions = new HashSet<>();
 
     @ManyToMany
@@ -85,7 +83,6 @@ public class Books implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "books_related_option_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "booksRelatedOptionDetails", "books" }, allowSetters = true)
     private Set<BooksRelatedOption> booksRelatedOptions = new HashSet<>();
 
     @ManyToMany
@@ -95,7 +92,6 @@ public class Books implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "books_attributes_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "books" }, allowSetters = true)
     private Set<BooksAttributes> booksAttributes = new HashSet<>();
 
     @ManyToMany
@@ -105,7 +101,6 @@ public class Books implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "books_variables_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "books" }, allowSetters = true)
     private Set<BooksVariables> booksVariables = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -115,7 +110,6 @@ public class Books implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "avatar_attributes_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "avatarCharactors", "books", "styles", "options" }, allowSetters = true)
     private Set<AvatarAttributes> avatarAttributes = new HashSet<>();
 
     @ManyToMany
@@ -125,7 +119,6 @@ public class Books implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "layer_group_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "layers", "books" }, allowSetters = true)
     private Set<LayerGroup> layerGroups = new HashSet<>();
 
     @ManyToMany

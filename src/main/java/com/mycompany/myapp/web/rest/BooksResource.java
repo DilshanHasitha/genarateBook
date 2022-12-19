@@ -2,11 +2,13 @@ package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.domain.Books;
 import com.mycompany.myapp.domain.BooksPage;
+import com.mycompany.myapp.domain.PageLayers;
+import com.mycompany.myapp.domain.PageLayersDetails;
 import com.mycompany.myapp.repository.BooksRepository;
-import com.mycompany.myapp.service.BooksQueryService;
-import com.mycompany.myapp.service.BooksService;
-import com.mycompany.myapp.service.PDFGenarator;
+import com.mycompany.myapp.security.CommonUtils;
+import com.mycompany.myapp.service.*;
 import com.mycompany.myapp.service.criteria.BooksCriteria;
+import com.mycompany.myapp.service.dto.BooksPageDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.io.IOException;
 import java.net.URI;
@@ -53,16 +55,26 @@ public class BooksResource {
 
     private final PDFGenarator pdfGenarator;
 
+    private final PageLayersDetailsService pageLayersDetailsService;
+    private final PageLayersService pageLayersService;
+    private final BooksPageService booksPageService;
+
     public BooksResource(
         BooksService booksService,
         BooksRepository booksRepository,
         BooksQueryService booksQueryService,
-        PDFGenarator pdfGenarator
+        PDFGenarator pdfGenarator,
+        PageLayersDetailsService pageLayersDetailsService,
+        PageLayersService pageLayersService,
+        BooksPageService booksPageService
     ) {
         this.booksService = booksService;
         this.booksRepository = booksRepository;
         this.booksQueryService = booksQueryService;
         this.pdfGenarator = pdfGenarator;
+        this.pageLayersDetailsService = pageLayersDetailsService;
+        this.pageLayersService = pageLayersService;
+        this.booksPageService = booksPageService;
     }
 
     /**
@@ -222,5 +234,59 @@ public class BooksResource {
 
         byte[] receipt = pdfGenarator.pdfCreator(books);
         return receipt;
+    }
+
+    @PostMapping("/createNewBooks")
+    public ResponseEntity<Books> createNewBooks(@Valid @RequestBody Books books) throws URISyntaxException {
+        log.debug("REST request to save Books : {}", books);
+        if (books.getId() != null) {
+            throw new BadRequestAlertException("A new books cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        String bookCode = CommonUtils.generateCode(books.getName());
+        Optional<Books> book = booksService.findOneByCode(bookCode);
+        if (book.isPresent()) {
+            throw new BadRequestAlertException("A new books cannot already have an CODE", ENTITY_NAME, "codeexists");
+        }
+        books.setCode(bookCode);
+        Books result = booksService.save(books);
+        return ResponseEntity
+            .created(new URI("/api/books/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
+    @PutMapping("/updateBooksPages")
+    public Books createNewBook(@Valid @RequestBody BooksPageDTO booksPageDTO) throws URISyntaxException {
+        if (booksPageDTO.getCode() == null || booksPageDTO.getCode().isEmpty()) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idexists");
+        }
+        Optional<Books> books = booksService.findOneByCode(booksPageDTO.getCode());
+        if (!books.isPresent()) {
+            throw new BadRequestAlertException("Invalid book", ENTITY_NAME, "idexists");
+        }
+        if (booksPageDTO.getBooksPages().size() < 1) {
+            throw new BadRequestAlertException("empty pages", ENTITY_NAME, "idexists");
+        }
+        Set<BooksPage> booksPages = booksPageDTO.getBooksPages();
+        for (BooksPage bookPage : booksPages) {
+            if (bookPage.getId() == null) {
+                Set<PageLayers> pageLayers = bookPage.getPageDetails();
+                for (PageLayers pageLayer : pageLayers) {
+                    if (pageLayer.getId() == null) {
+                        Set<PageLayersDetails> pageLayersDetails = pageLayer.getPageElementDetails();
+                        for (PageLayersDetails pageLayerDetail : pageLayersDetails) {
+                            if (pageLayerDetail.getId() == null) {
+                                pageLayersDetailsService.save(pageLayerDetail);
+                            }
+                        }
+                        pageLayersService.save(pageLayer);
+                    }
+                }
+                booksPageService.save(bookPage);
+            }
+        }
+        Books book = books.get();
+        book.setBooksPages(booksPages);
+        return booksService.update(book);
     }
 }

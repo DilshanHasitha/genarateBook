@@ -192,7 +192,7 @@ public class PDFGenarator {
         staticText.setWidth(parseInt(configMap.get("width")));
         staticText.setHeight(parseInt(configMap.get("height")));
         staticText.setFontSize(Float.parseFloat(configMap.get("fontSize")));
-        staticText.setForecolor(getColorByName("red"));
+        staticText.setForecolor(getColorByName(configMap.get("color")));
         staticText.setPdfFontName(configMap.get("fontName"));
         staticText.setPdfEncoding("Cp1252");
         staticText.setPdfEmbedded(true);
@@ -209,7 +209,7 @@ public class PDFGenarator {
         staticText.setWidth(parseInt(configMap.get("width")));
         staticText.setHeight(parseInt(configMap.get("height")));
         staticText.setFontSize(Float.parseFloat(configMap.get("fontSize")));
-        staticText.setForecolor(Color.getColor("white"));
+        staticText.setForecolor(getColorByName(configMap.get("color")));
         staticText.setPdfFontName(configMap.get("fontName"));
         staticText.setPdfEncoding("Cp1252");
         staticText.setPdfEmbedded(true);
@@ -266,22 +266,21 @@ public class PDFGenarator {
             Books book = books.get();
             for (SelectedOptionDetails selectedOptionDetails : selectedOption.getSelectedOptionDetails()) {
                 for (AvatarAttributes avatarAttributes : book.getAvatarAttributes()) {
-                    if (avatarAttributes.getDescription().equals(selectedOptionDetails.getName())) {
-                        if (
-                            avatarAttributes.getTemplateText() != null &&
-                            !avatarAttributes.getTemplateText().isEmpty() &&
-                            avatarAttributes.getOptionType().getCode() != null &&
-                            "TEXT".equals(avatarAttributes.getOptionType().getCode())
-                        ) {
-                            if (!selectedOptionDetails.getSelectedValue().isEmpty()) {
-                                templateText.put(avatarAttributes.getTemplateText(), selectedOptionDetails.getSelectedValue());
-                            }
-                        } else {
-                            for (Styles style : avatarAttributes.getStyles()) {
-                                if (style.getStylesDetails().size() > 0) {
-                                    for (StylesDetails styleDetails : style.getStylesDetails()) {
-                                        templateText.put(styleDetails.getTemplateValue(), styleDetails.getReplaceValue());
-                                    }
+                    if (
+                        avatarAttributes.getTemplateText() != null &&
+                        !avatarAttributes.getTemplateText().isEmpty() &&
+                        avatarAttributes.getOptionType().getCode() != null &&
+                        "TEXT".equals(avatarAttributes.getOptionType().getCode()) &&
+                        avatarAttributes.getTemplateText().equals(selectedOptionDetails.getName())
+                    ) {
+                        if (!selectedOptionDetails.getSelectedValue().isEmpty()) {
+                            templateText.put(avatarAttributes.getTemplateText(), selectedOptionDetails.getSelectedValue());
+                        }
+                    } else {
+                        for (Styles style : avatarAttributes.getStyles()) {
+                            if (style.getStylesDetails().size() > 0) {
+                                for (StylesDetails styleDetails : style.getStylesDetails()) {
+                                    templateText.put(styleDetails.getTemplateValue(), styleDetails.getReplaceValue());
                                 }
                             }
                         }
