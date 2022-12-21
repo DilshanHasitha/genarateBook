@@ -163,6 +163,7 @@ public class PDFGenarator {
         image.setWidth(selections.getWidth());
         image.setHeight(selections.getHeight());
         image.setExpression(expression);
+        image.setScaleImage(ScaleImageEnum.FILL_FRAME);
         return image;
     }
 
@@ -175,6 +176,7 @@ public class PDFGenarator {
         image.setWidth(parseInt(configMap.get("width")));
         image.setHeight(parseInt(configMap.get("height")));
         image.setExpression(expression);
+        image.setScaleImage(ScaleImageEnum.FILL_FRAME);
         return image;
     }
 

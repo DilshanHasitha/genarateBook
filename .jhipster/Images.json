@@ -1,0 +1,45 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "storeType",
+            "otherEntityName": "imageStoreType",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id",
+            "otherEntityRelationshipName": "images"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "imageBlob",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image"
+        },
+        {
+            "fieldName": "imageURL",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "imageName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "lowResURL",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "originalURL",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20200423182407",
+    "dto": "no",
+    "searchEngine": false,
+    "service": "serviceClass",
+    "entityTableName": "images",
+    "databaseType": "sql",
+    "readOnly": false,
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination"
+}

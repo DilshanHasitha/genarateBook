@@ -251,6 +251,12 @@ dependencies {
     implementation 'net.sf.jasperreports:jasperreports:6.20.0'
     // https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports-fonts
     implementation 'net.sf.jasperreports:jasperreports-fonts:6.20.0'
+
+
+// https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3
+    implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.368'
+// https://mvnrepository.com/artifact/net.coobird/thumbnailator
+    implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.1'
 }
 
 if (project.hasProperty("gae")) {

@@ -2,6 +2,7 @@ package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.domain.LayerGroup;
 import com.mycompany.myapp.repository.LayerGroupRepository;
+import com.mycompany.myapp.service.dto.ImageCreatorDTO;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +22,11 @@ public class LayerGroupService {
 
     private final LayerGroupRepository layerGroupRepository;
 
-    public LayerGroupService(LayerGroupRepository layerGroupRepository) {
+    private final CreateImage createImage;
+
+    public LayerGroupService(LayerGroupRepository layerGroupRepository, CreateImage createImage) {
         this.layerGroupRepository = layerGroupRepository;
+        this.createImage = createImage;
     }
 
     /**
@@ -115,5 +119,9 @@ public class LayerGroupService {
     public void delete(Long id) {
         log.debug("Request to delete LayerGroup : {}", id);
         layerGroupRepository.deleteById(id);
+    }
+
+    public void imageCreator(ImageCreatorDTO imageCreatorDTO) {
+        createImage.imageCreator(imageCreatorDTO);
     }
 }

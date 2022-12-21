@@ -1,22 +1,19 @@
 package com.mycompany.myapp.web.rest;
 
-import com.mycompany.myapp.domain.Books;
-import com.mycompany.myapp.domain.BooksPage;
-import com.mycompany.myapp.domain.PageLayers;
-import com.mycompany.myapp.domain.PageLayersDetails;
+import com.mycompany.myapp.domain.*;
 import com.mycompany.myapp.repository.BooksRepository;
 import com.mycompany.myapp.security.CommonUtils;
 import com.mycompany.myapp.service.*;
 import com.mycompany.myapp.service.criteria.BooksCriteria;
+import com.mycompany.myapp.service.dto.AvatarAttributesDTO;
 import com.mycompany.myapp.service.dto.BooksPageDTO;
+import com.mycompany.myapp.service.dto.ImageCreatorDTO;
+import com.mycompany.myapp.service.dto.ImageParameterDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import net.sf.jasperreports.engine.JRException;
@@ -59,6 +56,15 @@ public class BooksResource {
     private final PageLayersService pageLayersService;
     private final BooksPageService booksPageService;
 
+    private final AvatarCharactorService avatarCharactorService;
+    private final StylesDetailsService stylesDetailsService;
+    private final StylesService stylesService;
+    private final OptionsService optionsService;
+    private final AvatarAttributesService avatarAttributesService;
+
+    private final LayerGroupService layerGroupService;
+    private final BucketController bucketController;
+
     public BooksResource(
         BooksService booksService,
         BooksRepository booksRepository,
@@ -66,7 +72,14 @@ public class BooksResource {
         PDFGenarator pdfGenarator,
         PageLayersDetailsService pageLayersDetailsService,
         PageLayersService pageLayersService,
-        BooksPageService booksPageService
+        BooksPageService booksPageService,
+        AvatarCharactorService avatarCharactorService,
+        StylesDetailsService stylesDetailsService,
+        StylesService stylesService,
+        OptionsService optionsService,
+        AvatarAttributesService avatarAttributesService,
+        LayerGroupService layerGroupService,
+        BucketController bucketController
     ) {
         this.booksService = booksService;
         this.booksRepository = booksRepository;
@@ -75,6 +88,13 @@ public class BooksResource {
         this.pageLayersDetailsService = pageLayersDetailsService;
         this.pageLayersService = pageLayersService;
         this.booksPageService = booksPageService;
+        this.avatarCharactorService = avatarCharactorService;
+        this.stylesDetailsService = stylesDetailsService;
+        this.stylesService = stylesService;
+        this.optionsService = optionsService;
+        this.avatarAttributesService = avatarAttributesService;
+        this.layerGroupService = layerGroupService;
+        this.bucketController = bucketController;
     }
 
     /**
@@ -233,6 +253,35 @@ public class BooksResource {
         Books books = book.get();
 
         byte[] receipt = pdfGenarator.pdfCreator(books);
+
+        Set<ImageParameterDTO> imageParameterDTOSet = new HashSet<>();
+
+        ImageParameterDTO imageParameterDTO = new ImageParameterDTO();
+
+        imageParameterDTO.setImageUrl("https://alphadevs-logos.s3.ap-south-1.amazonaws.com/abc.png");
+        imageParameterDTO.setX(68);
+        imageParameterDTO.setY(120);
+        imageParameterDTO.setHeight(398);
+        imageParameterDTO.setWidth(446);
+
+        imageParameterDTOSet.add(imageParameterDTO);
+
+        ImageParameterDTO imageParameterDTO1 = new ImageParameterDTO();
+
+        imageParameterDTO1.setImageUrl("https://wikunum-lite-generic.s3.ap-south-1.amazonaws.com/ADPanicBuying1670238944.png");
+        imageParameterDTO1.setX(34);
+        imageParameterDTO1.setY(68);
+        imageParameterDTO1.setHeight(421);
+        imageParameterDTO1.setWidth(330);
+        imageParameterDTOSet.add(imageParameterDTO1);
+
+        ImageCreatorDTO obj = new ImageCreatorDTO();
+        obj.setPageHeight(595);
+        obj.setPageWidth(595);
+        obj.setImage(imageParameterDTOSet);
+
+        layerGroupService.imageCreator(obj);
+
         return receipt;
     }
 
@@ -289,4 +338,86 @@ public class BooksResource {
         book.setBooksPages(booksPages);
         return booksService.update(book);
     }
+
+    @PutMapping("/updateBooksAvatarAttributes")
+    public Books updateBooksAvatarAttributes(@Valid @RequestBody AvatarAttributesDTO avatarAttributesDTO) throws URISyntaxException {
+        if (avatarAttributesDTO.getCode() == null || avatarAttributesDTO.getCode().isEmpty()) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idexists");
+        }
+        Optional<Books> books = booksService.findOneByCode(avatarAttributesDTO.getCode());
+        if (!books.isPresent()) {
+            throw new BadRequestAlertException("Invalid book", ENTITY_NAME, "idexists");
+        }
+        if (avatarAttributesDTO.getAvatarAttributes().size() < 1) {
+            throw new BadRequestAlertException("empty avatarAttributes", ENTITY_NAME, "null attributes");
+        }
+
+        for (AvatarAttributes avatarAttributes : avatarAttributesDTO.getAvatarAttributes()) {
+            for (AvatarCharactor avatarCharactor : avatarAttributes.getAvatarCharactors()) {
+                avatarCharactorService.save(avatarCharactor);
+            }
+            for (Styles styles : avatarAttributes.getStyles()) {
+                stylesService.save(styles);
+                for (StylesDetails stylesDetails : styles.getStylesDetails()) {
+                    stylesDetailsService.save(stylesDetails);
+                }
+            }
+            for (Options options : avatarAttributes.getOptions()) {
+                optionsService.save(options);
+            }
+            avatarAttributesService.save(avatarAttributes);
+        }
+        Books book = books.get();
+        book.setAvatarAttributes(avatarAttributesDTO.getAvatarAttributes());
+        return booksService.update(book);
+    }
+
+    @PostMapping("/images")
+    public ResponseEntity<Images> uploadImages(@Valid @RequestBody Images images) throws URISyntaxException {
+        log.debug("REST request to upload Images : {}", images);
+        if (images.getId() != null) {
+            throw new BadRequestAlertException("A new images cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        images = bucketController.uploadFileByteNonSigned(images, "PanicBuying");
+        Images result = imagesService.save(images);
+
+        return ResponseEntity
+            .created(new URI("/api/images/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+    //    @PutMapping("/updateBooksAvatarAttributes")
+    //    public Books updateBooksAvatarAttributes(@Valid @RequestBody BooksPageDTO booksPageDTO) throws URISyntaxException {
+    //        if (booksPageDTO.getCode() == null || booksPageDTO.getCode().isEmpty()) {
+    //            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idexists");
+    //        }
+    //        Optional<Books> books = booksService.findOneByCode(booksPageDTO.getCode());
+    //        if (!books.isPresent()) {
+    //            throw new BadRequestAlertException("Invalid book", ENTITY_NAME, "idexists");
+    //        }
+    //        if (booksPageDTO.getBooksPages().size() < 1) {
+    //            throw new BadRequestAlertException("empty pages", ENTITY_NAME, "idexists");
+    //        }
+    //        Set<BooksPage> booksPages = booksPageDTO.getBooksPages();
+    //        for (BooksPage bookPage : booksPages) {
+    //            if (bookPage.getId() == null) {
+    //                Set<PageLayers> pageLayers = bookPage.getPageDetails();
+    //                for (PageLayers pageLayer : pageLayers) {
+    //                    if (pageLayer.getId() == null) {
+    //                        Set<PageLayersDetails> pageLayersDetails = pageLayer.getPageElementDetails();
+    //                        for (PageLayersDetails pageLayerDetail : pageLayersDetails) {
+    //                            if (pageLayerDetail.getId() == null) {
+    //                                pageLayersDetailsService.save(pageLayerDetail);
+    //                            }
+    //                        }
+    //                        pageLayersService.save(pageLayer);
+    //                    }
+    //                }
+    //                booksPageService.save(bookPage);
+    //            }
+    //        }
+    //        Books book = books.get();
+    //        book.setBooksPages(booksPages);
+    //        return booksService.update(book);
+    //    }
 }
