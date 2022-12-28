@@ -215,4 +215,5 @@ amazonProperties:
   endpointUrl: s3.ap-south-1.amazonaws.com
   accessKey: AKIASW3RPLHEMXZRUZRH
   secretKey: 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
-  bucketName: wikunum-lite-generic
+  bucketName: image-uploader-servic
+#  bucketName: wikunum-lite-generic

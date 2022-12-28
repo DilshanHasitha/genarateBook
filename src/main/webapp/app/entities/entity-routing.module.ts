@@ -136,6 +136,21 @@ import { RouterModule } from '@angular/router';
         data: { pageTitle: 'StylesDetails' },
         loadChildren: () => import('./styles-details/styles-details.module').then(m => m.StylesDetailsModule),
       },
+      {
+        path: 'font-family',
+        data: { pageTitle: 'FontFamilies' },
+        loadChildren: () => import('./font-family/font-family.module').then(m => m.FontFamilyModule),
+      },
+      {
+        path: 'image-store-type',
+        data: { pageTitle: 'ImageStoreTypes' },
+        loadChildren: () => import('./image-store-type/image-store-type.module').then(m => m.ImageStoreTypeModule),
+      },
+      {
+        path: 'images',
+        data: { pageTitle: 'Images' },
+        loadChildren: () => import('./images/images.module').then(m => m.ImagesModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

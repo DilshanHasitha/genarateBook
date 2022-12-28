@@ -144,8 +144,13 @@ public class AmazonClient {
         byte[] resultByte = DigestUtils.md5(image.getImageBlob());
         String streamMD5 = new String(Base64.encodeBase64(resultByte));
         s3ObjectMetadata.setContentMD5(streamMD5);
+        String uniqueID;
+        if (image.getImageName() == null || image.getImageName().isEmpty()) {
+            uniqueID = "AD" + prefix + System.currentTimeMillis() / 1000;
+        } else {
+            uniqueID = image.getImageName();
+        }
 
-        String uniqueID = "AD" + prefix + System.currentTimeMillis() / 1000;
         String fileExtension = (image.getImageBlobContentType().contains("/")) ? "." + image.getImageBlobContentType().split("/")[1] : "";
         String fileName = uniqueID + fileExtension;
 
@@ -173,7 +178,7 @@ public class AmazonClient {
         s3ObjectMetadataThumbnail.setContentMD5(streamMD5Thumbnail);
 
         this.s3client.putObject(
-                new PutObjectRequest(this.bucketName, "0.5/" + uniqueID + fileExtension, thumbnail, s3ObjectMetadataThumbnail)
+                new PutObjectRequest(this.bucketName, "mobile/" + uniqueID + fileExtension, thumbnail, s3ObjectMetadataThumbnail)
                     .withCannedAcl(CannedAccessControlList.PublicRead)
             );
 
@@ -205,7 +210,7 @@ public class AmazonClient {
         image.setImageBlob(null);
         image.setImageURL("https://" + this.bucketName + "." + this.endpointUrl + "/storeImages/" + fileName);
         image.setOriginalURL("https://" + this.bucketName + "." + this.endpointUrl + "/" + fileName);
-        image.setLowResURL("https://" + this.bucketName + "." + this.endpointUrl + "/0.5/" + fileName);
+        image.setLowResURL("https://" + this.bucketName + "." + this.endpointUrl + "/mobile/" + fileName);
 
         inputStream.close();
 

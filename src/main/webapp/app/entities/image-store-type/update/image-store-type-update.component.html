@@ -1,0 +1,81 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-image-store-type-heading" data-cy="ImageStoreTypeCreateUpdateHeading">Create or edit a Image Store Type</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_imageStoreTypeCode">Image Store Type Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="imageStoreTypeCode"
+            id="field_imageStoreTypeCode"
+            data-cy="imageStoreTypeCode"
+            formControlName="imageStoreTypeCode"
+          />
+          <div
+            *ngIf="
+              editForm.get('imageStoreTypeCode')!.invalid &&
+              (editForm.get('imageStoreTypeCode')!.dirty || editForm.get('imageStoreTypeCode')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('imageStoreTypeCode')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_imageStoreTypeDescription">Image Store Type Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="imageStoreTypeDescription"
+            id="field_imageStoreTypeDescription"
+            data-cy="imageStoreTypeDescription"
+            formControlName="imageStoreTypeDescription"
+          />
+          <div
+            *ngIf="
+              editForm.get('imageStoreTypeDescription')!.invalid &&
+              (editForm.get('imageStoreTypeDescription')!.dirty || editForm.get('imageStoreTypeDescription')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('imageStoreTypeDescription')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_isActive">Is Active</label>
+          <input type="checkbox" class="form-check" name="isActive" id="field_isActive" data-cy="isActive" formControlName="isActive" />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

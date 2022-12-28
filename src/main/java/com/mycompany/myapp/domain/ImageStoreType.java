@@ -2,7 +2,7 @@ package com.mycompany.myapp.domain;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -11,13 +11,15 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Table(name = "image_store_type")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class ImageStoreType implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @NotNull
@@ -31,9 +33,15 @@ public class ImageStoreType implements Serializable {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    // jhipster-needle-entity-add-field - JHipster will add fields here
+
     public Long getId() {
-        return id;
+        return this.id;
+    }
+
+    public ImageStoreType id(Long id) {
+        this.setId(id);
+        return this;
     }
 
     public void setId(Long id) {
@@ -41,11 +49,11 @@ public class ImageStoreType implements Serializable {
     }
 
     public String getImageStoreTypeCode() {
-        return imageStoreTypeCode;
+        return this.imageStoreTypeCode;
     }
 
     public ImageStoreType imageStoreTypeCode(String imageStoreTypeCode) {
-        this.imageStoreTypeCode = imageStoreTypeCode;
+        this.setImageStoreTypeCode(imageStoreTypeCode);
         return this;
     }
 
@@ -54,11 +62,11 @@ public class ImageStoreType implements Serializable {
     }
 
     public String getImageStoreTypeDescription() {
-        return imageStoreTypeDescription;
+        return this.imageStoreTypeDescription;
     }
 
     public ImageStoreType imageStoreTypeDescription(String imageStoreTypeDescription) {
-        this.imageStoreTypeDescription = imageStoreTypeDescription;
+        this.setImageStoreTypeDescription(imageStoreTypeDescription);
         return this;
     }
 
@@ -66,12 +74,12 @@ public class ImageStoreType implements Serializable {
         this.imageStoreTypeDescription = imageStoreTypeDescription;
     }
 
-    public Boolean isIsActive() {
-        return isActive;
+    public Boolean getIsActive() {
+        return this.isActive;
     }
 
     public ImageStoreType isActive(Boolean isActive) {
-        this.isActive = isActive;
+        this.setIsActive(isActive);
         return this;
     }
 
@@ -79,7 +87,7 @@ public class ImageStoreType implements Serializable {
         this.isActive = isActive;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -94,25 +102,18 @@ public class ImageStoreType implements Serializable {
 
     @Override
     public int hashCode() {
-        return 31;
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
-        return (
-            "ImageStoreType{" +
-            "id=" +
-            getId() +
-            ", imageStoreTypeCode='" +
-            getImageStoreTypeCode() +
-            "'" +
-            ", imageStoreTypeDescription='" +
-            getImageStoreTypeDescription() +
-            "'" +
-            ", isActive='" +
-            isIsActive() +
-            "'" +
-            "}"
-        );
+        return "ImageStoreType{" +
+            "id=" + getId() +
+            ", imageStoreTypeCode='" + getImageStoreTypeCode() + "'" +
+            ", imageStoreTypeDescription='" + getImageStoreTypeDescription() + "'" +
+            ", isActive='" + getIsActive() + "'" +
+            "}";
     }
 }

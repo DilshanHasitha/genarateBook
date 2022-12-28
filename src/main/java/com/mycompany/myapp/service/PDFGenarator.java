@@ -41,9 +41,13 @@ public class PDFGenarator {
         this.booksRepository = booksRepository;
     }
 
-    public byte[] pdfCreator(Books books) throws IOException, JRException {
+    public byte[] pdfCreator(Books books, String customer) throws IOException, JRException {
         List<JasperPrint> jasperPrintList = new ArrayList<JasperPrint>();
-        Map<String, String> getTemplateText = getTemplateText("CUSTOMER1");
+        Map<String, String> getTemplateText = new HashMap<>();
+        if (customer != "ADMIN") {
+            getTemplateText = getTemplateText(customer);
+        }
+        //
 
         JasperDesign jasperDesign = createPage(books);
         // is page size null
@@ -59,7 +63,7 @@ public class PDFGenarator {
             BooksPage booksPages = sortPageLayer(booksPage);
             //create page & add to jasper list
 
-            jasperPrint = createPageInner(booksPages, jasperDesign, books, getTemplateText);
+            jasperPrint = createPageInner(booksPages, jasperDesign, books, getTemplateText, customer);
         }
         jasperPrintList.add(jasperPrint);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -89,7 +93,13 @@ public class PDFGenarator {
         return jasperDesign;
     }
 
-    JasperPrint createPageInner(BooksPage booksPage, JasperDesign jasperDesign, Books books, Map<String, String> templateText) {
+    JasperPrint createPageInner(
+        BooksPage booksPage,
+        JasperDesign jasperDesign,
+        Books books,
+        Map<String, String> templateText,
+        String customer
+    ) {
         JRDesignBand band = new JRDesignBand();
         band.setHeight(books.getPageSize().getHeight());
         //        band.setSplitType(SplitTypeEnum.STRETCH);
@@ -103,8 +113,8 @@ public class PDFGenarator {
             }
 
             if (!layers.getIsText()) {
-                if (layers.getIsEditable()) {
-                    SelectedOption selectedOption = selectedOptionRepository.findOneByCodeAndBooks_Code("CUSTOMER1", "DEMO");
+                if (layers.getIsEditable() && customer != null && !customer.isEmpty() && customer != "ADMIN") {
+                    SelectedOption selectedOption = selectedOptionRepository.findOneByCodeAndBooks_Code("CUSTOMER1", books.getCode());
                     for (SelectedOptionDetails selectedOptionDetails : selectedOption.getSelectedOptionDetails()) {
                         if (!selectedOptionDetails.getName().isEmpty() && !selectedOptionDetails.getCode().isEmpty()) {
                             if (
@@ -125,7 +135,7 @@ public class PDFGenarator {
                     band.addElement(layers.getLayerNo(), createNonEditableImages(configMap, jasperDesign));
                 }
             } else {
-                if (layers.getIsEditable()) {
+                if (layers.getIsEditable() && customer != null && !customer.isEmpty() && customer != "ADMIN") {
                     String text = configMap.get("text");
                     band.addElement(layers.getLayerNo(), createEditableText(text, templateText, configMap));
                 } else {

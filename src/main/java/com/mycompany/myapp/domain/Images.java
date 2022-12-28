@@ -1,6 +1,5 @@
 package com.mycompany.myapp.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
@@ -11,13 +10,15 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Table(name = "images")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class Images implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @Lob
@@ -40,12 +41,17 @@ public class Images implements Serializable {
     private String originalURL;
 
     @ManyToOne
-    @JsonIgnoreProperties("images")
     private ImageStoreType storeType;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    // jhipster-needle-entity-add-field - JHipster will add fields here
+
     public Long getId() {
-        return id;
+        return this.id;
+    }
+
+    public Images id(Long id) {
+        this.setId(id);
+        return this;
     }
 
     public void setId(Long id) {
@@ -53,11 +59,11 @@ public class Images implements Serializable {
     }
 
     public byte[] getImageBlob() {
-        return imageBlob;
+        return this.imageBlob;
     }
 
     public Images imageBlob(byte[] imageBlob) {
-        this.imageBlob = imageBlob;
+        this.setImageBlob(imageBlob);
         return this;
     }
 
@@ -66,7 +72,7 @@ public class Images implements Serializable {
     }
 
     public String getImageBlobContentType() {
-        return imageBlobContentType;
+        return this.imageBlobContentType;
     }
 
     public Images imageBlobContentType(String imageBlobContentType) {
@@ -79,11 +85,11 @@ public class Images implements Serializable {
     }
 
     public String getImageURL() {
-        return imageURL;
+        return this.imageURL;
     }
 
     public Images imageURL(String imageURL) {
-        this.imageURL = imageURL;
+        this.setImageURL(imageURL);
         return this;
     }
 
@@ -92,11 +98,11 @@ public class Images implements Serializable {
     }
 
     public String getImageName() {
-        return imageName;
+        return this.imageName;
     }
 
     public Images imageName(String imageName) {
-        this.imageName = imageName;
+        this.setImageName(imageName);
         return this;
     }
 
@@ -105,11 +111,11 @@ public class Images implements Serializable {
     }
 
     public String getLowResURL() {
-        return lowResURL;
+        return this.lowResURL;
     }
 
     public Images lowResURL(String lowResURL) {
-        this.lowResURL = lowResURL;
+        this.setLowResURL(lowResURL);
         return this;
     }
 
@@ -118,11 +124,11 @@ public class Images implements Serializable {
     }
 
     public String getOriginalURL() {
-        return originalURL;
+        return this.originalURL;
     }
 
     public Images originalURL(String originalURL) {
-        this.originalURL = originalURL;
+        this.setOriginalURL(originalURL);
         return this;
     }
 
@@ -131,19 +137,19 @@ public class Images implements Serializable {
     }
 
     public ImageStoreType getStoreType() {
-        return storeType;
-    }
-
-    public Images storeType(ImageStoreType imageStoreType) {
-        this.storeType = imageStoreType;
-        return this;
+        return this.storeType;
     }
 
     public void setStoreType(ImageStoreType imageStoreType) {
         this.storeType = imageStoreType;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+    public Images storeType(ImageStoreType imageStoreType) {
+        this.setStoreType(imageStoreType);
+        return this;
+    }
+
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -158,34 +164,21 @@ public class Images implements Serializable {
 
     @Override
     public int hashCode() {
-        return 31;
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
-        return (
-            "Images{" +
-            "id=" +
-            getId() +
-            ", imageBlob='" +
-            getImageBlob() +
-            "'" +
-            ", imageBlobContentType='" +
-            getImageBlobContentType() +
-            "'" +
-            ", imageURL='" +
-            getImageURL() +
-            "'" +
-            ", imageName='" +
-            getImageName() +
-            "'" +
-            ", lowResURL='" +
-            getLowResURL() +
-            "'" +
-            ", originalURL='" +
-            getOriginalURL() +
-            "'" +
-            "}"
-        );
+        return "Images{" +
+            "id=" + getId() +
+            ", imageBlob='" + getImageBlob() + "'" +
+            ", imageBlobContentType='" + getImageBlobContentType() + "'" +
+            ", imageURL='" + getImageURL() + "'" +
+            ", imageName='" + getImageName() + "'" +
+            ", lowResURL='" + getLowResURL() + "'" +
+            ", originalURL='" + getOriginalURL() + "'" +
+            "}";
     }
 }

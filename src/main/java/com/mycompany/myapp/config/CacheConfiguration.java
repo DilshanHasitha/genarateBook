@@ -112,6 +112,9 @@ public class CacheConfiguration {
             createCache(cm, com.mycompany.myapp.domain.Character.class.getName() + ".avatarCharactors");
             createCache(cm, com.mycompany.myapp.domain.StylesDetails.class.getName());
             createCache(cm, com.mycompany.myapp.domain.Styles.class.getName() + ".stylesDetails");
+            createCache(cm, com.mycompany.myapp.domain.ImageStoreType.class.getName());
+            createCache(cm, com.mycompany.myapp.domain.Images.class.getName());
+            createCache(cm, com.mycompany.myapp.domain.FontFamily.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

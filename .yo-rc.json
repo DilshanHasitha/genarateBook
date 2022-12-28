@@ -20,6 +20,8 @@
     "enableSwaggerCodegen": false,
     "enableTranslation": false,
     "entities": [
+      "ImageStoreType",
+      "Images",
       "Customer",
       "Books",
       "SelectedOption",
@@ -45,14 +47,15 @@
       "LayerDetails",
       "Selections",
       "Character",
-      "StylesDetails"
+      "StylesDetails",
+      "FontFamily"
     ],
     "entitySuffix": "",
     "jhiPrefix": "jhi",
     "jhipsterVersion": "7.9.3",
     "jwtSecretKey": "ODk5ZjAzYTIyMjQ4NmRhMDgzM2YxZGE5Y2MyOTc1ODljOWIyNWUwZjJhNjg2NzVkOTA0MWJmYWFiNTAzNmEwNWQxM2E4ZmYyOGIxYmJlMWRlMmNhNWI0YzQzMmM5MjViZDU5YjczMzlhZWI2YjNjZjk4ZDE5ZjI0ZDA2MDcwNzY=",
     "languages": ["en", "fr"],
-    "lastLiquibaseTimestamp": 1670842613000,
+    "lastLiquibaseTimestamp": 1671778184000,
     "messageBroker": false,
     "microfrontend": false,
     "microfrontends": [],

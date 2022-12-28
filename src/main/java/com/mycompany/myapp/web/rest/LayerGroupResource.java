@@ -1,10 +1,11 @@
 package com.mycompany.myapp.web.rest;
 
-import com.mycompany.myapp.domain.LayerGroup;
+import com.mycompany.myapp.domain.*;
 import com.mycompany.myapp.repository.LayerGroupRepository;
 import com.mycompany.myapp.service.LayerGroupQueryService;
 import com.mycompany.myapp.service.LayerGroupService;
 import com.mycompany.myapp.service.criteria.LayerGroupCriteria;
+import com.mycompany.myapp.service.dto.AvatarAttributesDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -204,22 +205,9 @@ public class LayerGroupResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
     }
-    //    @GetMapping("/printReceipts")
-    //    public byte[] receipt(String orderId, String storeCode) throws IOException, JRException {
-    //        LayerGroup layerGroup = layerGroupRepository.findOneByCode("TEST");
-    //
-    ////Sort the array in ascending order
-    //        List<Layers> layers = new ArrayList<>(layerGroup.getLayers());
-    //        Collections.sort(layers, new Comparator<Layers>(){
-    //            public int compare(Layers o1, Layers o2)
-    //            {
-    //                return o1.getLayerNo().compareTo(o2.getLayerNo());
-    //            }
-    //        });
-    //        Set<Layers> targetSet = new HashSet<>(layers);
-    //        layerGroup.setLayers(targetSet);
-    //
-    //        byte[] receipt = pdfGenarator.pdfCreator(layerGroup);
-    //        return receipt;
-    //    }
+
+    @PutMapping("/createAvatarStructure")
+    public LayerGroup createAvatarStructure(@Valid @RequestBody LayerGroup layerGroup) throws URISyntaxException {
+        return layerGroup;
+    }
 }

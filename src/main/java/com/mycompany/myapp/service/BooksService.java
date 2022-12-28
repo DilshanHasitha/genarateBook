@@ -1,6 +1,8 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.domain.Books;
+import com.mycompany.myapp.domain.PriceRelatedOption;
+import com.mycompany.myapp.domain.PriceRelatedOptionDetails;
 import com.mycompany.myapp.repository.BooksRepository;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -20,9 +22,17 @@ public class BooksService {
     private final Logger log = LoggerFactory.getLogger(BooksService.class);
 
     private final BooksRepository booksRepository;
+    private final PriceRelatedOptionService priceRelatedOptionService;
+    private final PriceRelatedOptionDetailsService priceRelatedOptionDetailsService;
 
-    public BooksService(BooksRepository booksRepository) {
+    public BooksService(
+        BooksRepository booksRepository,
+        PriceRelatedOptionService priceRelatedOptionService,
+        PriceRelatedOptionDetailsService priceRelatedOptionDetailsService
+    ) {
         this.booksRepository = booksRepository;
+        this.priceRelatedOptionService = priceRelatedOptionService;
+        this.priceRelatedOptionDetailsService = priceRelatedOptionDetailsService;
     }
 
     /**
@@ -32,6 +42,18 @@ public class BooksService {
      * @return the persisted entity.
      */
     public Books save(Books books) {
+        if (books.getPriceRelatedOptions() != null || !books.getPriceRelatedOptions().isEmpty()) {
+            for (PriceRelatedOption priceRelatedOption : books.getPriceRelatedOptions()) {
+                if (priceRelatedOption.getId() == null) {
+                    for (PriceRelatedOptionDetails priceRelatedOptionDetails : priceRelatedOption.getPriceRelatedOptionDetails()) {
+                        if (priceRelatedOptionDetails.getId() == null) {
+                            priceRelatedOptionDetailsService.save(priceRelatedOptionDetails);
+                        }
+                    }
+                    priceRelatedOptionService.save(priceRelatedOption);
+                }
+            }
+        }
         log.debug("Request to save Books : {}", books);
         return booksRepository.save(books);
     }

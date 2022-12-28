@@ -1,34 +1,31 @@
 {
-    "fluentMethods": true,
-    "clientRootFolder": "",
-    "relationships": [],
-    "fields": [
-        {
-            "fieldName": "imageStoreTypeCode",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "imageStoreTypeDescription",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "isActive",
-            "fieldType": "Boolean"
-        }
-    ],
-    "changelogDate": "20200423181410",
-    "dto": "no",
-    "searchEngine": false,
-    "service": "serviceClass",
-    "entityTableName": "image_store_type",
-    "databaseType": "sql",
-    "readOnly": false,
-    "jpaMetamodelFiltering": true,
-    "pagination": "pagination"
+  "changelogDate": "20200423181410",
+  "clientRootFolder": "",
+  "databaseType": "sql",
+  "dto": "no",
+  "entityTableName": "image_store_type",
+  "fields": [
+    {
+      "fieldName": "imageStoreTypeCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "imageStoreTypeDescription",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": true,
+  "name": "ImageStoreType",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "searchEngine": false,
+  "service": "serviceClass"
 }

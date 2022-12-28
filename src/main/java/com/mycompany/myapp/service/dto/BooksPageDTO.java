@@ -1,10 +1,11 @@
 package com.mycompany.myapp.service.dto;
 
 import com.mycompany.myapp.domain.BooksPage;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
 
-public class BooksPageDTO {
+public class BooksPageDTO implements Serializable {
 
     private String code;
     private Set<BooksPage> booksPages;

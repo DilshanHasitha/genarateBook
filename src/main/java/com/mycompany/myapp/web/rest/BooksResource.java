@@ -64,6 +64,7 @@ public class BooksResource {
 
     private final LayerGroupService layerGroupService;
     private final BucketController bucketController;
+    private final ImagesService imagesService;
 
     public BooksResource(
         BooksService booksService,
@@ -79,7 +80,8 @@ public class BooksResource {
         OptionsService optionsService,
         AvatarAttributesService avatarAttributesService,
         LayerGroupService layerGroupService,
-        BucketController bucketController
+        BucketController bucketController,
+        ImagesService imagesService
     ) {
         this.booksService = booksService;
         this.booksRepository = booksRepository;
@@ -95,6 +97,7 @@ public class BooksResource {
         this.avatarAttributesService = avatarAttributesService;
         this.layerGroupService = layerGroupService;
         this.bucketController = bucketController;
+        this.imagesService = imagesService;
     }
 
     /**
@@ -246,41 +249,43 @@ public class BooksResource {
 
     @GetMapping("/printReceipts")
     public byte[] receipt(String booksCode, String storeCode) throws IOException, JRException {
-        Optional<Books> book = booksService.findOneByCode("DEMO");
+        Optional<Books> book = booksService.findOneByCode(booksCode);
         if (!book.isPresent()) {
             throw new BadRequestAlertException("A new books cannot already have an ID", ENTITY_NAME, "idexists");
         }
         Books books = book.get();
 
-        byte[] receipt = pdfGenarator.pdfCreator(books);
+        byte[] receipt = pdfGenarator.pdfCreator(books, "ADMIN");
 
-        Set<ImageParameterDTO> imageParameterDTOSet = new HashSet<>();
+        //        Set<ImageParameterDTO> imageParameterDTOSet = new HashSet<>();
+        //
+        //        ImageParameterDTO i
 
-        ImageParameterDTO imageParameterDTO = new ImageParameterDTO();
-
-        imageParameterDTO.setImageUrl("https://alphadevs-logos.s3.ap-south-1.amazonaws.com/abc.png");
-        imageParameterDTO.setX(68);
-        imageParameterDTO.setY(120);
-        imageParameterDTO.setHeight(398);
-        imageParameterDTO.setWidth(446);
-
-        imageParameterDTOSet.add(imageParameterDTO);
-
-        ImageParameterDTO imageParameterDTO1 = new ImageParameterDTO();
-
-        imageParameterDTO1.setImageUrl("https://wikunum-lite-generic.s3.ap-south-1.amazonaws.com/ADPanicBuying1670238944.png");
-        imageParameterDTO1.setX(34);
-        imageParameterDTO1.setY(68);
-        imageParameterDTO1.setHeight(421);
-        imageParameterDTO1.setWidth(330);
-        imageParameterDTOSet.add(imageParameterDTO1);
-
-        ImageCreatorDTO obj = new ImageCreatorDTO();
-        obj.setPageHeight(595);
-        obj.setPageWidth(595);
-        obj.setImage(imageParameterDTOSet);
-
-        layerGroupService.imageCreator(obj);
+        //        mageParameterDTO = new ImageParameterDTO();
+        //
+        //        imageParameterDTO.setImageUrl("https://alphadevs-logos.s3.ap-south-1.amazonaws.com/abc.png");
+        //        imageParameterDTO.setX(68);
+        //        imageParameterDTO.setY(120);
+        //        imageParameterDTO.setHeight(398);
+        //        imageParameterDTO.setWidth(446);
+        //
+        //        imageParameterDTOSet.add(imageParameterDTO);
+        //
+        //        ImageParameterDTO imageParameterDTO1 = new ImageParameterDTO();
+        //
+        //        imageParameterDTO1.setImageUrl("https://wikunum-lite-generic.s3.ap-south-1.amazonaws.com/ADPanicBuying1670238944.png");
+        //        imageParameterDTO1.setX(34);
+        //        imageParameterDTO1.setY(68);
+        //        imageParameterDTO1.setHeight(421);
+        //        imageParameterDTO1.setWidth(330);
+        //        imageParameterDTOSet.add(imageParameterDTO1);
+        //
+        //        ImageCreatorDTO obj = new ImageCreatorDTO();
+        //        obj.setPageHeight(595);
+        //        obj.setPageWidth(595);
+        //        obj.setImage(imageParameterDTOSet);
+        //
+        //        layerGroupService.imageCreator(obj);
 
         return receipt;
     }
@@ -371,21 +376,20 @@ public class BooksResource {
         book.setAvatarAttributes(avatarAttributesDTO.getAvatarAttributes());
         return booksService.update(book);
     }
-
-    @PostMapping("/images")
-    public ResponseEntity<Images> uploadImages(@Valid @RequestBody Images images) throws URISyntaxException {
-        log.debug("REST request to upload Images : {}", images);
-        if (images.getId() != null) {
-            throw new BadRequestAlertException("A new images cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        images = bucketController.uploadFileByteNonSigned(images, "PanicBuying");
-        Images result = imagesService.save(images);
-
-        return ResponseEntity
-            .created(new URI("/api/images/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
-            .body(result);
-    }
+    //    @PostMapping("/images")
+    //    public ResponseEntity<Images> uploadImages(@Valid @RequestBody Images images) throws URISyntaxException {
+    //        log.debug("REST request to upload Images : {}", images);
+    //        if (images.getId() != null) {
+    //            throw new BadRequestAlertException("A new images cannot already have an ID", ENTITY_NAME, "idexists");
+    //        }
+    //        images = bucketController.uploadFileByteNonSigned(images, "PanicBuying");
+    //        Images result = imagesService.save(images);
+    //
+    //        return ResponseEntity
+    //            .created(new URI("/api/images/" + result.getId()))
+    //            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+    //            .body(result);
+    //    }
     //    @PutMapping("/updateBooksAvatarAttributes")
     //    public Books updateBooksAvatarAttributes(@Valid @RequestBody BooksPageDTO booksPageDTO) throws URISyntaxException {
     //        if (booksPageDTO.getCode() == null || booksPageDTO.getCode().isEmpty()) {

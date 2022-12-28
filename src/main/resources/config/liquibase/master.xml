@@ -43,6 +43,9 @@
     <include file="config/liquibase/changelog/20221209040503_added_entity_Selections.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20221212102703_added_entity_Character.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20221212105653_added_entity_StylesDetails.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200423181410_added_entity_ImageStoreType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200423182407_added_entity_Images.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221223064944_added_entity_FontFamily.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20221205035305_added_entity_constraints_Books.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20221205035306_added_entity_constraints_SelectedOption.xml" relativeToChangelogFile="false"/>
@@ -58,6 +61,7 @@
 <!--    <include file="config/liquibase/changelog/20221205035323_added_entity_constraints_Styles.xml" relativeToChangelogFile="false"/>-->
     <include file="config/liquibase/changelog/20221205035321_added_entity_constraints_AvatarCharactor.xml" relativeToChangelogFile="false"/>
 <!--    <include file="config/liquibase/changelog/20221212102703_added_entity_constraints_Character.xml" relativeToChangelogFile="false"/>-->
+    <include file="config/liquibase/changelog/20200423182407_added_entity_constraints_Images.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>
