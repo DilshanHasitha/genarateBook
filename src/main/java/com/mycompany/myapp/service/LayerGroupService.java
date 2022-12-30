@@ -121,7 +121,7 @@ public class LayerGroupService {
         layerGroupRepository.deleteById(id);
     }
 
-    public void imageCreator(ImageCreatorDTO imageCreatorDTO) {
-        createImage.imageCreator(imageCreatorDTO);
+    public byte[] imageCreator(ImageCreatorDTO imageCreatorDTO) {
+        return createImage.imageCreator(imageCreatorDTO);
     }
 }

@@ -247,45 +247,26 @@ public class BooksResource {
             .build();
     }
 
+    //    @GetMapping("/printReceipts")
+    //    public byte[] receipt(String booksCode, String storeCode) throws IOException, JRException {
+    //        Optional<Books> book = booksService.findOneByCode(booksCode);
+    //        if (!book.isPresent()) {
+    //            throw new BadRequestAlertException("A new books cannot already have an ID", ENTITY_NAME, "idexists");
+    //        }
+    //        Books books = book.get();
+    //
+    //        byte[] receipt = pdfGenarator.pdfCreator(books, "ADMIN");
+    //        return receipt;
+    //    }
     @GetMapping("/printReceipts")
     public byte[] receipt(String booksCode, String storeCode) throws IOException, JRException {
-        Optional<Books> book = booksService.findOneByCode(booksCode);
+        Optional<Books> book = booksService.findOneByCode("DEMO");
         if (!book.isPresent()) {
             throw new BadRequestAlertException("A new books cannot already have an ID", ENTITY_NAME, "idexists");
         }
         Books books = book.get();
 
-        byte[] receipt = pdfGenarator.pdfCreator(books, "ADMIN");
-
-        //        Set<ImageParameterDTO> imageParameterDTOSet = new HashSet<>();
-        //
-        //        ImageParameterDTO i
-
-        //        mageParameterDTO = new ImageParameterDTO();
-        //
-        //        imageParameterDTO.setImageUrl("https://alphadevs-logos.s3.ap-south-1.amazonaws.com/abc.png");
-        //        imageParameterDTO.setX(68);
-        //        imageParameterDTO.setY(120);
-        //        imageParameterDTO.setHeight(398);
-        //        imageParameterDTO.setWidth(446);
-        //
-        //        imageParameterDTOSet.add(imageParameterDTO);
-        //
-        //        ImageParameterDTO imageParameterDTO1 = new ImageParameterDTO();
-        //
-        //        imageParameterDTO1.setImageUrl("https://wikunum-lite-generic.s3.ap-south-1.amazonaws.com/ADPanicBuying1670238944.png");
-        //        imageParameterDTO1.setX(34);
-        //        imageParameterDTO1.setY(68);
-        //        imageParameterDTO1.setHeight(421);
-        //        imageParameterDTO1.setWidth(330);
-        //        imageParameterDTOSet.add(imageParameterDTO1);
-        //
-        //        ImageCreatorDTO obj = new ImageCreatorDTO();
-        //        obj.setPageHeight(595);
-        //        obj.setPageWidth(595);
-        //        obj.setImage(imageParameterDTOSet);
-        //
-        //        layerGroupService.imageCreator(obj);
+        byte[] receipt = pdfGenarator.pdfCreator(books, "demo");
 
         return receipt;
     }
@@ -375,6 +356,17 @@ public class BooksResource {
         Books book = books.get();
         book.setAvatarAttributes(avatarAttributesDTO.getAvatarAttributes());
         return booksService.update(book);
+    }
+
+    @GetMapping("/getAvatarAttributes")
+    public Set<AvatarAttributes> getAvatarAttributesByCode(String booksCode) throws IOException, JRException {
+        Optional<Books> book = booksService.findOneByCode(booksCode);
+        if (!book.isPresent()) {
+            throw new BadRequestAlertException("invalid books code", ENTITY_NAME, "null books");
+        }
+
+        Books books = book.get();
+        return books.getAvatarAttributes();
     }
     //    @PostMapping("/images")
     //    public ResponseEntity<Images> uploadImages(@Valid @RequestBody Images images) throws URISyntaxException {

@@ -17,6 +17,10 @@
     {
       "fieldName": "isActive",
       "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "imageUrl",
+      "fieldType": "String"
     }
   ],
   "fluentMethods": true,

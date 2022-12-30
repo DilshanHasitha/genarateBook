@@ -35,7 +35,10 @@ public class LayerGroup implements Serializable {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    @ManyToMany
     @JoinTable(
         name = "rel_layer_group__layers",
         joinColumns = @JoinColumn(name = "layer_group_id"),
@@ -116,6 +119,19 @@ public class LayerGroup implements Serializable {
 
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public String getImageUrl() {
+        return this.imageUrl;
+    }
+
+    public LayerGroup imageUrl(String imageUrl) {
+        this.setImageUrl(imageUrl);
+        return this;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Set<Layers> getLayers() {
@@ -201,6 +217,7 @@ public class LayerGroup implements Serializable {
             ", code='" + getCode() + "'" +
             ", description='" + getDescription() + "'" +
             ", isActive='" + getIsActive() + "'" +
+            ", imageUrl='" + getImageUrl() + "'" +
             "}";
     }
 }

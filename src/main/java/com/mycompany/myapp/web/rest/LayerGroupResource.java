@@ -1,17 +1,20 @@
 package com.mycompany.myapp.web.rest;
 
+import static java.lang.Integer.parseInt;
+
 import com.mycompany.myapp.domain.*;
 import com.mycompany.myapp.repository.LayerGroupRepository;
+import com.mycompany.myapp.service.LayerDetailsService;
 import com.mycompany.myapp.service.LayerGroupQueryService;
 import com.mycompany.myapp.service.LayerGroupService;
+import com.mycompany.myapp.service.LayersService;
 import com.mycompany.myapp.service.criteria.LayerGroupCriteria;
-import com.mycompany.myapp.service.dto.AvatarAttributesDTO;
+import com.mycompany.myapp.service.dto.ImageCreatorDTO;
+import com.mycompany.myapp.service.dto.ImageParameterDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -46,15 +49,24 @@ public class LayerGroupResource {
     private final LayerGroupRepository layerGroupRepository;
 
     private final LayerGroupQueryService layerGroupQueryService;
+    private final LayerDetailsService layerDetailsService;
+    private final LayersService layersService;
+    private final ImagesResource imagesResource;
 
     public LayerGroupResource(
         LayerGroupService layerGroupService,
         LayerGroupRepository layerGroupRepository,
-        LayerGroupQueryService layerGroupQueryService
+        LayerGroupQueryService layerGroupQueryService,
+        LayerDetailsService layerDetailsService,
+        LayersService layersService,
+        ImagesResource imagesResource
     ) {
         this.layerGroupService = layerGroupService;
         this.layerGroupRepository = layerGroupRepository;
         this.layerGroupQueryService = layerGroupQueryService;
+        this.layerDetailsService = layerDetailsService;
+        this.layersService = layersService;
+        this.imagesResource = imagesResource;
     }
 
     /**
@@ -208,6 +220,46 @@ public class LayerGroupResource {
 
     @PutMapping("/createAvatarStructure")
     public LayerGroup createAvatarStructure(@Valid @RequestBody LayerGroup layerGroup) throws URISyntaxException {
+        for (Layers layers : layerGroup.getLayers()) {
+            if (layers.getId() == null) {
+                for (LayerDetails layerDetails : layers.getLayerdetails()) {
+                    if (layerDetails.getId() == null) {
+                        layerDetailsService.save(layerDetails);
+                    }
+                }
+                layersService.save(layers);
+            }
+        }
+
+        Set<ImageParameterDTO> imageParameterDTOSet = new HashSet<>();
+        Map<String, String> configMap = new HashMap<>();
+
+        for (Layers layers : layerGroup.getLayers()) {
+            ImageParameterDTO imageParameterDTO = new ImageParameterDTO();
+            for (LayerDetails layerDetails : layers.getLayerdetails()) {
+                configMap.put(layerDetails.getName(), layerDetails.getDescription());
+            }
+            imageParameterDTO.setImageUrl(configMap.get("image"));
+            imageParameterDTO.setX(parseInt(configMap.get("x")));
+            imageParameterDTO.setY(parseInt(configMap.get("y")));
+            imageParameterDTO.setHeight(parseInt(configMap.get("height")));
+            imageParameterDTO.setWidth(parseInt(configMap.get("width")));
+
+            imageParameterDTOSet.add(imageParameterDTO);
+        }
+        ImageCreatorDTO obj = new ImageCreatorDTO();
+        obj.setPageHeight(595);
+        obj.setPageWidth(595);
+        obj.setImage(imageParameterDTOSet);
+
+        Images image = new Images();
+        image.setImageBlob(layerGroupService.imageCreator(obj));
+        image.setImageBlobContentType("image/png");
+
+        Images newImage = imagesResource.createImages(image).getBody();
+
+        layerGroup.setImageUrl(newImage.getImageURL());
+        layerGroupService.save(layerGroup);
         return layerGroup;
     }
 }

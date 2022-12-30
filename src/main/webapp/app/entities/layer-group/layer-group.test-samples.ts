@@ -6,21 +6,23 @@ export const sampleWithRequiredData: ILayerGroup = {
 };
 
 export const sampleWithPartialData: ILayerGroup = {
-  id: 91700,
-  code: 'bi-directional Krone',
-  description: 'New explicit',
+  id: 51541,
+  code: 'Steel',
+  description: 'payment',
   isActive: true,
+  imageUrl: 'explicit',
 };
 
 export const sampleWithFullData: ILayerGroup = {
-  id: 15740,
-  code: 'core Future Rapids',
-  description: 'e-business haptic Engineer',
-  isActive: true,
+  id: 68616,
+  code: 'FTP',
+  description: 'Future',
+  isActive: false,
+  imageUrl: 'Chicken Gloves Cambridgeshire',
 };
 
 export const sampleWithNewData: NewLayerGroup = {
-  description: 'Shoals',
+  description: 'Fish',
   id: null,
 };
 

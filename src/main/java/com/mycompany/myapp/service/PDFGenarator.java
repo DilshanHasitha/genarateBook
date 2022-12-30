@@ -114,7 +114,7 @@ public class PDFGenarator {
 
             if (!layers.getIsText()) {
                 if (layers.getIsEditable() && customer != null && !customer.isEmpty() && customer != "ADMIN") {
-                    SelectedOption selectedOption = selectedOptionRepository.findOneByCodeAndBooks_Code("CUSTOMER1", books.getCode());
+                    SelectedOption selectedOption = selectedOptionRepository.findOneByCodeAndBooks_Code(customer, books.getCode());
                     for (SelectedOptionDetails selectedOptionDetails : selectedOption.getSelectedOptionDetails()) {
                         if (!selectedOptionDetails.getName().isEmpty() && !selectedOptionDetails.getCode().isEmpty()) {
                             if (

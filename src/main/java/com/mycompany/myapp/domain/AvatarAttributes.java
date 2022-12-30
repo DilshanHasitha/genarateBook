@@ -70,7 +70,7 @@ public class AvatarAttributes implements Serializable {
     )
     private Set<Books> books = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_avatar_attributes__styles",
         joinColumns = @JoinColumn(name = "avatar_attributes_id"),
@@ -80,7 +80,7 @@ public class AvatarAttributes implements Serializable {
     @JsonIgnoreProperties(value = { "stylesDetails" }, allowSetters = true)
     private Set<Styles> styles = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_avatar_attributes__options",
         joinColumns = @JoinColumn(name = "avatar_attributes_id"),

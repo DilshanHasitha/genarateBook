@@ -6,6 +6,7 @@ export interface ILayerGroup {
   code?: string | null;
   description?: string | null;
   isActive?: boolean | null;
+  imageUrl?: string | null;
   layers?: Pick<ILayers, 'id'>[] | null;
   books?: Pick<IBooks, 'id'>[] | null;
 }

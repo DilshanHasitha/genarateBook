@@ -4,6 +4,7 @@ import com.mycompany.myapp.service.dto.ImageCreatorDTO;
 import com.mycompany.myapp.service.dto.ImageParameterDTO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -16,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class CreateImage {
 
-    void imageCreator(ImageCreatorDTO imageCreatorDTO) {
+    public byte[] imageCreator(ImageCreatorDTO imageCreatorDTO) {
         // page size
         int w = imageCreatorDTO.getPageWidth();
         int h = imageCreatorDTO.getPageHeight();
@@ -29,11 +30,16 @@ public class CreateImage {
         }
 
         g.dispose();
+        byte[] bytes = null;
         try {
             ImageIO.write(combined, "PNG", new File("combined.png"));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(combined, "PNG", baos);
+            bytes = baos.toByteArray();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return bytes;
     }
 
     BufferedImage loadImage(String name) {

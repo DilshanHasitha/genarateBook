@@ -29,6 +29,8 @@ public class LayerGroupCriteria implements Serializable, Criteria {
 
     private BooleanFilter isActive;
 
+    private StringFilter imageUrl;
+
     private LongFilter layersId;
 
     private LongFilter booksId;
@@ -42,6 +44,7 @@ public class LayerGroupCriteria implements Serializable, Criteria {
         this.code = other.code == null ? null : other.code.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.isActive = other.isActive == null ? null : other.isActive.copy();
+        this.imageUrl = other.imageUrl == null ? null : other.imageUrl.copy();
         this.layersId = other.layersId == null ? null : other.layersId.copy();
         this.booksId = other.booksId == null ? null : other.booksId.copy();
         this.distinct = other.distinct;
@@ -112,6 +115,21 @@ public class LayerGroupCriteria implements Serializable, Criteria {
         this.isActive = isActive;
     }
 
+    public StringFilter getImageUrl() {
+        return imageUrl;
+    }
+
+    public StringFilter imageUrl() {
+        if (imageUrl == null) {
+            imageUrl = new StringFilter();
+        }
+        return imageUrl;
+    }
+
+    public void setImageUrl(StringFilter imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public LongFilter getLayersId() {
         return layersId;
     }
@@ -164,6 +182,7 @@ public class LayerGroupCriteria implements Serializable, Criteria {
             Objects.equals(code, that.code) &&
             Objects.equals(description, that.description) &&
             Objects.equals(isActive, that.isActive) &&
+            Objects.equals(imageUrl, that.imageUrl) &&
             Objects.equals(layersId, that.layersId) &&
             Objects.equals(booksId, that.booksId) &&
             Objects.equals(distinct, that.distinct)
@@ -172,7 +191,7 @@ public class LayerGroupCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, code, description, isActive, layersId, booksId, distinct);
+        return Objects.hash(id, code, description, isActive, imageUrl, layersId, booksId, distinct);
     }
 
     // prettier-ignore
@@ -183,6 +202,7 @@ public class LayerGroupCriteria implements Serializable, Criteria {
             (code != null ? "code=" + code + ", " : "") +
             (description != null ? "description=" + description + ", " : "") +
             (isActive != null ? "isActive=" + isActive + ", " : "") +
+            (imageUrl != null ? "imageUrl=" + imageUrl + ", " : "") +
             (layersId != null ? "layersId=" + layersId + ", " : "") +
             (booksId != null ? "booksId=" + booksId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

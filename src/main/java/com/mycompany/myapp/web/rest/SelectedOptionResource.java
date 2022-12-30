@@ -1,16 +1,20 @@
 package com.mycompany.myapp.web.rest;
 
-import com.mycompany.myapp.domain.SelectedOption;
+import com.mycompany.myapp.domain.*;
 import com.mycompany.myapp.repository.SelectedOptionRepository;
+import com.mycompany.myapp.service.BooksService;
+import com.mycompany.myapp.service.SelectedOptionDetailsService;
 import com.mycompany.myapp.service.SelectedOptionQueryService;
 import com.mycompany.myapp.service.SelectedOptionService;
 import com.mycompany.myapp.service.criteria.SelectedOptionCriteria;
+import com.mycompany.myapp.service.dto.SelectedOptionDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,15 +47,21 @@ public class SelectedOptionResource {
     private final SelectedOptionRepository selectedOptionRepository;
 
     private final SelectedOptionQueryService selectedOptionQueryService;
+    private final BooksService booksService;
+    private final SelectedOptionDetailsService selectedOptionDetailsService;
 
     public SelectedOptionResource(
         SelectedOptionService selectedOptionService,
         SelectedOptionRepository selectedOptionRepository,
-        SelectedOptionQueryService selectedOptionQueryService
+        SelectedOptionQueryService selectedOptionQueryService,
+        BooksService booksService,
+        SelectedOptionDetailsService selectedOptionDetailsService
     ) {
         this.selectedOptionService = selectedOptionService;
         this.selectedOptionRepository = selectedOptionRepository;
         this.selectedOptionQueryService = selectedOptionQueryService;
+        this.booksService = booksService;
+        this.selectedOptionDetailsService = selectedOptionDetailsService;
     }
 
     /**
@@ -201,5 +211,21 @@ public class SelectedOptionResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @PostMapping("/addSelectedOptions")
+    public SelectedOption addSelectedOptions(@Valid @RequestBody SelectedOptionDTO selectedOptionDTO) throws URISyntaxException {
+        Optional<Books> books = booksService.findOneByCode(selectedOptionDTO.getBookCode());
+        if (!books.isPresent()) {
+            throw new BadRequestAlertException("Invalid book", ENTITY_NAME, "idexists");
+        }
+        for (SelectedOptionDetails selectedOptionDetails : selectedOptionDTO.getSelectedOptionDetails()) {
+            selectedOptionDetailsService.save(selectedOptionDetails);
+        }
+        SelectedOption selectedOption = new SelectedOption();
+        selectedOption.selectedOptionDetails(selectedOptionDTO.getSelectedOptionDetails());
+        selectedOption.setBooks(books.get());
+
+        return selectedOptionService.save(selectedOption);
     }
 }

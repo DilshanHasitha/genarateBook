@@ -51,6 +51,9 @@ class LayerGroupResourceIT {
     private static final Boolean DEFAULT_IS_ACTIVE = false;
     private static final Boolean UPDATED_IS_ACTIVE = true;
 
+    private static final String DEFAULT_IMAGE_URL = "AAAAAAAAAA";
+    private static final String UPDATED_IMAGE_URL = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/layer-groups";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -81,7 +84,11 @@ class LayerGroupResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static LayerGroup createEntity(EntityManager em) {
-        LayerGroup layerGroup = new LayerGroup().code(DEFAULT_CODE).description(DEFAULT_DESCRIPTION).isActive(DEFAULT_IS_ACTIVE);
+        LayerGroup layerGroup = new LayerGroup()
+            .code(DEFAULT_CODE)
+            .description(DEFAULT_DESCRIPTION)
+            .isActive(DEFAULT_IS_ACTIVE)
+            .imageUrl(DEFAULT_IMAGE_URL);
         return layerGroup;
     }
 
@@ -92,7 +99,11 @@ class LayerGroupResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static LayerGroup createUpdatedEntity(EntityManager em) {
-        LayerGroup layerGroup = new LayerGroup().code(UPDATED_CODE).description(UPDATED_DESCRIPTION).isActive(UPDATED_IS_ACTIVE);
+        LayerGroup layerGroup = new LayerGroup()
+            .code(UPDATED_CODE)
+            .description(UPDATED_DESCRIPTION)
+            .isActive(UPDATED_IS_ACTIVE)
+            .imageUrl(UPDATED_IMAGE_URL);
         return layerGroup;
     }
 
@@ -117,6 +128,7 @@ class LayerGroupResourceIT {
         assertThat(testLayerGroup.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testLayerGroup.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testLayerGroup.getIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
+        assertThat(testLayerGroup.getImageUrl()).isEqualTo(DEFAULT_IMAGE_URL);
     }
 
     @Test
@@ -168,7 +180,8 @@ class LayerGroupResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(layerGroup.getId().intValue())))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())));
+            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGE_URL)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -202,7 +215,8 @@ class LayerGroupResourceIT {
             .andExpect(jsonPath("$.id").value(layerGroup.getId().intValue()))
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()));
+            .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()))
+            .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGE_URL));
     }
 
     @Test
@@ -394,6 +408,71 @@ class LayerGroupResourceIT {
 
     @Test
     @Transactional
+    void getAllLayerGroupsByImageUrlIsEqualToSomething() throws Exception {
+        // Initialize the database
+        layerGroupRepository.saveAndFlush(layerGroup);
+
+        // Get all the layerGroupList where imageUrl equals to DEFAULT_IMAGE_URL
+        defaultLayerGroupShouldBeFound("imageUrl.equals=" + DEFAULT_IMAGE_URL);
+
+        // Get all the layerGroupList where imageUrl equals to UPDATED_IMAGE_URL
+        defaultLayerGroupShouldNotBeFound("imageUrl.equals=" + UPDATED_IMAGE_URL);
+    }
+
+    @Test
+    @Transactional
+    void getAllLayerGroupsByImageUrlIsInShouldWork() throws Exception {
+        // Initialize the database
+        layerGroupRepository.saveAndFlush(layerGroup);
+
+        // Get all the layerGroupList where imageUrl in DEFAULT_IMAGE_URL or UPDATED_IMAGE_URL
+        defaultLayerGroupShouldBeFound("imageUrl.in=" + DEFAULT_IMAGE_URL + "," + UPDATED_IMAGE_URL);
+
+        // Get all the layerGroupList where imageUrl equals to UPDATED_IMAGE_URL
+        defaultLayerGroupShouldNotBeFound("imageUrl.in=" + UPDATED_IMAGE_URL);
+    }
+
+    @Test
+    @Transactional
+    void getAllLayerGroupsByImageUrlIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        layerGroupRepository.saveAndFlush(layerGroup);
+
+        // Get all the layerGroupList where imageUrl is not null
+        defaultLayerGroupShouldBeFound("imageUrl.specified=true");
+
+        // Get all the layerGroupList where imageUrl is null
+        defaultLayerGroupShouldNotBeFound("imageUrl.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllLayerGroupsByImageUrlContainsSomething() throws Exception {
+        // Initialize the database
+        layerGroupRepository.saveAndFlush(layerGroup);
+
+        // Get all the layerGroupList where imageUrl contains DEFAULT_IMAGE_URL
+        defaultLayerGroupShouldBeFound("imageUrl.contains=" + DEFAULT_IMAGE_URL);
+
+        // Get all the layerGroupList where imageUrl contains UPDATED_IMAGE_URL
+        defaultLayerGroupShouldNotBeFound("imageUrl.contains=" + UPDATED_IMAGE_URL);
+    }
+
+    @Test
+    @Transactional
+    void getAllLayerGroupsByImageUrlNotContainsSomething() throws Exception {
+        // Initialize the database
+        layerGroupRepository.saveAndFlush(layerGroup);
+
+        // Get all the layerGroupList where imageUrl does not contain DEFAULT_IMAGE_URL
+        defaultLayerGroupShouldNotBeFound("imageUrl.doesNotContain=" + DEFAULT_IMAGE_URL);
+
+        // Get all the layerGroupList where imageUrl does not contain UPDATED_IMAGE_URL
+        defaultLayerGroupShouldBeFound("imageUrl.doesNotContain=" + UPDATED_IMAGE_URL);
+    }
+
+    @Test
+    @Transactional
     void getAllLayerGroupsByLayersIsEqualToSomething() throws Exception {
         Layers layers;
         if (TestUtil.findAll(em, Layers.class).isEmpty()) {
@@ -449,7 +528,8 @@ class LayerGroupResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(layerGroup.getId().intValue())))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())));
+            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGE_URL)));
 
         // Check, that the count call also returns 1
         restLayerGroupMockMvc
@@ -497,7 +577,7 @@ class LayerGroupResourceIT {
         LayerGroup updatedLayerGroup = layerGroupRepository.findById(layerGroup.getId()).get();
         // Disconnect from session so that the updates on updatedLayerGroup are not directly saved in db
         em.detach(updatedLayerGroup);
-        updatedLayerGroup.code(UPDATED_CODE).description(UPDATED_DESCRIPTION).isActive(UPDATED_IS_ACTIVE);
+        updatedLayerGroup.code(UPDATED_CODE).description(UPDATED_DESCRIPTION).isActive(UPDATED_IS_ACTIVE).imageUrl(UPDATED_IMAGE_URL);
 
         restLayerGroupMockMvc
             .perform(
@@ -514,6 +594,7 @@ class LayerGroupResourceIT {
         assertThat(testLayerGroup.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testLayerGroup.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testLayerGroup.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+        assertThat(testLayerGroup.getImageUrl()).isEqualTo(UPDATED_IMAGE_URL);
     }
 
     @Test
@@ -584,7 +665,7 @@ class LayerGroupResourceIT {
         LayerGroup partialUpdatedLayerGroup = new LayerGroup();
         partialUpdatedLayerGroup.setId(layerGroup.getId());
 
-        partialUpdatedLayerGroup.isActive(UPDATED_IS_ACTIVE);
+        partialUpdatedLayerGroup.isActive(UPDATED_IS_ACTIVE).imageUrl(UPDATED_IMAGE_URL);
 
         restLayerGroupMockMvc
             .perform(
@@ -601,6 +682,7 @@ class LayerGroupResourceIT {
         assertThat(testLayerGroup.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testLayerGroup.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testLayerGroup.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+        assertThat(testLayerGroup.getImageUrl()).isEqualTo(UPDATED_IMAGE_URL);
     }
 
     @Test
@@ -615,7 +697,11 @@ class LayerGroupResourceIT {
         LayerGroup partialUpdatedLayerGroup = new LayerGroup();
         partialUpdatedLayerGroup.setId(layerGroup.getId());
 
-        partialUpdatedLayerGroup.code(UPDATED_CODE).description(UPDATED_DESCRIPTION).isActive(UPDATED_IS_ACTIVE);
+        partialUpdatedLayerGroup
+            .code(UPDATED_CODE)
+            .description(UPDATED_DESCRIPTION)
+            .isActive(UPDATED_IS_ACTIVE)
+            .imageUrl(UPDATED_IMAGE_URL);
 
         restLayerGroupMockMvc
             .perform(
@@ -632,6 +718,7 @@ class LayerGroupResourceIT {
         assertThat(testLayerGroup.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testLayerGroup.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testLayerGroup.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+        assertThat(testLayerGroup.getImageUrl()).isEqualTo(UPDATED_IMAGE_URL);
     }
 
     @Test

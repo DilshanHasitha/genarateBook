@@ -23,6 +23,7 @@ describe('LayerGroup Form Service', () => {
             code: expect.any(Object),
             description: expect.any(Object),
             isActive: expect.any(Object),
+            imageUrl: expect.any(Object),
             layers: expect.any(Object),
             books: expect.any(Object),
           })
@@ -38,6 +39,7 @@ describe('LayerGroup Form Service', () => {
             code: expect.any(Object),
             description: expect.any(Object),
             isActive: expect.any(Object),
+            imageUrl: expect.any(Object),
             layers: expect.any(Object),
             books: expect.any(Object),
           })

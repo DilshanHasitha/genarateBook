@@ -94,6 +94,9 @@ public class LayerGroupQueryService extends QueryService<LayerGroup> {
             if (criteria.getIsActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getIsActive(), LayerGroup_.isActive));
             }
+            if (criteria.getImageUrl() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getImageUrl(), LayerGroup_.imageUrl));
+            }
             if (criteria.getLayersId() != null) {
                 specification =
                     specification.and(

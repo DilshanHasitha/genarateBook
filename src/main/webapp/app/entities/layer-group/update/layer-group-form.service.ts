@@ -21,6 +21,7 @@ type LayerGroupFormGroupContent = {
   code: FormControl<ILayerGroup['code']>;
   description: FormControl<ILayerGroup['description']>;
   isActive: FormControl<ILayerGroup['isActive']>;
+  imageUrl: FormControl<ILayerGroup['imageUrl']>;
   layers: FormControl<ILayerGroup['layers']>;
   books: FormControl<ILayerGroup['books']>;
 };
@@ -47,6 +48,7 @@ export class LayerGroupFormService {
         validators: [Validators.required],
       }),
       isActive: new FormControl(layerGroupRawValue.isActive),
+      imageUrl: new FormControl(layerGroupRawValue.imageUrl),
       layers: new FormControl(layerGroupRawValue.layers ?? []),
       books: new FormControl(layerGroupRawValue.books ?? []),
     });
