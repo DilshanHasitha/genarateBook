@@ -1,8 +1,10 @@
 package com.mycompany.myapp.service;
 
+import com.mycompany.myapp.domain.AvatarAttributes;
 import com.mycompany.myapp.domain.AvatarCharactor;
 import com.mycompany.myapp.repository.AvatarCharactorRepository;
 import java.util.Optional;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -121,5 +123,10 @@ public class AvatarCharactorService {
     public void delete(Long id) {
         log.debug("Request to delete AvatarCharactor : {}", id);
         avatarCharactorRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Set<AvatarCharactor>> getAvatarCharactersByAvatarCode(String code) {
+        return avatarCharactorRepository.findAllByCharacter_Code(code);
     }
 }

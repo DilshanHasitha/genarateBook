@@ -14,7 +14,7 @@ export type EntityArrayResponseType = HttpResponse<ILayerGroup[]>;
 
 @Injectable({ providedIn: 'root' })
 export class LayerGroupService {
-  public exportOrderUrl = SERVER_API_URL + 'api/printReceipts';
+  public exportOrderUrl = SERVER_API_URL + 'api/printBook';
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/layer-groups');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
@@ -38,7 +38,7 @@ export class LayerGroupService {
     const httpOptions = {
       responseType: 'arraybuffer' as 'json',
     };
-    return this.http.get<any>(this.exportOrderUrl + '?orderId=aaa&storeCode=kk', httpOptions);
+    return this.http.get<any>(this.exportOrderUrl + '?booksCode=DEMO&customerCode=Lzrt', httpOptions);
   }
 
   find(id: number): Observable<EntityResponseType> {

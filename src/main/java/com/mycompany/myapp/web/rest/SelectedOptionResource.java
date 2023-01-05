@@ -2,6 +2,7 @@ package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.domain.*;
 import com.mycompany.myapp.repository.SelectedOptionRepository;
+import com.mycompany.myapp.security.CommonUtils;
 import com.mycompany.myapp.service.BooksService;
 import com.mycompany.myapp.service.SelectedOptionDetailsService;
 import com.mycompany.myapp.service.SelectedOptionQueryService;
@@ -14,6 +15,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -219,10 +221,24 @@ public class SelectedOptionResource {
         if (!books.isPresent()) {
             throw new BadRequestAlertException("Invalid book", ENTITY_NAME, "idexists");
         }
+        Set<AvatarAttributes> avatarAttributes = books.get().getAvatarAttributes();
         for (SelectedOptionDetails selectedOptionDetails : selectedOptionDTO.getSelectedOptionDetails()) {
+            String AvatarAttributesCode = selectedOptionDetails.getCode();
+            for (AvatarAttributes avatarAttribute : avatarAttributes) {
+                if (avatarAttribute.getCode().equals(AvatarAttributesCode)) {
+                    if (avatarAttribute.getTemplateText() != null) {
+                        selectedOptionDetails.setName(avatarAttribute.getTemplateText());
+                    } else {
+                        selectedOptionDetails.setName(selectedOptionDetails.getCode());
+                        selectedOptionDetails.setCode(avatarAttribute.getAvatarCharactors().iterator().next().getCharacter().getCode());
+                    }
+                }
+            }
             selectedOptionDetailsService.save(selectedOptionDetails);
         }
         SelectedOption selectedOption = new SelectedOption();
+        String code = CommonUtils.generateCode(selectedOptionDTO.getCode());
+        selectedOption.setCode(code);
         selectedOption.selectedOptionDetails(selectedOptionDTO.getSelectedOptionDetails());
         selectedOption.setBooks(books.get());
 

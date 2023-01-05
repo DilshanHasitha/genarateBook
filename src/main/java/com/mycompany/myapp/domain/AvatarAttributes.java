@@ -41,7 +41,7 @@ public class AvatarAttributes implements Serializable {
     @Column(name = "template_text")
     private String templateText;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_avatar_attributes__avatar_charactor",
         joinColumns = @JoinColumn(name = "avatar_attributes_id"),

@@ -44,8 +44,8 @@ public class PDFGenarator {
     public byte[] pdfCreator(Books books, String customer) throws IOException, JRException {
         List<JasperPrint> jasperPrintList = new ArrayList<JasperPrint>();
         Map<String, String> getTemplateText = new HashMap<>();
-        if (customer != "ADMIN") {
-            getTemplateText = getTemplateText(customer);
+        if (!"ADMIN".equals(customer)) {
+            getTemplateText = getTemplateText(customer, books);
         }
         //
 
@@ -270,10 +270,10 @@ public class PDFGenarator {
         return null;
     }
 
-    Map<String, String> getTemplateText(String customerCode) {
+    Map<String, String> getTemplateText(String customerCode, Books bookCode) {
         Map<String, String> templateText = new HashMap<>();
-        SelectedOption selectedOption = selectedOptionRepository.findOneByCodeAndBooks_Code(customerCode, "DEMO");
-        Optional<Books> books = booksRepository.findOneByCode("DEMO");
+        SelectedOption selectedOption = selectedOptionRepository.findOneByCodeAndBooks_Code(customerCode, bookCode.getCode());
+        Optional<Books> books = booksRepository.findOneByCode(bookCode.getCode());
         if (books.isPresent()) {
             Books book = books.get();
             for (SelectedOptionDetails selectedOptionDetails : selectedOption.getSelectedOptionDetails()) {
@@ -291,8 +291,13 @@ public class PDFGenarator {
                     } else {
                         for (Styles style : avatarAttributes.getStyles()) {
                             if (style.getStylesDetails().size() > 0) {
-                                for (StylesDetails styleDetails : style.getStylesDetails()) {
-                                    templateText.put(styleDetails.getTemplateValue(), styleDetails.getReplaceValue());
+                                if (
+                                    selectedOptionDetails.getSelectedStyleCode() != null &&
+                                    selectedOptionDetails.getSelectedStyleCode().equals(style.getCode())
+                                ) {
+                                    for (StylesDetails styleDetails : style.getStylesDetails()) {
+                                        templateText.put(styleDetails.getTemplateValue(), styleDetails.getReplaceValue());
+                                    }
                                 }
                             }
                         }

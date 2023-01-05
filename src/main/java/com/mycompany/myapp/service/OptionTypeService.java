@@ -107,4 +107,9 @@ public class OptionTypeService {
         log.debug("Request to delete OptionType : {}", id);
         optionTypeRepository.deleteById(id);
     }
+
+    @Transactional(readOnly = true)
+    public Optional<OptionType> getOptionByCode(String Code) {
+        return optionTypeRepository.findOneByCode(Code);
+    }
 }

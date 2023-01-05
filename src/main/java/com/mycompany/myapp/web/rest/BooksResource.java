@@ -5,10 +5,7 @@ import com.mycompany.myapp.repository.BooksRepository;
 import com.mycompany.myapp.security.CommonUtils;
 import com.mycompany.myapp.service.*;
 import com.mycompany.myapp.service.criteria.BooksCriteria;
-import com.mycompany.myapp.service.dto.AvatarAttributesDTO;
-import com.mycompany.myapp.service.dto.BooksPageDTO;
-import com.mycompany.myapp.service.dto.ImageCreatorDTO;
-import com.mycompany.myapp.service.dto.ImageParameterDTO;
+import com.mycompany.myapp.service.dto.*;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.io.IOException;
 import java.net.URI;
@@ -65,6 +62,7 @@ public class BooksResource {
     private final LayerGroupService layerGroupService;
     private final BucketController bucketController;
     private final ImagesService imagesService;
+    private final OptionTypeService optionTypeService;
 
     public BooksResource(
         BooksService booksService,
@@ -81,7 +79,8 @@ public class BooksResource {
         AvatarAttributesService avatarAttributesService,
         LayerGroupService layerGroupService,
         BucketController bucketController,
-        ImagesService imagesService
+        ImagesService imagesService,
+        OptionTypeService optionTypeService
     ) {
         this.booksService = booksService;
         this.booksRepository = booksRepository;
@@ -98,6 +97,7 @@ public class BooksResource {
         this.layerGroupService = layerGroupService;
         this.bucketController = bucketController;
         this.imagesService = imagesService;
+        this.optionTypeService = optionTypeService;
     }
 
     /**
@@ -258,15 +258,15 @@ public class BooksResource {
     //        byte[] receipt = pdfGenarator.pdfCreator(books, "ADMIN");
     //        return receipt;
     //    }
-    @GetMapping("/printReceipts")
-    public byte[] receipt(String booksCode, String storeCode) throws IOException, JRException {
-        Optional<Books> book = booksService.findOneByCode("DEMO");
+    @GetMapping("/printBook")
+    public byte[] receipt(String booksCode, String customerCode) throws IOException, JRException {
+        Optional<Books> book = booksService.findOneByCode(booksCode);
         if (!book.isPresent()) {
             throw new BadRequestAlertException("A new books cannot already have an ID", ENTITY_NAME, "idexists");
         }
         Books books = book.get();
 
-        byte[] receipt = pdfGenarator.pdfCreator(books, "demo");
+        byte[] receipt = pdfGenarator.pdfCreator(books, customerCode);
 
         return receipt;
     }
@@ -326,35 +326,59 @@ public class BooksResource {
     }
 
     @PutMapping("/updateBooksAvatarAttributes")
-    public Books updateBooksAvatarAttributes(@Valid @RequestBody AvatarAttributesDTO avatarAttributesDTO) throws URISyntaxException {
-        if (avatarAttributesDTO.getCode() == null || avatarAttributesDTO.getCode().isEmpty()) {
+    public Books updateBooksAvatarAttributes(@Valid @RequestBody UpdateBooksAvatarAttributesDTO updateBooksAvatarAttributesDTO)
+        throws URISyntaxException {
+        if (updateBooksAvatarAttributesDTO.getCode() == null || updateBooksAvatarAttributesDTO.getCode().isEmpty()) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idexists");
         }
-        Optional<Books> books = booksService.findOneByCode(avatarAttributesDTO.getCode());
+        Optional<Books> books = booksService.findOneByCode(updateBooksAvatarAttributesDTO.getCode());
         if (!books.isPresent()) {
             throw new BadRequestAlertException("Invalid book", ENTITY_NAME, "idexists");
         }
-        if (avatarAttributesDTO.getAvatarAttributes().size() < 1) {
+        if (updateBooksAvatarAttributesDTO.getAvatarAttributes().size() < 1) {
             throw new BadRequestAlertException("empty avatarAttributes", ENTITY_NAME, "null attributes");
         }
+        Set<AvatarAttributes> avatarAttributesSet = new HashSet<>();
+        for (AvatarAttributesDTO avatarAttributes : updateBooksAvatarAttributesDTO.getAvatarAttributes()) {
+            AvatarAttributes avatarAttributes1 = new AvatarAttributes();
 
-        for (AvatarAttributes avatarAttributes : avatarAttributesDTO.getAvatarAttributes()) {
-            for (AvatarCharactor avatarCharactor : avatarAttributes.getAvatarCharactors()) {
-                avatarCharactorService.save(avatarCharactor);
+            if (!avatarAttributes.getCharacterCode().isEmpty()) {
+                avatarAttributes1.setAvatarCharactors(
+                    avatarCharactorService.getAvatarCharactersByAvatarCode(avatarAttributes.getCharacterCode()).get()
+                );
             }
             for (Styles styles : avatarAttributes.getStyles()) {
-                stylesService.save(styles);
                 for (StylesDetails stylesDetails : styles.getStylesDetails()) {
                     stylesDetailsService.save(stylesDetails);
                 }
+                styles.setIsText(false);
+                stylesService.save(styles);
             }
             for (Options options : avatarAttributes.getOptions()) {
                 optionsService.save(options);
             }
-            avatarAttributesService.save(avatarAttributes);
+            avatarAttributes1.setOptionType(optionTypeService.getOptionByCode(avatarAttributes.getOptionType()).get());
+            avatarAttributes1.setDescription(avatarAttributes.getDescription());
+            avatarAttributes1.setCode(CommonUtils.generateCode(avatarAttributes.getDescription()));
+            avatarAttributes1.setStyles(avatarAttributes.getStyles());
+            avatarAttributes1.setOptions(avatarAttributes.getOptions());
+            //            for (AvatarCharactor avatarCharactor : avatarAttributes.getAvatarCharactors()) {
+            //                avatarCharactorService.save(avatarCharactor);
+            //            }
+            //            for (Styles styles : avatarAttributes.getStyles()) {
+            //                stylesService.save(styles);
+            //                for (StylesDetails stylesDetails : styles.getStylesDetails()) {
+            //                    stylesDetailsService.save(stylesDetails);
+            //                }
+            //            }
+            //            for (Options options : avatarAttributes.getOptions()) {
+            //                optionsService.save(options);
+            //            }
+            avatarAttributesService.save(avatarAttributes1);
+            avatarAttributesSet.add(avatarAttributes1);
         }
         Books book = books.get();
-        book.setAvatarAttributes(avatarAttributesDTO.getAvatarAttributes());
+        book.setAvatarAttributes(avatarAttributesSet);
         return booksService.update(book);
     }
 

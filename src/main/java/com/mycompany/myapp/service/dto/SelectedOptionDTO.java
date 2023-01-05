@@ -6,14 +6,24 @@ import java.util.Set;
 
 public class SelectedOptionDTO {
 
+    private String code;
     private String bookCode;
     private Set<SelectedOptionDetails> selectedOptionDetails;
 
     public SelectedOptionDTO() {}
 
-    public SelectedOptionDTO(String bookCode, Set<SelectedOptionDetails> selectedOptionDetails) {
+    public SelectedOptionDTO(String code, String bookCode, Set<SelectedOptionDetails> selectedOptionDetails) {
+        this.code = code;
         this.bookCode = bookCode;
         this.selectedOptionDetails = selectedOptionDetails;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getBookCode() {

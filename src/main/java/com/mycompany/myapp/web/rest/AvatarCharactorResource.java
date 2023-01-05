@@ -1,18 +1,23 @@
 package com.mycompany.myapp.web.rest;
 
+import com.mycompany.myapp.domain.AvatarAttributes;
 import com.mycompany.myapp.domain.AvatarCharactor;
+import com.mycompany.myapp.domain.Books;
 import com.mycompany.myapp.repository.AvatarCharactorRepository;
 import com.mycompany.myapp.service.AvatarCharactorQueryService;
 import com.mycompany.myapp.service.AvatarCharactorService;
 import com.mycompany.myapp.service.criteria.AvatarCharactorCriteria;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import net.sf.jasperreports.engine.JRException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -204,5 +209,15 @@ public class AvatarCharactorResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @GetMapping("/getAvatarCharactersByAvatarCode")
+    public Set<AvatarCharactor> getAvatarCharactersByAvatarCode(String avatarCode) throws IOException, JRException {
+        Optional<Set<AvatarCharactor>> avatarAttributes = avatarCharactorService.getAvatarCharactersByAvatarCode(avatarCode);
+        if (avatarAttributes.isPresent()) {
+            return avatarAttributes.get();
+        } else {
+            return null;
+        }
     }
 }
