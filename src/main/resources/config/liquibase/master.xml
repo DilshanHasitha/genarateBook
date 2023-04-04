@@ -46,6 +46,7 @@
     <include file="config/liquibase/changelog/20200423181410_added_entity_ImageStoreType.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200423182407_added_entity_Images.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20221223064944_added_entity_FontFamily.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230403112034_added_entity_OrgProperty.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20221205035305_added_entity_constraints_Books.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20221205035306_added_entity_constraints_SelectedOption.xml" relativeToChangelogFile="false"/>

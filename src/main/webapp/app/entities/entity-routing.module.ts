@@ -151,6 +151,11 @@ import { RouterModule } from '@angular/router';
         data: { pageTitle: 'Images' },
         loadChildren: () => import('./images/images.module').then(m => m.ImagesModule),
       },
+      {
+        path: 'org-property',
+        data: { pageTitle: 'OrgProperties' },
+        loadChildren: () => import('./org-property/org-property.module').then(m => m.OrgPropertyModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

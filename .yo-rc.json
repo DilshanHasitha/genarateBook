@@ -48,14 +48,15 @@
       "Selections",
       "Character",
       "StylesDetails",
-      "FontFamily"
+      "FontFamily",
+      "OrgProperty"
     ],
     "entitySuffix": "",
     "jhiPrefix": "jhi",
     "jhipsterVersion": "7.9.3",
     "jwtSecretKey": "ODk5ZjAzYTIyMjQ4NmRhMDgzM2YxZGE5Y2MyOTc1ODljOWIyNWUwZjJhNjg2NzVkOTA0MWJmYWFiNTAzNmEwNWQxM2E4ZmYyOGIxYmJlMWRlMmNhNWI0YzQzMmM5MjViZDU5YjczMzlhZWI2YjNjZjk4ZDE5ZjI0ZDA2MDcwNzY=",
     "languages": ["en", "fr"],
-    "lastLiquibaseTimestamp": 1671778184000,
+    "lastLiquibaseTimestamp": 1680520834000,
     "messageBroker": false,
     "microfrontend": false,
     "microfrontends": [],
